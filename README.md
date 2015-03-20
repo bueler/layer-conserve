@@ -2,6 +2,7 @@ layer-conserve
 ==============
 
 Project on mass-conserving layer models with a constraint on the conserved
-variable.  Includes nontrivial SIA example via modification of Mahaffy (1976)
-FD scheme, a new FVE scheme.
+variable.  Includes a draft paper, talks at AGU 2014 and LIWG 2015, and 1D
+petsc codes.
 
+A nontrivial 2D example has moved to a separate repo, https://github.com/bueler/sia-fve.

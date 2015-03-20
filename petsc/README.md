@@ -1,5 +1,5 @@
-petsc/layer1D/
-==============
+petsc/
+======
 
 The code `layer.c` describes a one-dimensional moving layer with a non-negative-
 constrained thickness, and thus a moving boundary.  PETSc SNESVI is used to
