@@ -6,7 +6,7 @@
   \input{fvmesh-core.tikz}
 
   % the free boundary is just like the other edges
-  \draw[gray] (6,3) -- (3,5) -- (4,9) -- (8,8) -- (8,14) --
+  \draw[gray, thick] (6,3) -- (3,5) -- (4,9) -- (8,8) -- (8,14) --
               (12,11) -- (16,9) -- (10,5) -- cycle;
   % label some cell d.o.f.
   \draw (6,6) node {$u_n^j$};

@@ -105,7 +105,7 @@ Fluid layer problems of the type addressed here appear within earth-system and c
 \begin{figure}[ht]
 \begin{center}
 FIGURE (FIXME)
-%\includegraphics[width=2.0in,keepaspectratio=true]{domains-fig}
+%\includegraphics[width=2.0in,keepaspectratio=true]{}
 \end{center}
 \caption{Time-stepping, free-boundary fluid layer mass conservation problems occur for several components of the earth-system and climate models, including ice sheet (a), sea ice (b), and ocean (c) components.}
 \label{fig:climatepictures}
@@ -130,7 +130,7 @@ Our second question is perhaps less obvious, but of substantial importance in mo
   \end{quote}
 By considering this question abstractly, we conclude that the answer is ``no,'' in particular in the case where the answer to (i) is ``yes.''  That is, our answer to the brief question ``can a numerical model of a fluid layer governed by \eqref{eq:massconserve} and \eqref{eq:constraint} conserve mass?'' is ``no''.  We can, however, quantify the non-conservation error associated to the free boundary (below).
 
-Free-boundary problems of the above kind appear for the evolution of ice sheets \cite{Bueleretal2005,Calvoetal2002,EgholmNielsen2010,JouvetBueler2012}, shallow liquid water flowing over marshes \cite{AlonsoSantillanaDawson2008}, shallow water equation models for tsunumi run-up \cite{LeVequeGeorge2008}, coupled surface/subsurface hydrological modelling \cite{Maxwelletal2014}, subglacial hydrology \cite{Aschwandenetal2012,BuelervanPeltDRAFT,Schoofetal2012}, supraglacial runoff \cite{Aschwandenetal2012}, ice shelves [FIXME], and sea ice [FIXME], among many other applications.  FIXME: point out categorization by diffusive versus hyperbolic
+Free-boundary problems of the above kind appear for the evolution of ice sheets \cite{Bueleretal2005,Calvoetal2002,EgholmNielsen2010,JouvetBueler2012,Bueler2015}, shallow liquid water flowing over marshes \cite{AlonsoSantillanaDawson2008}, shallow water equation models for tsunumi run-up \cite{LeVequeGeorge2008}, coupled surface/subsurface hydrological modelling \cite{Maxwelletal2014}, subglacial hydrology \cite{Aschwandenetal2012,BuelervanPelt2015,Schoofetal2012}, supraglacial runoff \cite{Aschwandenetal2012}, ice shelves [FIXME], and sea ice [FIXME], among many other applications.  FIXME: point out categorization by diffusive versus hyperbolic
 
 Theoretical guidance as to the degree of achievable numerical (i.e.~discrete) conservation is generally absent in the literature of free-boundary fluid problems.  For instance, within the context of glacier \cite{JaroschSchoofAnslow2013} and ice shelf \cite{Albrechtetal2011} modeling, schemes for improved discrete mass conservation at free boundaries are proposed, but this small literature provides only \emph{ad hoc} solutions to improve conservation at the discrete level.  \emph{Local} discrete conservation, within the fluid and away from the free boundary, is a common goal and property of numerical schemes \cite{LeVeque2002}.  Indeed when we consider spatial discretization near the end of the paper (section FIXME), we will simply \emph{assume} that such local discrete conservation is already exact.  The discrete conservation limitations we identify are thus entirely at the free boundary.  Regarding conservation issues, we focus on the advance of the fluid layer into areas where it was absent a time-step earlier, and on its retreat from areas where it was present a time-step earlier.
 
@@ -510,24 +510,21 @@ Straightforward calculation turns \eqref{eq:doubleflux} into
 \end{equation}
 with $K=k m^{p-1}>0$, giving the $p$-Laplacian flux \eqref{eq:plapflux}.
 
-In fact, PDE \eqref{eq:semimassconserve} with flux \eqref{eq:doubleflux} is formally equivalent to
+Transformation  \eqref{eq:doubletransform} converts PDE \eqref{eq:semimassconserve} and \eqref{eq:doubleflux} to a $p$-Laplacian equation with additional zeroth-order terms, namely
 \begin{equation}
-    \frac{w^m - u_{n-1}}{\Delta t} + \Div \bQ_n(\grad w) = F_n(w^m,x).  \label{eq:doublestrong}
+    - K \Div\left(|\grad w|^{p-2} \grad w\right) + G(w,x) = 0  \label{eq:doubleplap}
 \end{equation}
-This is a semilinear (i.e.~linear in the highest order term) PDE which can be rewritten
+with
 \begin{equation}
-    - k \lap w + G(w,x) = \frac{u_{n-1}(x)}{\Delta t} \label{eq:doublesemilinear}
+   G(w,x) = w^m - \Delta t\, F_n(w^m,x) - u_{n-1}. \label{eq:doubleGdefn}
 \end{equation}
-where
-\begin{equation}
-   G(w,x) = w^m - \Delta t\, F_n(w^m,x) + u_{n-1}. \label{eq:doubleGdefn}
-\end{equation}
+If $p=2$ then \eqref{eq:doubleplap} is semilinear (i.e.~linear in the highest-order term), so the transformation converts the porous medium equation into semilinear form.
 
 Noting $u\ge 0$ if and only if $w\ge 0$ in transformation \eqref{eq:doubletransform}, define $\mathcal{X} = W_0^{1,p}(\Omega)$, and the admissible functions $\mathcal{K}\subset \mathcal{X}$, just as before in section \ref{sec:weakform}.  Define $A_n: \mathcal{K} \to \mathcal{X}'$ by
 \begin{equation}
 \ip{A_n(w)}{\phi} = \int_\Omega \Delta t\, K |\grad w|^{p-2} \grad w\cdot \grad \phi + G(w,x)\phi. \label{eq:doubleform}
 \end{equation}
-The weak formulation of \eqref{eq:doublestrong} is \eqref{eq:theVI} with $A_n$ defined in \eqref{eq:doubleform}.  The following theorem is, essentially, the argument in subsection III.3 of \cite{KinderlehrerStampacchia1980}.
+The weak formulation of \eqref{eq:doubleplap} is precisely \eqref{eq:theVI} with this $A_n$.  The following theorem uses the argument in subsection III.3 of \cite{KinderlehrerStampacchia1980}.
 
 \medskip
 \begin{theorem}
@@ -546,10 +543,10 @@ The case $1<p<2$ follows by a trivial modification of the technique used in prov
 
 FIXME: of course assumptions on $G$ are assumptions on $F_n$.  if $F_n=F_n(x)$ we are done. because of $\Delta t$ we can still solve with increasing $F_n(u)$ as long as time steps are short
 
-FIXME: major deficiency is no bedrock
+FIXME: major deficiency is no bedrock. compare results in \cite{JouvetBueler2012}
 
 
-\subsection{Non-local dependence through an integral kernel} \label{subsec:nonlocal}   The examples so far in section \ref{sec:wellposed} are cases where the value of the flux $\bQ_n$ at $x\in\Omega$ is computed using only the values $u(x)$ and $\grad u(x)$.  The flux in realistic models is, however, often computed by solving another differential equation, for instance an energy or momentum conservation equation which is coupled to the mass-conservation equation \eqref{eq:massconserve}.  Thus we now look at fluxes that are non-local functions of the thickness $u$ and its spatial derivatives.  For simplicity we restrict to the linear case.
+\subsection{Non-local dependence through an integral kernel} \label{subsec:nonlocal}   The examples so far in section \ref{sec:wellposed} are cases where the value of the flux $\bQ_n$ at $x\in\Omega$ is computed using only the values $u(x)$ and $\grad u(x)$.  The flux in realistic models is, however, often computed by solving another differential equation, for instance an energy or momentum conservation equation which is coupled to the mass-conservation equation \eqref{eq:massconserve}.  Therefore we consider fluxes that are non-local functions of the thickness $u$ and its spatial derivatives.  For simplicity we restrict to the linear case.
 
 Let $\mathcal{X} = W_0^{1,2}(\Omega)$, a Hilbert space, and let $\mathcal{K}=\{u\in\mathcal{X}|u\ge 0\}$ as before.  Suppose $G_1(x,y), \dots, G_d(x,y)$ and $K(x,y)$ are scalar, real-valued functions in $L^2(\Omega\times \Omega)$; these will be our integral kernels.  Define
 \begin{equation}
@@ -612,20 +609,20 @@ However, even if $F_n$ is in the dual space, the variational inequality is not e
 \begin{equation}
 u_n = \max\{0,u_{n-1} + \Delta t\,F_n\} \in L^2(\Omega)  \label{eq:explicittruncation}
 \end{equation}
-\cite[page 27]{KinderlehrerStampacchia1980}.  But this is not very helpful because $u_n \in L^2(\Omega)$ is not regular enough so that $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}' \in L^2(\Omega)$, even in the closest case where $\bq = \bX(x) u$ (i.e.~$\bq$ is zeroth-order in $u$).  In summary, for explicit steps the solution to a single weakly-posed time step is truncation \eqref{eq:explicittruncation}, but that solution cannot be expected to be regular enough to yield a well-posed problem at the next step.
+\cite[page 27]{KinderlehrerStampacchia1980}.  But this is not very helpful because $u_n \in L^2(\Omega)$ is not regular enough so that $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}' \in L^2(\Omega)$, even in the case where $\bq = \bX(x) u$ so that $\bq$ is zeroth-order in $u$.  In summary, for explicit steps the solution to a single weakly-posed time step is truncation \eqref{eq:explicittruncation}, but that solution cannot be expected to be regular enough to yield a well-posed problem at the next step.
 
 On the other hand, fully-explicit and \emph{fully-discretized} numerical schemes are in widespread use for solving first-order and even second-order PDE problems.  So we return to these explicit schemes after adding spatial discretization in the next section.
 
 
-\section{The fully-discretized single time-step problem}  \label{sec:spacediscretized}   A major purpose of our work is to understand time-dependent free-boundary mass conservation models through time semi-discretized form, as a sequence of spatial free-boundary problems.  We can address well-posedness (section \ref{sec:wellposed}) and conservation errors at the free boundary (section \ref{sec:timeseries}; esp.~\ref{subsec:retreatloss}) in such a continuous-space framework.  But aspects of our theory are only completed by fully-discretizing the models.  In this section we make the weakest assumptions about the spatial discretization which is possible, namely that there is some finite volume \cite{LeVeque2002} interpretation of the fully-discrete scheme.  Within a fully-discrete framework we will be able to say a bit more about time-step restrictions for explicit and semi-explicit schemes (\ref{subsec:spaceexplicit}) so that we can tell a complete story about conservation errors at the free boundary (i.e.~subsection \ref{subsec:shellerror}).  First we set notation for a highly-generic finite volume scheme (\ref{subsec:spacenotation}).
+\section{The fully-discretized single time-step problem}  \label{sec:spacediscretized}   A major purpose of our work is to understand time-dependent free-boundary mass conservation models through time semi-discretized form, as a sequence of spatial free-boundary problems.  We address well-posedness (section \ref{sec:wellposed}) and conservation errors at the free boundary (subsection \ref{subsec:retreatloss}) in such a continuous-space framework.  But aspects of our theory are only completed by fully-discretizing the models.  In this section we make weak assumptions about the spatial discretization, namely that there is some finite volume \cite{LeVeque2002} interpretation of the fully-discrete scheme.  Within this fully-discrete framework we will be able to say a bit more about time-step restrictions for explicit and semi-explicit schemes (subsection \ref{subsec:spaceexplicit}) so that we can tell a complete story about conservation errors at the free boundary (i.e.~subsection \ref{subsec:shellerror}).  First we set notation for a highly-generic finite volume scheme.
 
-\subsection{Unstructured finite volume schemes} \label{subsec:spacenotation}  We restrict to $d=2$ or $d=3$, and we suppose $\Omega$ is a polygon (polyhedron).  An unstructured finite volume scheme here assumes only that $\Omega$ is tiled by cells which are themselves polygons (Figure \ref{fig:fvmesh-notation}).  These polygonal cells can be non-convex, and the number of edges (faces) per cell may vary.
+\subsection{Unstructured finite volume schemes} \label{subsec:spacenotation}  We restrict to $\Omega \subset \RR^d$ for $d=2,3$, and we suppose $\Omega$ is a polygon (polyhedron).  Our unstructured finite volume paradigm here assumes only that $\Omega$ is tiled by cells which are themselves polygons (Figure \ref{fig:fvmesh-notation}).  These polygonal cells can even be non-convex, and the number of edges (faces) per cell may vary.
 
-For notation, each cell $\omega_j$ has area (volume) $a_j$, so $\bar\Omega = \bigcup_j \bar \omega_j$ and $|\Omega| = \sum_j a_j$.  The edge (face) between cell $j$ and cell $k$ is indexed by a pair $(j,k)$, and it has length (area) $\ell_{(j,k)}$.  The $j$th cell has a set of edges $\mathcal{E}_j$ which contains those pairs $(j,k)$ so that $\omega_j$ and $\omega_k$ meet in an edge (face).  The set of all edges is the union $\mathcal{E} = \bigcup_j \mathcal{E}_j$.
+For notation, the cells are indexed by $j\in J$.  Each cell $\omega_j$ has area (volume) $a_j$, so $\bar\Omega = \bigcup_{j\in J} \bar \omega_j$ and $|\Omega| = \sum_{j\in J} a_j$.  The edge (face) between cell $j$ and cell $k$ is indexed by a pair $(j,k)$, and it has length (area) $\ell_{(j,k)}$.  The $j$th cell has a set of edges $\mathcal{E}_j$ which contains those pairs $(j,k)$ so that $\omega_j$ and $\omega_k$ meet in an edge (face).  The set of all edges is the union $\mathcal{E} = \bigcup_{j\in J} \mathcal{E}_j$.
 
 The representative thickness $u_n^j$ in cell $j$ is given the usual finite volume interpretation as an average, and similarly $F_n^j$ is a representative source term for the cell.
 \begin{equation}
-u_n^j \approx \frac{1}{a_j} \int_{\omega_j} u_n(x)\,dx, \qquad F_n^j \approx \frac{1}{a_j} \int_{\omega_j} F_n(x)\,dx.  \label{eq:fvthickness}
+u_n^j \approx \frac{1}{a_j} \int_{\omega_j} u_n(x)\,dx, \qquad F_n^j \approx \frac{1}{a_j} \int_{\omega_j} F_n(u_n,x)\,dx.  \label{eq:fvthickness}
 \end{equation}
 The value $F_n^j$ is computed in some way from the geometry of cell $j$ and from as many values $\{u_n^j\}$ as necessary; the details do not matter here.
 
@@ -648,6 +645,7 @@ We make two specific assumptions about the fully-discrete finite volume scheme:\
 \begin{equation}
 \frac{u_n^j - u_{n-1}^j}{\Delta t} + \frac{1}{a_j} \sum_{k\in \mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = F_n^j \label{eq:fvmassconserve}
 \end{equation}
+in the sense that \eqref{eq:fvmassconserve} is true for each $j\in J$ such that $u_n^j > 0$.
 \end{enumerate}
 
 Local conservation (i) is completely standard, but we do not expect it at the free boundary because a flux scheme at the edge (face) of a fluid-free cell, facing a fluid-filled cell, cannot easily be expected to generate flux which is compatible with monotonicity or coercivity properties in subsection \ref{subsec:mono}, for example.  Regarding (ii), recall that, at least heuristically, the divergence of a vector field $\bX$ is the limit of line (surface) integrals, $|R|^{-1} \int_{\partial R} \bX\cdot \bn\,ds \to \Div \bX(x)$, where $R\subset \RR^d$ denotes a region with Lipshitz boundary, enclosing $x$, with outward unit normal vector $\bn$ and boundary length (area) element $ds$.  Thus the discrete scheme is assumed to approximate such an integral. 
