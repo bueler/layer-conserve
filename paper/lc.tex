@@ -115,24 +115,24 @@ In the time-semi-discretized case, each time-step requires the solution of a (co
   \begin{quote}
   \renewcommand{\labelenumi}{(\roman{enumi})}
   \begin{enumerate}
-  \item \emph{Is the weakly-posed, single-time-step, free-boundary problem well-posed?}
+  \item \emph{Is this free-boundary problem well-posed?}
   \end{enumerate}
   \end{quote}
-The answer to (i) depends on the form of the flux, but we can show, by essentially-standard methods applied to the variational inequality form of the weakly-posed problem (section \ref{sec:wellposed}), that the answer is often ``yes''.
+The answer to (i) depends on the form of the flux, but we can show, by essentially-standard methods applied to the variational inequality form of the weakly-posed problem (section \ref{sec:wellposed}), that the answer is often ``yes,'' though our sufficient conditions may include a time-step restriction.
 
 Our second question is perhaps less obvious, but of substantial importance in modeling practice:
   \begin{quote}
   \renewcommand{\labelenumi}{(\roman{enumi})}
   \begin{enumerate}
   \setcounter{enumi}{1}
-  \item \emph{Can the modeled total mass of the fluid layer, inside its free boundary, be conserved exactly in the sense that a computable space-time integral of the source term $f$, over the time step, is equal to the change in total mass in that time step?}
+  \item \emph{Can the modeled mass of the fluid layer be conserved exactly in the sense that a computable space-time integral of the source term $f$ is equal to the change in mass in a time step?}
   \end{enumerate}
   \end{quote}
-By considering this question abstractly, we conclude that the answer is ``no,'' in particular in the case where the answer to (i) is ``yes.''  That is, our answer to the brief question ``can a numerical model of a fluid layer governed by \eqref{eq:massconserve} and \eqref{eq:constraint} conserve mass?'' is ``no''.  We can, however, quantify the non-conservation error associated to the free boundary (below).
+By considering this question abstractly in section \ref{sec:spacediscretized} we conclude that the answer is ``no,'' in particular in cases where the answer to (i) is ``yes.''  That is, a numerical model of a fluid layer governed by \eqref{eq:massconserve} and \eqref{eq:constraint} cannot conserve mass.  We can, however, bound the conservation error in a practical manner.
 
-Free-boundary problems of the above kind appear for the evolution of ice sheets \cite{Bueleretal2005,Calvoetal2002,EgholmNielsen2010,JouvetBueler2012,Bueler2015}, shallow liquid water flowing over marshes \cite{AlonsoSantillanaDawson2008}, shallow water equation models for tsunumi run-up \cite{LeVequeGeorge2008}, coupled surface/subsurface hydrological modelling \cite{Maxwelletal2014}, subglacial hydrology \cite{Aschwandenetal2012,BuelervanPelt2015,Schoofetal2012}, supraglacial runoff \cite{Aschwandenetal2012}, ice shelves [FIXME], and sea ice [FIXME], among many other applications.  FIXME: point out categorization by diffusive versus hyperbolic
+In the geophysical literature, free-boundary problems of the above kind appear for the evolution of ice sheets \cite{Bueleretal2005,Calvoetal2002,EgholmNielsen2010,JouvetBueler2012,Bueler2015}, shallow liquid water flowing over marshes \cite{AlonsoSantillanaDawson2008}, shallow water equation models for tsunumi run-up \cite{LeVequeGeorge2008}, coupled surface/subsurface hydrological modelling \cite{Maxwelletal2014}, subglacial hydrology \cite{Aschwandenetal2012,BuelervanPelt2015,Schoofetal2012}, supraglacial runoff \cite{Aschwandenetal2012}, ice shelves \cite{Albrechtetal2011}, and sea ice [FIXME], among many other applications.  FIXME: point out categorization by diffusive versus hyperbolic
 
-Theoretical guidance as to the degree of achievable numerical (i.e.~discrete) conservation is generally absent in the literature of free-boundary fluid problems.  For instance, within the context of glacier \cite{JaroschSchoofAnslow2013} and ice shelf \cite{Albrechtetal2011} modeling, schemes for improved discrete mass conservation at free boundaries are proposed, but this small literature provides only \emph{ad hoc} solutions to improve conservation at the discrete level.  \emph{Local} discrete conservation, within the fluid and away from the free boundary, is a common goal and property of numerical schemes \cite{LeVeque2002}.  Indeed when we consider spatial discretization near the end of the paper (section FIXME), we will simply \emph{assume} that such local discrete conservation is already exact.  The discrete conservation limitations we identify are thus entirely at the free boundary.  Regarding conservation issues, we focus on the advance of the fluid layer into areas where it was absent a time-step earlier, and on its retreat from areas where it was present a time-step earlier.
+Theoretical guidance as to the degree of achievable numerical (i.e.~discrete) conservation is generally absent in the literature of free-boundary fluid problems.  For instance, within the context of glacier \cite{JaroschSchoofAnslow2013} and ice shelf \cite{Albrechtetal2011} modeling, schemes for improved discrete mass conservation at free boundaries are proposed, but this small literature provides only \emph{ad hoc} solutions to improve conservation at the discrete level.  \emph{Local} discrete conservation, within the fluid and away from the free boundary, is a common goal and property of numerical schemes \cite{LeVeque2002}.  Indeed when we consider spatial discretization near the end of the paper (section \ref{sec:spacediscretized}), we will simply \emph{assume} that such local discrete conservation is already exact.  The discrete conservation limitations we identify are thus entirely at the free boundary.  Regarding conservation issues, we focus on the advance of the fluid layer into areas where it was absent a time-step earlier, and on its retreat from areas where it was present a time-step earlier.
 
 
 \section{Strong formulation of the single time-step problem}  \label{sec:strongform}
