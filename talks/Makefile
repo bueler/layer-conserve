@@ -1,4 +1,4 @@
-all: liwgtalk.pdf
+all: siamgstalk.pdf
 
 figures = cartoon-wclimate.pdf cartoon-sensitive-one.pdf cartoon-sensitive-two.pdf cartoon-sensitive-three.pdf cartoon-sets.pdf masstimeseries.pdf
 
@@ -31,6 +31,7 @@ mass0.txt:
 masstimeseries.pdf: masstimefig.py mass0.txt
 	python masstimefig.py -o masstimeseries.pdf mass?.txt
 
+
 agutalk.aux: agutalk.tex $(figures) anim/adv/u-1.png anim/sia/u-1.png
 	pdflatex agutalk
 
@@ -43,6 +44,13 @@ liwgtalk.aux: liwgtalk.tex $(figures) anim/adv/u-1.png anim/sia/u-1.png anim/tde
 
 liwgtalk.pdf: liwgtalk.aux $(figures) anim/adv/u-1.png anim/sia/u-1.png anim/tdep/u-1.png
 	pdflatex liwgtalk
+
+
+siamgstalk.aux: siamgstalk.tex $(figures) anim/adv/u-1.png anim/sia/u-1.png anim/tdep/u-1.png
+	pdflatex siamgstalk
+
+siamgstalk.pdf: siamgstalk.aux $(figures) anim/adv/u-1.png anim/sia/u-1.png anim/tdep/u-1.png
+	pdflatex siamgstalk
 
 
 .PHONY: clean
