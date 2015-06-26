@@ -84,7 +84,7 @@ plot(x[795] + 0.4*cos(th), s[795] + 0.65*sin(th),'-r',lw=3.0)
 hold(False)
 figsave('cartoon-sensitive-three.pdf')
 
-for useH in [True,False]:
+for useH in [True]:
     figure(figsize=(10,4))
     x, s, b = genbasicfig(showqh=False)
     # compute and plot H_{n-1}

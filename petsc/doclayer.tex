@@ -1,8 +1,5 @@
 \documentclass[11pt]{amsart}
 
-\usepackage{geometry}
-\geometry{letterpaper, margin=1in}
-
 \usepackage{verbatim}
 
 % math macros
@@ -52,15 +49,18 @@
 \begin{document}
 
 \begin{abstract}
-This brief document explains the code \texttt{layer.c}.  It covers the way the PDE (strong) form is discretized into a nonlinear system solved by a \texttt{SNESVI} object from PETSc.  This example may be useful in the paper ``Conservation for fluid layers with free boundaries''.  This example has been used in my AGU 2014 and LIWG 2015 talks.
+This brief document explains the code \texttt{layer.c}.  It covers the equations which are solved, and provides some documentation of the runtime options.  It states the way the PDE (strong) form is discretized into a nonlinear system solved by a \texttt{SNESVI} object from PETSc.
+
+This example has been used in my AGU 2014 and LIWG 2015 talks.  Also see the paper \emph{Conservation for fluid layers with free boundaries}, namely the file \verb|../paper/lc.pdf|.
 \end{abstract}
 
 \maketitle
 
 \thispagestyle{empty}
 
-%\baselineskip=14pt
-%\parskip=7pt
+\baselineskip=12pt
+\parskip=5pt
+
 
 \section{Introduction}
 
@@ -72,7 +72,7 @@ where $u(t,x)$ is the layer thickness, thus
 \begin{equation}
 u \ge 0. \label{eq:constraint}
 \end{equation}
-The spatial domain is $[0,L]$, where $L=10$, with periodic boundary conditions.  The temporal domain is $[0,T]$.  The source term $f=f(x)$ only depends on space.
+The source term $f=f(x)$ only depends on space.  The spatial domain is $[0,L]$, where $L=10$, with periodic boundary conditions.  The temporal domain is $[0,T]$.
 
 The flux $q(x,u,u_x)$ is a mix of advective and non-linearly diffusive parts according to a parameter $0\le \lambda \le 1$.  The two parts are $q^0(x,u,u_x)$, a shallow ice approximation flux using a continuously-differentiable bed elevation $b(x)$, and $q^1(u)$, a constant-velocity advection.  In detail,
 \begin{align}
@@ -82,6 +82,17 @@ The flux $q(x,u,u_x)$ is a mix of advective and non-linearly diffusive parts acc
 \end{align}
 Here $n\ge 1$ is the Glen exponent and $\gamma>0$ is a scaling.  We assume the advection is right-ward, so $v_0 \ge 0$.
 
+To get started do this to build and see program-specific options:
+\begin{verbatim}
+$ make layer
+$ ./layer -help |grep lay_
+\end{verbatim}
+Simple runs that illustrates what the program does is:
+\begin{verbatim}
+$ ./layer -draw_pause 0.5
+$ ./layer -draw_pause 0.1 -lay_dt 0.01 -lay_steps 50 -da_grid_x 200
+\end{verbatim}
+The second run is at higher space and time resolution.
 
 \section{PDE discretization}
 
@@ -114,13 +125,11 @@ F_j(\bu) &= u_j - u_j^{n-1} - \Delta t\,f(x_j)  \label{eq:defineFj} \\
 where
     $$\nu_2 = \frac{\Delta t}{2\Delta x}.$$
 
-Details in the code are, however, largely-determined by the flux-discretization scheme for the parts inside square brackets.  See the next section.
-
 \section{Flux discretization}
 
-Consider flux form \eqref{eq:fluxform}, with diffusive part $q^0$ and advective part $q^1$.  The approximations of these fluxes appear in method \verb|FormFunctionLocal()|, which is called-back by SNES using DMDA information.
+The flux-discretization scheme for the parts inside square brackets in \eqref{eq:defineFj} determines many details in the code.  These approximations appear in \verb|FormFunctionLocal()|, by call-back from SNES using DMDA information.
 
-We start with approximations of $q^0$.  Let
+Recall flux form \eqref{eq:fluxform}.  We start with approximations of $q^0$.  Let
 	$$S(u,z) = - \gamma u^{n+2} |z|^{n-1} z,$$
 so that $q^0(x,u,u_x) = S(u,u_x+b_x)$.  Also define derivatives of the bed
 	$$b'_{j+1/2} = \frac{b(x_{j+1}) - b(x_j)}{\Delta x}, \quad b'_{j-1/2} = \frac{b(x_j) - b(x_{j-1})}{\Delta x}.$$
@@ -139,19 +148,19 @@ where \verb|X| is 0,1,2:
 \begin{enumerate}
 \setcounter{enumi}{-1}
 \item %0
-In this case we use a backward-Euler time-discretization and a centered (second-order) space-discretization, so the first line approximates ``$2 \Delta x\,(v_0 u)_x$'':
+A backward-Euler time-discretization and a centered (second-order) space-discretization, so the first line approximates ``$2 \Delta x\,(v_0 u)_x$'':
 \begin{align*}
 q^1_{j+1/2}(\bu) - q^1_{j-1/2}(\bu)             &= v_0 \left( - u_{j-1} + u_{j+1} \right), \\
 q^1_{j+1/2}(\bu^{n-1}) - q^1_{j-1/2}(\bu^{n-1}) &= 0.
 \end{align*}
 \item %1
-This case uses a backward-Euler time-discretization and a third-order, upwind-biased space-discretization.  As above, the first line approximates ``$2 \Delta x\,(v_0 u)_x$'':
+A backward-Euler time-discretization and a third-order, upwind-biased space-discretization:
 \begin{align*}
 q^1_{j+1/2}(\bu) - q^1_{j-1/2}(\bu)             &= v_0 \left( \tfrac{1}{3} u_{j-2} - \tfrac{6}{3} u_{j-1} + \tfrac{3}{3} u_j - \tfrac{2}{3} u_{j+1} \right), \\
 q^1_{j+1/2}(\bu^{n-1}) - q^1_{j-1/2}(\bu^{n-1}) &= 0.
 \end{align*}
 \item %2
-This case uses the trapezoid rule time-discretization and a centered (second-order) space-discretization.  Thus each of these lines is an approximation of ``$\Delta x\,(v_0 u)_x$'':
+A trapezoid rule time-discretization and a centered (second-order) space-discretization.  Each of these lines approximates ``$\Delta x\,(v_0 u)_x$'':
 \begin{align*}
 q^1_{j+1/2}(\bu) - q^1_{j-1/2}(\bu)             &= v_0 \left( - \tfrac{1}{2} u_{j-1} + \tfrac{1}{2} u_{j+1} \right), \\
 q^1_{j+1/2}(\bu^{n-1}) - q^1_{j-1/2}(\bu^{n-1}) &= v_0 \left( - \tfrac{1}{2} u_{j-1}^{n-1} + \tfrac{1}{2} u_{j+1}^{n-1} \right).
