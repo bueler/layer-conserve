@@ -57,7 +57,7 @@
 
 \title{Conservation for fluid layers with free boundaries\thanks{Draft date: \today.  Supported by NASA grant \# NNX13AM16G.}} 
 
-\author{Ed Bueler\thanks{Dept.~of Mathematics and Statistics, and Geophysical Institute, University of Alaska Fairbanks (\texttt{elbueler@alaska.edu}).}}
+\author{Ed Bueler\thanks{Dept.~of Mathematics and Statistics, University of Alaska Fairbanks (\texttt{elbueler@alaska.edu}).}}
 
 \begin{document}
 \maketitle
@@ -75,9 +75,11 @@ FIXME
 
 \section{Introduction}  \label{sec:intro}
 
-Consider a fluid which moves in a thin layer, in which fluid mass can be added or removed from the layer by processes like precipitation, evaporation, ablation, and so on.  Through flow and the addition/removal processes the area of substrate covered by the fluid can change in time.  Flow or precipitation can enlarge the fluid-covered region.  A balance between ongoing flow and ablation processes determine the location of the free boundary of the fluid layer.  Sufficient ablation can remove the layer entirely.
+Consider a fluid which moves in a thin layer, in which fluid mass can be added or removed from the layer by processes like precipitation, evaporation, ablation, and so on.  Through flow and these addition/removal processes the area of substrate covered by the fluid can change in time.  Flow or precipitation can enlarge the fluid-covered region.  A balance between ongoing flow and ablation processes determine the location of the free boundary of the fluid layer.  Sufficient ablation can remove the layer entirely.
 
-We consider models of such fluid layers, at least those models described by a \emph{thickness} or equivalent quantity.  In such models the boundary addition/removal processes are signed source terms in a two-spatial-dimension conservation equation.  The layer occupies a subset of a larger fixed region of the plane.  The domain where the fluid layer is present, and thus the conservation equation applies, is the set where the thickness is positive.  This domain changes in time, so the conservation problem is of free-boundary type.  Fluid layer problems of the type addressed here appear within earth-system and climate models for the ice sheet, sea-ice, and even ocean components (Figure \ref{fig:climatepictures}).
+We consider models of such fluid layers, at least those models described by a \emph{thickness} or equivalent quantity.  In such models the addition/removal processes are combined into a signed source terms in a two-spatial-dimension conservation equation.  The layer occupies a subset of a larger fixed region of the plane.  The domain where the fluid layer is present, thus where the conservation equation applies, is the set where the thickness is positive.  This domain changes in time, so that the conservation problem is of free-boundary type.
+
+Fluid layer problems of the type addressed here appear within earth-system and climate models for the ice sheet, sea ice, and even ocean components (Figure \ref{fig:climatepictures}).  In such problems the modeling goal may be to predict the fluid-covered area.  For instance, sea ice and ice sheets are much more reflective of sunlight than the substrate they cover (i.e.~ocean or land, respectively).  At the same time, conservation of mass, especially in the sense of capturing mass transfers to and from the modeled fluid, is also a major modeling goal.
 
 \begin{figure}[ht]
 \begin{center}
@@ -88,34 +90,35 @@ FIGURE (FIXME)
 \label{fig:climatepictures}
 \end{figure}
 
-FIXME In such layer models for constant density fluids the thickness is the conserved quantity, equivalent to mass, and this thickness must be nonnegative.  In models for variable density fluids the vertical integral of density is the conserved quantity, and it must be nonnegative.  In layer models of conservation of energy of a single phase in a fluid layer, the vertical integral of internal energy or temperature is the conserved quantity, and in some such cases this vertical energy must be bounded below (because the layer is only one phase) \cite{Aschwandenetal2012}.  However, we consider only conservation of scalar properties, and not, for example conservation of vectors like momentum.  As the mass of a constant-density fluid is the primary example of the conserved scalar in such layer models, we will for simplicity call the conserved quantity ``mass'' and the corresponding nonnegative variable ``thickness''.
+If the fluid is modeled as having constant density then the thickness is the conserved quantity, equivalent to mass, and this thickness must be nonnegative.  In models for variable density fluids the vertical integral of density is the conserved quantity in the two-dimensional form of the problem, and it must be nonnegative.  In layer models of conservation of energy of a single phase in a fluid layer, the vertical integral of internal energy or temperature is the conserved quantity, and in some such cases this vertical energy must be bounded below \cite{Aschwandenetal2012}.  However, we consider only conservation of scalar properties, and not, for example conservation of vectors like momentum.  As the mass of a constant-density fluid is the primary example of the conserved scalar in the models considered here, we will for simplicity call the conserved quantity ``mass'' and the corresponding nonnegative variable ``thickness''.
 
-
-Thus we suppose $\Omega \subset \RR^d$, $d\ge 1$, is a bounded open region with regular (Lipshitz) boundary.  Our time-dependent model is usually stated in strong form, combining a conservation equation and a sometimes-ignored constraint:
+To be more precise we suppose $\Omega \subset \RR^d$, $d\ge 1$, is a bounded open region with regular (Lipshitz) boundary.  Our time-dependent model is usually stated in strong form, combining a conservation equation and a sometimes-ignored constraint:
 \begin{align}
 u_t + \Div \bq &= f(u,x,t) &&\text{in } \Omega, \text{ where } u > 0 \label{eq:massconserve} \\
 u &\ge 0 &&\text{in } \bar\Omega. \label{eq:constraint}
 \end{align}
-Note $u(x,t)$ is defined for all $x\in \bar\Omega$ and $t>0$, even where there is no fluid and $u(x,t)=0$.
+The thickness function $u(x,t)$ is defined for all $x\in \bar\Omega$ and $t>0$, but where there is no fluid we have $u(x,t)=0$.
 
 Constraint \eqref{eq:constraint} comes from the meaning of $u$ as a thickness, of course, and we say that the layer \emph{exists} where $u(x,t)>0$, and that it is \emph{absent} otherwise.  The \emph{strong form} conservation equation \eqref{eq:massconserve} only applies where the layer exists.  Well-posedness of the combined problem \eqref{eq:massconserve}--\eqref{eq:constraint} requires a precise specification of admissible functions and a weak formulation, which we supply in sections \ref{sec:weakform} and \ref{sec:wellposed}.
 
-The form of the flux $\bq$, that is, how it depends on the unknown $u$ or its gradient $\grad u$, is reasonably general,
+The form of the flux $\bq$ considered here, that is, how it depends on the unknown $u$ or its gradient $\grad u$, is reasonably general,
 \begin{equation}
 \bq = \bq(\grad u,u,x,t), \label{eq:fluxdepends}
 \end{equation}
-more detail is given in subsection \ref{subsec:fluxassumptions}.  In many examples we may think of the fluid moving at some vertically-averaged velocity $\bX=\bX(x,t)$ determined by ``external'' factors, and thus $\bq = \bX u$, and we address such cases in subsection \ref{subsec:advect}.  The results there apply if $\bX$ is from a coupled solution of a mass and momentum conservation system, as long as it has the regularity we need to apply the theory (i.e.~as in subsection \ref{subsec:fluxassumptions}).  In fact our main ideas apply equally to models where $\bq$ depends \emph{globally} on the conserved quantity $u$ and its derivatives, perhaps through integrals but more likely through coupling to other equations.  Because such integro-differential or coupled models are exactly our interest, we do not intend that the mass-conservation equation is decoupled from other parts of the model.  However, so as to find rigorous and precise results here, we need to have some assurance of well-posedness at each time step (section \ref{sec:wellposed}), and so we restrict most of the presentation to cases \eqref{eq:fluxdepends}.  An exception occurs in subsection \ref{subsec:nonlocal}, which covers an example where the form of $\bq$ involves a spatial integral.
+more detail is given in subsection \ref{subsec:fluxassumptions}.  In some examples the process is significantly diffusive so that $\bq=- D \grad u + (\text{other terms})$, where $D\ge 0$ has various dependence on $t,x,u,|\grad u|$.
 
-Numerical approximations of these time-evolving fluid layer problems necessarily discretize time in some manner, and our analysis is based on this fact.  We semi-discretize the mass conservation equation in time by a one-step method and pose the single-time-step, continuous-space problem in weak variational form.  A broad selection of methods are then possible when discretizing space to solve this single-time-step problem numerically, including finite difference/volume/element methods and even spectral methods, but, until section \ref{sec:spacediscretized}, our approach is independent of any spatial discretization whatsoever.
+In other examples we may think of the fluid moving at some vertically-averaged velocity $\bX=\bX(x,t)$ determined by ``external'' factors, and thus $\bq = \bX u$, and we address such cases in subsection \ref{subsec:advect}.  The results there apply if $\bX$ is from a coupled solution of a mass and momentum conservation system, as long as it has the regularity we need to apply the theory (i.e.~as in subsection \ref{subsec:fluxassumptions}).  In fact our ideas are intended to apply equally to models where $\bq$ depends \emph{globally} on the conserved quantity $u$ and its derivatives, perhaps through integrals over $\Omega$ but more likely through coupling to other differential equations over $\Omega$.  Such integro-differential or coupled models are exactly our interest.  However, so as to find rigorous and precise results here, we need to have some assurance of well-posedness at each time step (section \ref{sec:wellposed}), and so we restrict most of the presentation to cases \eqref{eq:fluxdepends}.  An exception is in subsection \ref{subsec:nonlocal}, an example where $\bq$ is a spatial (i.e.~over $\Omega$) integral of $u$ and $\grad u$.
 
-In the time-semi-discretized case, each time-step requires the solution of a (continuous) free boundary problem in space.  Our first questions about such models is
+Numerical approximations of these time-evolving fluid layer problems necessarily discretize time in some manner, and our analysis is based on this reality.  We semi-discretize the mass conservation equation in time by a one-step method and pose the single-time-step, continuous-space problem in weak variational form.  For the discretized-time problem, sections \ref{sec:timeseries} and \ref{sec:wellposed} address conservation errors and well-posedness, respectively, independently of spatial discretization.  When solving the single-time-step problem numerically, however, a broad selection of spatial-discretization methods are of course available, including finite difference/volume/element methods.  Only in section \ref{sec:spacediscretized}, where we use an unstructured finite volume element \cite{Cai1990} approach to extend the results from the discretized-time case, in our approach is specific to a spatial discretization.
+
+In the discretized-time case each time-step requires the solution of a (continuous) free boundary problem in space.  An immediate question about such models is
   \begin{quote}
   \renewcommand{\labelenumi}{(\roman{enumi})}
   \begin{enumerate}
   \item \emph{Is this free-boundary problem well-posed?}
   \end{enumerate}
   \end{quote}
-The answer to (i) depends on the form of the flux, but we can show, by essentially-standard methods applied to the variational inequality form of the weakly-posed problem (section \ref{sec:wellposed}), that the answer is often ``yes,'' though our sufficient conditions may include a time-step restriction.
+The answer to (i) depends on the form of the flux, but we can show (section \ref{sec:wellposed}), by essentially-standard methods applied to the variational inequality form of the weakly-posed problem (section \ref{sec:weakform}), that the answer is often ``yes,'' with sufficient conditions which may include a time-step restriction.
 
 Our second question is perhaps less obvious, but of substantial importance in modeling practice:
   \begin{quote}
@@ -125,7 +128,9 @@ Our second question is perhaps less obvious, but of substantial importance in mo
   \item \emph{Can the modeled mass of the fluid layer be conserved exactly in the sense that a computable space-time integral of the source term $f$ is equal to the change in mass in a time step?}
   \end{enumerate}
   \end{quote}
-By considering this question abstractly in section \ref{sec:spacediscretized} we conclude that the answer is ``no,'' in particular in cases where the answer to (i) is ``yes.''  That is, a numerical model of a fluid layer governed by \eqref{eq:massconserve} and \eqref{eq:constraint} cannot conserve mass.  We can, however, bound the conservation error in a practical manner.
+By considering this question abstractly in sections \ref{sec:timeseries} and \ref{sec:spacediscretized} we conclude that the answer is ``no,'' in particular in cases where the answer to (i) is ``yes.''  That is, a numerical model of a fluid layer governed by \eqref{eq:massconserve} and \eqref{eq:constraint} cannot conserve mass.
+
+FIXME We can, however, bound the conservation error in a practical manner.
 
 In the geophysical literature, free-boundary problems of the above kind appear for the evolution of ice sheets \cite{Bueler2015,Bueleretal2005,CalvoDuranyVazquez2000,Calvoetal2002,EgholmNielsen2010,JouvetBueler2012}, shallow liquid water flowing over marshes \cite{AlonsoSantillanaDawson2008}, shallow water equation models for tsunumi run-up \cite{LeVequeetal2011}, coupled surface/subsurface hydrological modelling \cite{Maxwelletal2014}, subglacial and supraglacial hydrology \cite{Aschwandenetal2012,BuelervanPelt2015,Schoofetal2012}, ice shelves \cite{Albrechtetal2011}, and sea ice \cite[and references therein]{LipscombHunke2004}, among other applications.
 
