@@ -21,4 +21,4 @@ lc.bbl: lc.aux lc.bib
 .PHONY: clean
 
 clean:
-	@rm -f *.pyc *.out *.aux *.log *.bbl *.blg *.synctex.gz *~
+	@rm -f *.pyc *.out *.aux *.log *.bbl *.blg *.synctex.gz *~ domains-fig.pdf
