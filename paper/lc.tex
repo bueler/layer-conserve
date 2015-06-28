@@ -386,17 +386,21 @@ As an operational statement about discrete-time models, we can rephrase our majo
 In stating this assertion, we note that the retreat loss $R_n$ should vanish in the $\Delta t_n\to 0$ limit, which is a consistency statement about the time-discretized model, and that we can show $R_n\to 0$ in that limit with additional stability results on the solution of the weak single time-step problem \eqref{eq:theVI}.
 
 
-\section{The fully-discretized single time-step problem}  \label{sec:spacediscretized}
+\section{The fully-discrete single time-step problem}  \label{sec:spacediscretized}
 
-So far we have treated time-dependent free-boundary mass conservation models in time-semi-discretized form, as a sequence of continuous-space free-boundary problems.  We will address well-posedness (section \ref{sec:wellposed}) in such a continuous-space framework also.  However, aspects of our theory are only completed by fully-discretizing the models, and the fully-discretized case shows that we must add to the \emph{a posteriori} computations of the last section if we are to fully-balance the conservation books at the free boundary.
+So far we have treated time-dependent free-boundary mass conservation models in time-semi-discretized form, as a sequence of continuous-space free-boundary problems.  We will address well-posedness (section \ref{sec:wellposed}) in such a continuous-space framework also.  However, considering the fully-discrete case shows that we must add to the \emph{a posteriori} computations of the last section if we are to completely balance the conservation books at the free boundary.
 
-In this section we make the mild assumption that the spatial discretization allows an unstructured finite volume \cite{LeVeque2002} interpretation.  Within this fully-discrete framework we will be able to say more about time-step restrictions for explicit and semi-explicit schemes (subsection \ref{subsec:spaceexplicit}).  Also we will be able to tell a complete story about conservation errors at the free boundary (subsection \ref{subsec:shellerror}).  After that we   First we set notation for a highly-generic finite volume scheme.
+In this section we make the mild assumption that the spatial discretization allows an unstructured finite volume \cite{LeVeque2002} interpretation (subsection \ref{subsec:spacenotation}).  Also we will be able to tell a complete story about conservation errors at the free boundary (subsection \ref{subsec:shellerror}).  After that we consider numerical solution methods for the constrained nonlinear problem (subsection \ref{subsec:newtonvi}).   First we set notation for a highly-generic finite volume scheme.
 
-\subsection{Unstructured finite volume schemes} \label{subsec:spacenotation}  We restrict to $\Omega \subset \RR^d$ for $d=2,3$, and we suppose $\Omega$ is a polygon (polyhedron).  Our unstructured finite volume paradigm here assumes only that $\Omega$ is tiled by cells which are themselves polygons (Figure \ref{fig:fvmesh-notation}).  These polygonal cells can even be non-convex, and the number of edges (faces) per cell may vary.
+\subsection{Unstructured finite volume schemes} \label{subsec:spacenotation}  We restrict to $\Omega \subset \RR^d$ for $d=2,3$, and we suppose $\Omega$ is an open polygon (polyhedron).  We assume that $\Omega$ is tiled by open polygonal (polyhedral) cells $\omega_j$, indexed by $j\in J$ and with area (volume) $|\omega_j|=a_j$, as shown Figure \ref{fig:fvmesh-notation}.  These cells may be non-convex and the number of edges (faces) per cell may vary.  Because this is a tiling, $\omega_j \cap \omega_k = \emptyset$ for $j\ne k$ and
+\begin{equation}
+\bar\Omega = \bigcup_{j\in J} \bar \omega_j \quad \text{and} \quad |\Omega| = \sum_{j\in J} a_j.  \label{eq:tiling}
+\end{equation}
 
-For notation, the cells are indexed by $j\in J$.  Each cell $\omega_j$ has area (volume) $a_j$, so $\bar\Omega = \bigcup_{j\in J} \bar \omega_j$ and $|\Omega| = \sum_{j\in J} a_j$.  The edge (face) between cell $j$ and cell $k$ is indexed by a pair $(j,k)$, and it has length (area) $\ell_{(j,k)}$.  The $j$th cell has a set of edges $\mathcal{E}_j$ which contains those pairs $(j,k)$ so that $\omega_j$ and $\omega_k$ meet in an edge (face).  The set of all edges is the union $\mathcal{E} = \bigcup_{j\in J} \mathcal{E}_j$.
 
-The representative thickness $u_n^j$ in cell $j$ is given the usual finite volume interpretation as an average, and similarly $F_n^j$ is a representative source term for the cell.
+The edge (face) between cell $j$ and cell $k$, i.e.~$\bar\omega_j \cap \bar \omega_k$, has length (area) $\ell_{(j,k)}$.  Cell $\omega_j$ has a set of edges $\mathcal{E}_j$ which contains those pairs $(j,k)$ so that $\bar\omega_j \cap \bar \omega_k \ne \emptyset$.  The set of all edges is the (non-disjoint) union $\mathcal{E} = \bigcup_{j\in J} \mathcal{E}_j$.
+
+The representative thickness $u_n^j$ in cell $j$ is given the usual finite volume interpretation as an average \cite{LeVeque2002}, and similarly $F_n^j$ dennote a representative source term for the cell.
 \begin{equation}
 u_n^j \approx \frac{1}{a_j} \int_{\omega_j} u_n(x)\,dx, \qquad F_n^j \approx \frac{1}{a_j} \int_{\omega_j} F_n(u_n,x)\,dx.  \label{eq:fvthickness}
 \end{equation}
@@ -473,7 +477,9 @@ Techniques for proving well-posedness of time-independent variational inequaliti
 \item[\ref{subsec:powertransform}] doubly-nonlinear parabolic fluxes including the porous medium case; and
 \item[\ref{subsec:nonlocal}] linear non-local fluxes computed by integrals over $\Omega$.
 \end{itemize}
-In subsections \ref{subsec:plap}--\ref{subsec:nonlocal} we only consider fully-implicit (i.e.~backward Euler) time-stepping schemes.  In \ref{subsec:explicit} we see how regularity issues stop us from having the well-posed, \emph{continuous-space} single time-step free boundary problems if time-stepping is explicit or semi-explicit.  The fully-discretized schemes in section \ref{sec:spacediscretized} allow arbitrary balance between implicitness and explicitness, however.
+In subsections \ref{subsec:plap}--\ref{subsec:nonlocal} we only consider fully-implicit (i.e.~backward Euler) time-stepping schemes.
+
+In subsection \ref{subsec:explicit} we see how regularity issues stop us from having the well-posed, \emph{continuous-space} single time-step free boundary problems if time-stepping is explicit or semi-explicit.  The fully-discretized schemes in section \ref{sec:spacediscretized} allow arbitrary balance between implicitness and explicitness, however.  In this fully-discrete framework we will be able to say more about time-step restrictions for explicit and semi-explicit schemes (subsection \ref{subsec:spaceexplicit}).
 
 \subsection{Monotonicity and sufficient conditions on flux for well-posedness} \label{subsec:mono}  Recall that $\mathcal{X}$ is a Banach space and $\mathcal{K}$ is a closed, convex subset of $\mathcal{X}$.  A mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{monotone} \cite{KinderlehrerStampacchia1980} if
 \begin{equation}
