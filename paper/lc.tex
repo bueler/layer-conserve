@@ -9,7 +9,6 @@
 \usepackage{tikz}
 
 \newtheorem{example}{Example}
-%\newtheorem*{assumptions}{Standard Assumptions}
 
 % math macros
 \newcommand\bb{\mathbf{b}}
@@ -214,9 +213,9 @@ The strong form \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint} of the
 
 \section{Weak formulation of the single time-step problem}  \label{sec:weakform}
 
-A strong form of a free-boundary problem, such as PDE \eqref{eq:semimassconserve} subject to inequality \eqref{eq:semiconstraint}, is inadequate because the boundary conditions satisfied by $u_n$ along the free boundary $\partial\Omega_n$ are not clear.  Also, as noted already, statements \eqref{eq:semimassconserve} and \eqref{eq:strongconditionswherezero}, while intuitively correct, apply on solution-dependent sets.  By contrast, the weak form of the single time-step problem, which we derive in this section, namely a variational inequality \cite{Friedman1982,KinderlehrerStampacchia1980} on a convex set of admissible functions, can be well-posed.  This weak form refers only to the set $\Omega$ and its boundary $\partial\Omega$.
+A strong-form free-boundary problem, such as PDE \eqref{eq:semimassconserve} subject to inequality \eqref{eq:semiconstraint}, is inadequate because the boundary conditions satisfied by the solution $u_n$ along the free boundary $\partial\Omega_n$ are not clear, and because statements \eqref{eq:semimassconserve} and \eqref{eq:strongconditionswherezero}, while intuitively correct, apply on solution-dependent sets.  By contrast, a weak form of the single time-step problem can be well-posed.  Our weak form in this section is a variational inequality \cite{Friedman1982,KinderlehrerStampacchia1980} on a convex set of admissible functions.  Our formulation refers only to the set $\Omega$ and its boundary $\partial\Omega$, not to $\Omega_n$.
 
-We will state conditions on the discrete-time flux $\bQ_n$ first (subsection \ref{subsec:fluxassumptions}) so that we can then argue that a solution to the discrete-time strong problem is a solution to a certain variational inequality (subsection \ref{subsec:derivevi}); thereby we derive the weak form.  Then we show a converse, that a sufficiently-smooth solution of the weak problem solves the strong problem (subsection \ref{subsec:interior}).  Only in the next section \ref{sec:wellposed} do we address well-posedness, however, which depends on details of $\bQ_n$ which we do not need here.
+We will state conditions on the discrete-time flux $\bQ_n$ first (subsection \ref{subsec:fluxassumptions}), then construct a variational inequality (subsection \ref{subsec:derivevi}), and then show that a sufficiently-smooth solution of this weak problem solves the strong problem (subsection \ref{subsec:interior}).  Only in section \ref{sec:wellposed} do we address well-posedness as it depends on details of $\bQ_n$ which we do not need here.
 
 \subsection{Flux assumptions} \label{subsec:fluxassumptions}  Let $p\ge 1$ and recall that $L^p (\Omega)$ is the Banach space of functions with norm $\|v\|_{L^p} = \left(\int_\Omega |v|^p\,dx\right)^{1/p}$.  The Sobolev space $W^{1,p}(\Omega)$ is the Banach space of functions $v$ with $v,\partial_1 v,\dots,\partial_d v \in L^p(\Omega)$ \cite{Evans1998}, with norm
 \begin{equation}
@@ -225,53 +224,56 @@ We will state conditions on the discrete-time flux $\bQ_n$ first (subsection \re
 Note that if $p>d$ then each $v\in W^{1,p}(\Omega)$ has a continuous representative \cite[``Morrey's inequality'']{Evans1998}, but otherwise $v$ may be discontinuous.  Denote by $W_0^{1,p}(\Omega)$ the closure of $C_c^\infty(\Omega)$ in $W^{1,p}(\Omega)$.
 
 \medskip
-\begin{definition}  \label{ass:std}  We say $\bQ_n$ satisfies the \emph{standard assumptions} if the following hold:  If $v \in W^{1,p}(\Omega)$ then, for $1/p + 1/q = 1$,
+\begin{definition}  \label{ass:std}  For $v \in W^{1,p}(\Omega)$ define $E_v = \{x\in\Omega \,\big|\, v(x) = 0\}$.  (Note that $\grad v = 0$ a.e.~on $E_v$ by lemma A.4 in chapter II of \cite{KinderlehrerStampacchia1980}.)  We say $\bQ_n$ satisfies the \emph{standard flux assumptions} if
+\renewcommand{\labelenumi}{\emph{\roman{enumi}})}
+\begin{enumerate}
+\item for each fixed $x\in \Omega$,
 \begin{equation}
-\bQ_n(\grad v,v,x) \in L^q(\Omega). \label{eq:QisLq}
+(\bX,z) \mapsto \bQ_n(\bX,z,x) \text{ is continuous on } \RR^d \times \RR,  \label{eq:Qiscontinuous}
 \end{equation}
-For fixed $x\in \Omega$, $\bQ_n(\bX,v,x)$ is continuous as a function of $\bX$ and $v$:
+\item and if $v \in W^{1,p}(\Omega)$ then, for $1/p + 1/q = 1$,
 \begin{equation}
-(\bX,v) \mapsto \bQ_n(\bX,v,x) \text{ is continuous on } \RR^d \times \RR.  \label{eq:Qiscontinuous}
+\bQ_n(\grad v,v,x) \in L^q(\Omega), \label{eq:QisLq}
 \end{equation}
-For $v \in W^{1,p}(\Omega)$, define $E_v = \left\{x\in\Omega \,\big|\, v(x) = 0\right\}$.  Then
+\item and
 \begin{equation}
 \bQ_n(\grad v,v,x)=0 \quad \text{a.e.~on } E_v. \label{eq:Qiszero}
 \end{equation}
+\end{enumerate}
 \end{definition}
 
-Thus we make two kinds of assumptions about the discrete-time flux, namely that $\bQ_n$ is a well-behaved function (i.e.~\eqref{eq:QisLq} and \eqref{eq:Qiscontinuous}) and
-that $\bQ_n=0$ if the thickness is zero.  Assumption \eqref{eq:Qiszero} relates to the core meaning of $\bQ_n$ in \eqref{eq:semimassconserve}, namely that $\bQ_n$ is the flux of a layer with nonnegative thickness.  Note that $\grad v = 0$ a.e.~on $E_v$ by lemma A.4 in chapter II of \cite{KinderlehrerStampacchia1980}.
+Thus we make different kinds of assumptions about the discrete-time flux.  In \eqref{eq:Qiscontinuous} and \eqref{eq:QisLq} we simply assume that $\bQ_n$ is a well-behaved function.  Assumption \eqref{eq:Qiszero}, that $\bQ_n=0$ if the thickness is zero, relates to the core meaning of $\bQ_n$ in \eqref{eq:semimassconserve}, namely that $\bQ_n$ is the flux of a layer with nonnegative thickness.  
 
 Regarding the source term $F_n$, we assume first that if $v\in W^{1,p}(\Omega)$ then
 \begin{equation}
-F_n(v(x),x) \in L^q(\Omega).  \label{eq:FisLq}
+F_n(v,x) \in L^q(\Omega).  \label{eq:FisLq}
 \end{equation}
 Secondly we assume that $F_n$ is uniformly Lipshitz as a function of $v$: there is $L>0$ so that for all $x\in\Omega$ and $v_1,v_2 \in [0,\infty)$, we have
 \begin{equation}
 \left|F_n(v_1,x)-F_n(v_2,x)\right| \le L |v_1-v_2|.  \label{eq:Fislip}
 \end{equation}
-Thus $F_n$ is continuous as a function of $v$.
+In particular, $F_n$ is continuous as a function of $v$.
 
-We do not require that $F_n$ be strictly increasing in $v$, which would be natural if we sought monotonicity of the variational form in the $\Delta t \to \infty$ (i.e.~steady state) limit.  See section \ref{sec:wellposed} and compare the discussion of monotonicity in  \cite{JouvetBueler2012}.
+However, we do not require that $F_n$ be strictly increasing in $v$, which would be natural if we sought monotonicity of the variational form in the $\Delta t \to \infty$ (i.e.~steady state) limit.  See section \ref{sec:wellposed} and compare the discussion of monotonicity in  \cite{JouvetBueler2012}.
 
-\subsection{Derivation of the variational inequality}  \label{subsec:derivevi}  To use the strong form in deriving a weak form and vice versa (section \ref{subsec:interior}), we need an extra assumption that $\bQ_n$ is smooth:  Let $S \subset \Omega$ be an open subset.  If $v\in W^{1,p}(S)$ then
+\subsection{Derivation of the variational inequality}  \label{subsec:derivevi}  To use the strong form in deriving a weak form and vice versa (section \ref{subsec:interior}), we need an extra assumption that $\bQ_n$ is smooth:  For all open $S \subset \Omega$, if $v\in W^{1,p}(S)$ then
 \begin{equation}
 \frac{\partial}{\partial x_i} \bQ_n(\grad v,v,x) \in L^q(S). \label{eq:Qissmooth}
 \end{equation}
 
 \medskip
-\begin{theorem} \label{thm:strongimpliesweak} Suppose $u_n\ge 0$ and $v\ge 0$ are continuous functions on $\overline{\Omega}$ and that $\grad u_n,\grad v$ are in $L^p(\Omega)$.  Suppose that the boundaries of the sets $\Omega_n$ and $\Omega_n^r \cup \Omega_n^0$ in decomposition \eqref{eq:omegadecomposition} are all sufficiently smooth (e.g.~Lipshitz).  Suppose $u_n$ solves \eqref{eq:semimassconserve} on $\Omega_n$ and \eqref{eq:strongconditionswherezero} on $\Omega_n^r \cup \Omega_n^0$.  Suppose the function $\bQ_n(\bX,v,x)$ satisfies the standard assumptions and \eqref{eq:Qissmooth}.  Define $\bQ_n=\bQ_n(\grad u_n,u_n,x)$ and $F_n = F_n(u_n,x)$.  Then
+\begin{theorem} \label{thm:strongimpliesweak}  Suppose $u_n\ge 0$ solves \eqref{eq:semimassconserve} on $\Omega_n$ and \eqref{eq:strongconditionswherezero} on $\Omega_n^r \cup \Omega_n^0$.  Suppose $u_n,v\in C(\overline{\Omega})$, $v\ge 0$, and $\grad u_n,\grad v \in L^p(\Omega)$.  Suppose the boundaries of the sets $\Omega_n$ and $\Omega_n^r \cup \Omega_n^0$ in decomposition \eqref{eq:omegadecomposition} are all sufficiently smooth (e.g.~Lipshitz).  Suppose the function $\bQ_n(\bX,v,x)$ satisfies both the standard flux assumptions and \eqref{eq:Qissmooth}.  Define $\bQ_n=\bQ_n(\grad u_n,u_n,x)$ and $F_n = F_n(u_n,x)$.  Then
 \begin{equation}
 -\int_{\Omega} \bQ_n \cdot \grad(v-u_n) \ge \int_{\Omega} \left(F_n - \frac{u_n - u_{n-1}}{\Delta t}\right) (v-u_n). \label{eq:morallytheVI}
 \end{equation}
 \end{theorem}
 
-\begin{proof}  Let $w=v-u_n$.  Using decomposition \eqref{eq:omegadecomposition} and integration by parts (i.e.~divergence theorem)---here we use regularity of $\partial \Omega_n$ and $\partial(\Omega_n^r \cup \Omega_n^0)$ and assumption \eqref{eq:Qissmooth} on $S=\Omega_n$ and $S=(\Omega_n^r \cup \Omega_n^0)^\circ$---we get
+\begin{proof}  Let $w=v-u_n$.  Using decomposition \eqref{eq:omegadecomposition} and integration by parts---here we use regularity of $\partial \Omega_n$ and $\partial(\Omega_n^r \cup \Omega_n^0)$ and assumption \eqref{eq:Qissmooth} on $S=\Omega_n$ and $S=(\Omega_n^r \cup \Omega_n^0)^\circ$---we get
 \begin{align}
 -\int_{\Omega} \bQ_n \cdot \grad w &= \int_{\Omega_n} (\Div \bQ_n) w - \int_{\partial \Omega_n} (\bQ_n \cdot \bn) w \label{eq:intbypartsfromstrong} \\
   &\qquad\quad + \int_{\Omega_n^r \cup \Omega_n^0} (\Div \bQ_n) w - \int_{\partial(\Omega_n^r \cup \Omega_n^0)} (\bQ_n \cdot \bn) w. \notag
 \end{align}
-Because $u_n$ is continuous, $u_n=0$ on $\partial \Omega_n$ and $\partial(\Omega_n^r \cup \Omega_n^0)$ so by \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero} we see that $\bQ_n=0$ on these boundaries.  Thus the boundary integrals in \eqref{eq:intbypartsfromstrong} are zero.  On the other hand, by \eqref{eq:semimassconserve} we get
+Because $u_n$ is continuous, $u_n=0$ on $\partial \Omega_n$ and $\partial(\Omega_n^r \cup \Omega_n^0)$.  Thus by \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero} we see that $\bQ_n=0$ on these boundaries, so the boundary integrals in \eqref{eq:intbypartsfromstrong} are zero.  On the other hand, by \eqref{eq:semimassconserve} we get
 \begin{equation}
 -\int_{\Omega} \bQ_n \cdot \grad w = \int_{\Omega_n} \left(F_n - \frac{u_n - u_{n-1}}{\Delta t}\right) w + \int_{\Omega_n^r \cup \Omega_n^0} (\Div \bQ_n) w. \label{eq:equalitybeforeVI}
 \end{equation}
@@ -283,28 +285,27 @@ Combining \eqref{eq:equalitybeforeVI} and \eqref{eq:inequalitybeforeVI} we have 
 \end{proof}
 
 \medskip
-We can now precisely define our weak problem.
+This derivation of inequality \eqref{eq:morallytheVI} requires too many hypotheses, but it serves as sufficient motivation to define our weak problem.  Relative to the strong form, inequality \eqref{eq:morallytheVI} can serve as the weak problem because it avoids using the solution to say on which subset of $\Omega$ a pointwise equality or inequality applies, and because it requires less regularity of $u_{n-1}$ and $u_n$.
 
 \medskip
-\begin{definition}  \label{def:spaces}  Fix $p>1$.  Denote $\mathcal{X} = W_0^{1,p}(\Omega)$ with norm \eqref{eq:norm} denoted by $\|\cdot\|$.  Recalling $\mathcal{X}$ is a reflexive Banach space, denote its dual space by $\mathcal{X}'$, and the pairing of $\mathcal{X}'$ and $\mathcal{X}$ by $\ip{\cdot}{\cdot}$.  Define
-    $$\mathcal{K} = \left\{v \in \mathcal{X} \,\big|\, v(x) \ge 0 \text{ for all } x \in \Omega\right\}.$$
+\begin{definition}  \label{def:spaces}  Fix $p>1$.  Denote $\mathcal{X} = W_0^{1,p}(\Omega)$ and its norm \eqref{eq:norm} by $\|\cdot\|$.  Recalling $\mathcal{X}$ is a reflexive Banach space, denote its dual space by $\mathcal{X}'$.  Write $\ip{\cdot}{\cdot}$ for the pairing of $\mathcal{X}'$ and $\mathcal{X}$.  Define
+    $$\mathcal{K} = \left\{v \in \mathcal{X} \,\big|\, v(x) \ge 0 \text{ a.~e.~} x \in \Omega\right\}.$$
+Observe that $\mathcal{K}$ is a closed, convex subset of $\mathcal{X}$.
 \end{definition}
-It is easy to see that $\mathcal{K}$ is a closed, convex subset of $\mathcal{X}$.  
 
 \medskip
-\begin{definition}  Suppose $u_{n-1}\in\mathcal{K}$ and $\Delta t>0$.  Assume that the flux function $\bQ_n(\bX,v,x)$ satisfies \eqref{eq:QisLq} and that the source function $F_n(v,x)$ satisfies \eqref{eq:FisLq}.  Define
-    $$A_n:\mathcal{K} \to \mathcal{X}'$$
-by
+\begin{definition}  Suppose $u_{n-1}\in\mathcal{K}$ and $\Delta t_n>0$.  Assume that the flux function $\bQ_n$ satisfies the standard flux assumptions and that the source function $F_n(v,x)$ satisfies \eqref{eq:FisLq}.  Define $A_n:\mathcal{K} \to \mathcal{X}'$ by
 \begin{equation}
-  \ip{A_n(v)}{\phi} = \int_\Omega \left(v - \Delta t\, F_n(v,x) - u_{n-1}\right)\phi - \Delta t\, \bQ_n(\grad v,v,x) \cdot \grad\phi. \label{eq:defineAn}
+  \ip{A_n(v)}{\phi} = \int_\Omega \left(v - \Delta t\, F_n(v,x) - u_{n-1}\right)\phi - \Delta t_n\, \bQ_n(\grad v,v,x) \cdot \grad\phi. \label{eq:defineAn}
 \end{equation}
-We can write \eqref{eq:morallytheVI} as
+We say $u_n$ solves the \emph{single time-step problem} for $u_{n-1}\in\mathcal{K}$ if
 \begin{equation}
-  \ip{A_n(u_n)}{v-u_n} \ge 0 \quad \text{for all $v \in \mathcal{K}$.}\label{eq:theVI}
+  \ip{A_n(u_n)}{v-u_n} \ge 0 \quad \text{for all } v \in \mathcal{K},  \label{eq:theVI}
 \end{equation}
+which is the same inequality as \eqref{eq:morallytheVI}.
 \end{definition}
 
-So now the weak formulation of the single time-step problem is this:  Given $u_{n-1}\in\mathcal{K}$, solve \eqref{eq:theVI} for $u_n\in\mathcal{K}$.  Relative to the strong form, this statement both avoids using the solution to say on which subset of $\Omega$ a pointwise equality or inequality applies, and it requires much less regularity of the functions $u_{n-1}$ and $u_n$.  In section \ref{sec:wellposed}, for a variety of cases for $\bQ_n$, we will show that it determines $u_n$ uniquely, i.e.~that \eqref{eq:theVI} is a well-posed problem.
+
 
 \subsection{Interior condition}  \label{subsec:interior}  We can further justify the weak form by showing a converse of Theorem \ref{thm:strongimpliesweak}.  In Theorem \ref{thm:weakimpliesstrong} below, an ``interior condition'', we need no regularity assumptions on set boundaries in decomposition \eqref{eq:omegadecomposition}.  It says that a continuous weak solution $u_n$ of \eqref{eq:theVI} solves the PDE \eqref{eq:semimassconserve} where it is positive, and otherwise it satisfies inequalities \eqref{eq:strongconditionswherezero}.
 
@@ -401,7 +402,7 @@ is continuous because of the linearity of the integral, \eqref{eq:Qiscontinuous}
 Corollary III.1.8 of \cite{KinderlehrerStampacchia1980} now gives the following theorem.
 
 \medskip
-\begin{theorem}  \label{thm:monowellposed}  Suppose $\frac{1}{2} \ge \frac{1}{p} - \frac{1}{d}$ and $F_n=F_n(x)\in L^q(\Omega)$.  Suppose that $\bQ_n$ satisfies the standard assumptions and that condition \eqref{eq:Fislip} applies to $F_n$.  If \eqref{eq:Qncoercive} holds for $\bQ_n$ then the single time-step weak problem \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
+\begin{theorem}  \label{thm:monowellposed}  Suppose $\frac{1}{2} \ge \frac{1}{p} - \frac{1}{d}$ and $F_n=F_n(x)\in L^q(\Omega)$.  Suppose that $\bQ_n$ satisfies the standard flux assumptions and that condition \eqref{eq:Fislip} applies to $F_n$.  If \eqref{eq:Qncoercive} holds for $\bQ_n$ then the single time-step weak problem \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
 
 \subsection{$p$-Laplacian fluxes} \label{subsec:plap}  We can immediately apply lemma \ref{lem:monotonecoercive} and theorem \ref{thm:monowellposed} to show well-posedness for some linear and non-linear parabolic cases, i.e.~where $\bq$ has the direction of $-\grad u$.  Consider the $p$-Laplacian \cite{Evans1998} flux
