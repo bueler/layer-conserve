@@ -552,11 +552,11 @@ Corollary III.1.8 of \cite{KinderlehrerStampacchia1980} now gives the following 
 \begin{theorem}  \label{thm:monowellposed}  Suppose $\frac{1}{2} \ge \frac{1}{p} - \frac{1}{d}$ and $F_n=F_n(x)\in L^q(\Omega)$.  Suppose that $\bQ_n$ satisfies the standard flux assumptions and that condition \eqref{eq:Fislip} applies to $F_n$.  If \eqref{eq:Qncoercive} holds for $\bQ_n$ then the single time-step weak problem \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
 
-\subsection{$p$-Laplacian fluxes} \label{subsec:plap}  We can immediately apply lemma \ref{lem:monotonecoercive} and theorem \ref{thm:monowellposed} to show well-posedness for some linear and non-linear parabolic cases, i.e.~where $\bq$ has the direction of $-\grad u$.  Consider the $p$-Laplacian \cite{Evans1998} flux
+\subsection{$p$-Laplacian fluxes} \label{subsec:plap}  We can immediately apply lemma \ref{lem:monotonecoercive} and theorem \ref{thm:monowellposed} to show well-posedness for some linear and non-linear parabolic cases, i.e.~some of those where $\bq$ has the direction of $-\grad u$.  Consider the $p$-Laplacian \cite{Evans1998} flux
 \begin{equation}
   \bQ_n(\grad u) = - k |\grad u|^{p-2} \grad u \label{eq:plapflux}
 \end{equation}
-with $1<p<\infty$.  Formula \eqref{eq:plapflux} includes the ordinary Fourier flux as the $p=2$ case.  For the proofs in this subsection we will assume $F_n=F_n(x)$ is independent of $u$, and we will need inequalities from Appendix \ref{app:pinequalities}.
+with $k>0$ and $1<p<\infty$, so $\bQ_n$ clearly satisfies the standard flux assumptions.  Formula \eqref{eq:plapflux} includes the ordinary Fourier flux as the $p=2$ case.  For the proofs in this subsection we assume $F_n=F_n(x)$ is independent of $u$, and we need inequalities from Appendix \ref{app:pinequalities}.
 
 If $p\ge 2$ then by \eqref{eq:pinequality} and \eqref{eq:poincare}
 \begin{align}
@@ -564,26 +564,24 @@ If $p\ge 2$ then by \eqref{eq:pinequality} and \eqref{eq:poincare}
   &\le - \frac{k}{2^{p-2}} \int_\Omega |\grad u - \grad v|^p \notag \\
   &\le - \frac{k}{2^{p-2}\,C(\Omega,p)} \|u-v\|^p \label{eq:plapQnmono}
 \end{align}
-and thus \eqref{eq:Qncoercive} with $r=p$ and the given formula for $c$.  Thus the corresponding nonlinear operator $A_n$ from \eqref{eq:defineAn} is coercive and strictly-monotone, and problem \eqref{eq:theVI} is well-posed.
+and thus \eqref{eq:Qncoercive} with $r=p$.
 
 If $1<p<2$ then we have to work harder, and we cannot use condition \eqref{eq:Qncoercive} directly.  Returning to the nonlinear operator $A_n$ and using \eqref{eq:pinequality}, \eqref{eq:smallpbound}, and \eqref{eq:poincare} gives
 \begin{align*}
   &\ip{A_n(u) - A_n(v)}{u-v} \\
-  &\qquad = \|u-v\|_{L^2(\Omega)}^2 + \Delta t\,k \int_\Omega \left(|\grad u|^{p-2} \grad u - |\grad v|^{p-2} \grad v\right)\cdot (\grad u - \grad v) \\
-  &\qquad \ge \|u-v\|_{L^2(\Omega)}^2 + \Delta t\,k (p-1) \int_\Omega \frac{|\grad u - \grad v|^2}{\left(|\grad u|+|\grad v|\right)^{2-p}} \\
-  &\qquad \ge \|u-v\|_{L^2(\Omega)}^2 + \Delta t\,k (p-1) \frac{\|\grad u - \grad v\|_{L^p(\Omega; \RR^d)}^2}{\big\||\grad u|+|\grad v|\big\|_{L^p(\Omega)}^{2-p}} \\
+  &\qquad = \|u-v\|_{L^2(\Omega)}^2 + \Delta t_n\,k \int_\Omega \left(|\grad u|^{p-2} \grad u - |\grad v|^{p-2} \grad v\right)\cdot (\grad u - \grad v) \\
+  &\qquad \ge \|u-v\|_{L^2(\Omega)}^2 + \Delta t_n\,k (p-1) \int_\Omega \frac{|\grad u - \grad v|^2}{\left(|\grad u|+|\grad v|\right)^{2-p}} \\
+  &\qquad \ge \|u-v\|_{L^2(\Omega)}^2 + \Delta t_n\,k (p-1) \frac{\|\grad u - \grad v\|_{L^p(\Omega; \RR^d)}^2}{\big\||\grad u|+|\grad v|\big\|_{L^p(\Omega)}^{2-p}} \\
   &\qquad \ge \|u-v\|_{L^2(\Omega)}^2 + B\, \frac{\|u - v\|^2}{\big\||\grad u|+|\grad v|\big\|_{L^p(\Omega)}^{2-p}}
 \end{align*}
-where $B = \Delta t\,k (p-1) C(\Omega,p)^{-2/p} >0$.  This shows $\ip{A_n(u) - A_n(v)}{u-v} \ge \|u-v\|_{L^2(\Omega)}^2$, so that $A_n$ is strictly-monotone.  On the other hand, fixing any $v$ with $\|\grad v\|_{L^p(\Omega;\RR^d)} >0$, we have
+where $B = \Delta t_n\,k (p-1) C(\Omega,p)^{-2/p} >0$.  This shows $\ip{A_n(u) - A_n(v)}{u-v} \ge \|u-v\|_{L^2(\Omega)}^2$, so that $A_n$ is strictly-monotone.  On the other hand, fixing any $v$ with $\|\grad v\|_{L^p(\Omega;\RR^d)} >0$, we have
 \begin{equation*}
 \frac{\ip{A_n(u) - A_n(v)}{u-v}}{\|u-v\|} \ge B\, \frac{\|u - v\|}{\big\||\grad u|+|\grad v|\big\|_{L^p(\Omega)}^{2-p}} \to \infty
 \end{equation*}
-as $\|u\|\to\infty$ because $0<2-p<1$.  Therefore the limit \eqref{eq:coercivedef} applies, and so, again, $A_n$  is coercive and strictly-monotone.
-
-We have proven the following theorem:
+as $\|u\|\to\infty$ because $0<2-p<1$, so $A_n$ is coercive.  We have proven this theorem:
 
 \medskip
-\begin{theorem}  \label{thm:plapwellposed}  If $\Omega\subset \RR^d$ is bounded, $1<p<\infty$, $F_n=F_n(x)$ is independent of $u$, and $\bQ_n$ is given by \eqref{eq:plapflux} with $k>0$, then for any $\Delta t>0$, \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
+\begin{theorem}  \label{thm:plapwellposed}  If $\Omega\subset \RR^d$ is bounded, $1<p<\infty$, $F_n=F_n(x)$ is independent of $u$, and $\bQ_n$ is given by \eqref{eq:plapflux} with $k>0$, then for any $\Delta t_n>0$, \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
 
 \subsection{Advective fluxes from differentiable velocity} \label{subsec:advect}  We are interested in hyperbolic problems too.  The simplest such problems involve a flux which comes from considering a layer which is transported by a differentiable velocity field $\bX \in W^{1,\infty}(\Omega;\RR^d)$, so that
