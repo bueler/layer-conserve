@@ -768,7 +768,7 @@ We believe that avoidance of, or at least clearer understanding of, \emph{ad hoc
 
 \appendix
 
-\section{Inequalities for $p$-norms}   \label{app:pinequalities}  Versions of the inequality in the first Lemma \eqref{lem:pinequality} appear in the literature, at least as early as \cite{GlowinskiMarroco1975}, but here the result applies in $\RR^d$---contrast \cite{BarrettLiu1993,GlowinskiMarroco1975} for the $\RR^2$ case---and have complete proofs and explicit constants.  The proofs follow and correct those in \cite[Appendix A]{Peral1997}.
+\section{Inequalities for $p$-norms}   \label{app:pinequalities}  Versions of the inequality in the following Lemma appear in the literature, at least as early as \cite{GlowinskiMarroco1975}, but here the result applies in $\RR^d$---contrast \cite{BarrettLiu1993,GlowinskiMarroco1975} for the $\RR^2$ case---and it has a complete proof and explicit constants.  The proof follows and corrects \cite[Appendix A]{Peral1997}.
 
 \begin{lemma}  \label{lem:pinequality}  If $1<p<\infty$ and $x,y\in\RR^n$ then
 \begin{equation}
@@ -782,7 +782,7 @@ We believe that avoidance of, or at least clearer understanding of, \emph{ad hoc
 
 \begin{proof}  \underline{Case $p \ge 2$:}  The case where $x=0$ or $y=0$ is trivial, so assume, by swapping $x$ and $y$ as necessary, that $0 < |y| \le |x|$.  Define $t=|y|/|x|$ and $s = (x\cdot y)/(|x||y|)$ so that $0\le t \le 1$ and $|s|\le 1$.  Expand \eqref{eq:pinequality} and divide it by $|x|^p$, to get the equivalent statement
     $$1 - (t^{p-1}+t) s + t^p \ge 2^{2-p} \left(1 - 2 s t + t^2\right)^{p/2}.$$
-Thus we are trying to prove that $2^{2-p}$ is a lower bound for
+Thus we need to prove that $2^{2-p}$ is a lower bound for
 	$$f(t,s) = \frac{1 - (t^{p-1}+t) s + t^p}{\left(1 - 2 s t + t^2\right)^{p/2}}.$$
 Note $s=1$ if and only if $x=y$, and in that case \eqref{eq:pinequality} is true.  We find a lower bound of $f$ on $(t,s) \in R=[0,1]\times[-1,1)$.  Note $1-2st+t^2 > 0$ on $ R$, so $f(t,s)$ is well-defined and differentiable on $R$.
 
@@ -846,7 +846,7 @@ We will also need the result of combining the $1<p\le 2$ case of Lemma \ref{lem:
 thus \eqref{eq:smallpbound}.
 \end{proof}
 
-Finally we recall the classical Poincar\'e inequality on the Sobolev space $W_0^{1,p}(\Omega)$, which is defined at the beginning of subsection \ref{subsec:fluxassumptions}.  The form of the Poincar\'e inequality in the following Lemma, with an explicit but not optimal constant, is from \cite[section 7.8]{GilbargTrudinger2001}.
+Finally we recall the classical Poincar\'e inequality on the Sobolev space $W_0^{1,p}(\Omega)$.  This form, with an explicit but not optimal constant, is from \cite[section 7.8]{GilbargTrudinger2001}.
 
 \begin{lemma} \label{lem:poincare}  If $\Omega\subset \RR^d$ is a bounded domain with volume $|\Omega|$, and if $1\le p<\infty$ then for all $u\in W_0^{1,p}(\Omega)$,
 \begin{equation}
