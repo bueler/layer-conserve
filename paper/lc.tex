@@ -672,26 +672,27 @@ FIXME: a weaker assumption on $G$ is possible, e.g.~$(G(w,x)-G(v,x))(w-v) \ge - 
 
 FIXME: major deficiency is no bedrock. compare results in \cite{JouvetBueler2012}
 
-\subsection{Non-local dependence through an integral kernel} \label{subsec:nonlocal}   The examples so far in section \ref{sec:wellposed} are cases where the value of the flux $\bQ_n$ at $x\in\Omega$ is computed using only the values $u(x)$ and $\grad u(x)$.  The flux in realistic models is, however, often computed by solving another differential equation, for instance an energy or momentum conservation equation which is coupled to the mass-conservation equation \eqref{eq:massconserve}.  Therefore we consider fluxes that are non-local functions of the thickness $u$ and its spatial derivatives.  For simplicity we restrict to the linear case.
+\subsection{Non-local dependence through an integral kernel} \label{subsec:nonlocal}   The examples so far in section \ref{sec:wellposed} compute the flux $\bQ_n$ at $x\in\Omega$ using only the values $u(x)$ and $\grad u(x)$.  The flux in realistic models is, however, often comes from solving another differential equation, for instance an energy or momentum conservation equation which is coupled to the mass-conservation equation \eqref{eq:massconserve}.  Therefore we consider fluxes that are non-local functions of the thickness $u$ and its spatial derivatives.  For simplicity we restrict to the linear case.
 
-Let $\mathcal{X} = W_0^{1,2}(\Omega)$, a Hilbert space, and let $\mathcal{K}=\{u\in\mathcal{X}|u\ge 0\}$ as before.  Suppose $G_1(x,y), \dots, G_d(x,y)$ and $K(x,y)$ are scalar, real-valued functions in $L^2(\Omega\times \Omega)$; these will be our integral kernels.  Define
+Let $\mathcal{X} = W_0^{1,2}(\Omega)$, a Hilbert space, and let $\mathcal{K}=\{u\in\mathcal{X}|u\ge 0\}$.  Suppose $G_1(x,y), \dots, G_d(x,y)$ and $K(x,y)$ are scalar, real-valued functions in $L^2(\Omega\times \Omega)$; these will be integral kernels.  Define
 \begin{equation}
-\bQ_n[u](x,t) = \int_\Omega \bG(x,y) u(y,t)\,dy - \int_\Omega K(x,y) \grad u(y)\,dy, \label{eq:nonlocaldefQn}
+\bQ_n[\grad u,u](x) = \int_\Omega \bG(x,y) u(y)\,dy - \int_\Omega K(x,y) \grad u(y)\,dy, \label{eq:nonlocaldefQn}
 \end{equation}
-where $\bG(x,y) = (G_1(x,y), \dots, G_d(x,y))$ is an $\RR^d$-valued function.  Note we use notation ``$\bQ_n[u]$'' to emphasize general, not just point-wise, dependence on $u$.
+where $\bG(x,y) = (G_1(x,y), \dots, G_d(x,y))$ is an $\RR^d$-valued function; note we use notation ``$\bQ_n[\cdot]$'' to emphasize general, not point-wise, dependence on $u$.
 
-With flux \eqref{eq:nonlocaldefQn}, equation \eqref{eq:semimassconserve} is no longer a PDE, but rather a (linear) time-independent integro-differential equation.  That is, \eqref{eq:semimassconserve} is not a PDE in \emph{two} senses, first that it includes an integral operator and second that it is subject to the constraint $u_n\ge 0$.  We consider its weak form \eqref{eq:theVI}.
+With flux \eqref{eq:nonlocaldefQn}, equation \eqref{eq:semimassconserve} is no longer a PDE, but rather a linear integro-differential equation.  Indeed, \eqref{eq:semimassconserve} is not a PDE in \emph{two} senses, first that it includes an integral operator and second that it is subject to the constraint $u_n\ge 0$.
 
-Let $A_n:\mathcal{K} \to \mathcal{X}'=\mathcal{X}$ be defined by \eqref{eq:defineAn}, but with $\bQ_n[u]$ from \eqref{eq:nonlocaldefQn} as the flux, so that
+Let $A_n:\mathcal{K} \to \mathcal{X}'=\mathcal{X}$ be defined by \eqref{eq:defineAn}, with $\bQ_n$ in \eqref{eq:nonlocaldefQn} as the flux, so that
 \begin{align}
-    \ip{A_n(v)}{\phi} &= \int_\Omega \bigg[(v - \Delta t\,F_n + u_{n-1})\phi - \Delta t\,\left(\int_\Omega \bG(x,y) v(y)\,dy\right)\cdot \grad \phi \label{eq:nonlocaldefnAn} \\
-                      &\qquad\qquad + \Delta t\,\left(\int_\Omega K(x,y) \grad v(y)\,dy\right)\cdot \grad \phi\,\bigg]\,dx. \notag
+    \ip{A_n(v)}{\phi} &= \int_\Omega \bigg[(v - \Delta t_n\,F_n + u_{n-1})\phi - \Delta t_n\,\left(\int_\Omega \bG(x,y) v(y)\,dy\right)\cdot \grad \phi \label{eq:nonlocaldefnAn} \\
+                      &\qquad\qquad + \Delta t_n\,\left(\int_\Omega K(x,y) \grad v(y)\,dy\right)\cdot \grad \phi\,\bigg]. \notag
 \end{align}
-We need to assume $K$ is positive and bounded below \cite{PorterStirling1990} in the sense that there is $\delta>0$ so that if $\phi \in L^2(\Omega)$ then
+
+We now assume $K$ is positive and bounded below \cite{PorterStirling1990} in the sense that there is $\delta>0$ so that if $\phi \in L^2(\Omega)$ then
 \begin{equation}
    \int_\Omega \int_\Omega K(x,y) \phi(x) \phi(y)\,dx\,dy \ge \delta \|\phi\|_{L^2(\Omega)}^2.  \label{eq:nonlocalKpos}
 \end{equation}
-In particular this requires $K\ne 0$, but $K$ may have negative point values, and we require no symmetry.  Assumption \eqref{eq:nonlocalKpos} will allow us to show $A_n$ is coercive.  We can also show $A_n$ is strictly monotone if $\Delta t$ is not too large, with a bound in terms of a norm of the kernel $\bG$.
+Though this requires $K\ne 0$, in fact $K$ may have negative point values.  Also we require no symmetry for $K$.  Assumption \eqref{eq:nonlocalKpos} will allow us to show $A_n$ is coercive.
 
 We do two preliminary calculations.  First, if $\phi\in\mathcal{X}$ then
 \begin{equation}
@@ -702,42 +703,42 @@ by $d$ applications of \eqref{eq:nonlocalKpos}.  Second, by two applications of 
 \left|\int_\Omega \int_\Omega \bG(x,y) \cdot \grad \phi(x)\,\phi(y) \,dx\,dy\right|
   \le \|\bG\|_{L^2(\Omega\times\Omega;\RR^d)} \|\phi\|^2,   \label{eq:nonlocalGbound}
 \end{equation}
-where, by definition, $\|\bG\|_{L^2(\Omega\times\Omega;\RR^d)} = \left(\sum_{i=1}^d \left\|G_i\right\|_{L^2(\Omega \times \Omega)}^2\right)^{1/2}$.  We get the following theorem:
+where, by definition, $\|\bG\|_{L^2(\Omega\times\Omega;\RR^d)} = \left(\sum_{i=1}^d \left\|G_i\right\|_{L^2(\Omega \times \Omega)}^2\right)^{1/2}$.
 
 \begin{theorem}  \label{thm:nonlocalwellposed}  Suppose $F_n=F_n(x) \in L^2(\Omega)$ is independent of $u$, $G_i \in L^2(\Omega\times\Omega)$ for $i=1,\dots,d$, and $K \in L^2(\Omega\times\Omega)$ satisfies \eqref{eq:nonlocalKpos} with constant $\delta >0$.  If either $\bG=0$ or
 \begin{equation}
-  \Delta t < \frac{\delta}{C(\Omega,p)\, \|\bG\|_{L^2(\Omega\times\Omega;\RR^d)}},  \label{eq:nonlocaldtcond}
+  \Delta t_n < \frac{\delta}{C(\Omega,p)\, \|\bG\|_{L^2(\Omega\times\Omega;\RR^d)}},  \label{eq:nonlocaldtcond}
 \end{equation}
 where $C(\Omega,p)$ is the Poincar\'e constant in \eqref{eq:poincare}, then $A_n$ defined by \eqref{eq:nonlocaldefnAn} is coercive and strictly monotone, so variational inequality \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
 
 \begin{proof}  Let $\phi=u-v$ for $u,v\in\mathcal{K}$.  By \eqref{eq:nonlocalKposRd}, \eqref{eq:nonlocalGbound}, and \eqref{eq:poincare},
 \begin{align*}
-\ip{A_n(u)-A_n(v)}{\phi} &\ge \|\phi\|_{L^2(\Omega)}^2 - \Delta t\,\int_\Omega \int_\Omega \bG(x,y) \cdot \grad \phi(x) \phi(y)\,dx\,dy \\
-    &\qquad + \Delta t\,\int_\Omega \int_\Omega K(x,y) \grad \phi(x) \cdot \grad \phi(y)\,dx\,dy \\
-    &\ge \|\phi\|_{L^2(\Omega)}^2 - \Delta t\,\|\bG\|_{L^2(\Omega\times\Omega;\RR^d)} \|\phi\|^2 + \delta \|\grad\phi\|_{L^2(\Omega;\RR^d)}^2 \\
-    &\ge \|\phi\|_{L^2(\Omega)}^2 + \left(\frac{\delta}{C(\Omega,p)} - \Delta t\,\|\bG\|_{L^2(\Omega\times\Omega;\RR^d)}\right) \|\phi\|^2.
+\ip{A_n(u)-A_n(v)}{\phi} &\ge \|\phi\|_{L^2(\Omega)}^2 - \Delta t_n\,\int_\Omega \int_\Omega \bG(x,y) \cdot \grad \phi(x) \phi(y)\,dx\,dy \\
+    &\qquad + \Delta t_n\,\int_\Omega \int_\Omega K(x,y) \grad \phi(x) \cdot \grad \phi(y)\,dx\,dy \\
+    &\ge \|\phi\|_{L^2(\Omega)}^2 - \Delta t_n\,\|\bG\|_{L^2(\Omega\times\Omega;\RR^d)} \|\phi\|^2 + \delta \|\grad\phi\|_{L^2(\Omega;\RR^d)}^2 \\
+    &\ge \|\phi\|_{L^2(\Omega)}^2 + \left(\frac{\delta}{C(\Omega,p)} - \Delta t_n\,\|\bG\|_{L^2(\Omega\times\Omega;\RR^d)}\right) \|\phi\|^2.
 \end{align*}
 The result follows from the definitions of coercivity and strict monotonicity, and condition \eqref{eq:nonlocaldtcond}.
 \end{proof}
 
-The observant reader will see a difference in the approaches in theorems \ref{thm:plapadvectwellposed} and \ref{thm:nonlocalwellposed}.  In the former the velocity $\bX$ in the hyperbolic flux $\bQ_n(u) = \bX(x) u$ was assumed to be differentiable.  Thereby an integration-by-parts gave a criterion for coercivity in terms of the norm of the divergence of $\bX$.  By constrast, in theorem \ref{thm:nonlocalwellposed} we assume only that $\bG$ is integrable, and thus the corresponding integration-by-parts, which would require integrable derivatives $\partial G_i/\partial x_j$, is not tried.  As a result, condition \eqref{eq:nonlocaldtcond} on $\Delta t$ is in some senses more severe than condition \eqref{eq:plapadvectdtcond}; for instance, \eqref{eq:nonlocaldtcond} involves both at kernel-positivity constant $\delta$ and the Poincar\'e constant.
+The observant reader will see a difference in the approaches in theorems \ref{thm:plapadvectwellposed} and \ref{thm:nonlocalwellposed}.  In the former the velocity $\bX$ in the hyperbolic flux $\bQ_n(u) = \bX(x) u$ was assumed to be differentiable.  Thereby an integration-by-parts gave a criterion for coercivity in terms of the norm of the divergence of $\bX$.  By constrast, in theorem \ref{thm:nonlocalwellposed} we assume only that $\bG$ is integrable, and thus no integration-by-parts is attempted.  As a result, condition \eqref{eq:nonlocaldtcond} on $\Delta t$ is in some senses more severe than condition \eqref{eq:plapadvectdtcond}; for instance, \eqref{eq:nonlocaldtcond} involves both at kernel-positivity constant $\delta$ and the Poincar\'e constant.
 
-\subsection{Explicit time-steps} \label{subsec:explicit}  Recall the $\theta=0$, fully-explicit, case of the time semi-discretization equation \eqref{eq:thetamethod}.  In weak form the problem is variational inequality \eqref{eq:theVI}, but with
+\subsection{Explicit time-steps} \label{subsec:explicit}  Recall the $\theta=0$ explicit case of equation \eqref{eq:thetamethod}.  In weak form the problem is variational inequality \eqref{eq:theVI}, but with
     $$\bQ_n=0 \quad \text{ and } \quad F_n = - \Div \bq(\grad u_{n-1},u_{n-1},x) + f(u_{n-1},x).$$
 The weak problem seeks $u\in\mathcal{K} \subset \mathcal{X}$ so that
 \begin{equation}
-\ip{A_n(u)}{\phi} = \int_\Omega (u - \Delta t\,F_n - u_{n-1})\phi \ge 0 \quad \text{ for all } \phi \in \mathcal{K}.  \label{eq:explicitweakstep}
+\ip{A_n(u)}{\phi} = \int_\Omega (u - \Delta t_n\,F_n - u_{n-1})\phi \ge 0 \quad \text{ for all } \phi \in \mathcal{K}.  \label{eq:explicitweakstep}
 \end{equation}
 But the previous state $u_{n-1}$ must be regular enough so that $F_n$ is well defined, that is, so that $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}'$ and thus $F_n\in\mathcal{X}'$.
 
-However, even if $F_n$ is in the dual space, the variational inequality is not elliptic.  If $\mathcal{X}=L^2(\Omega)$ then the single time step \eqref{eq:explicitweakstep} is a well-posed problem, namely a truncation problem with solution
+Even if $F_n$ is in the dual space, variational inequality \eqref{eq:explicitweakstep} is not coercive on $\mathcal{X}=W^{1,p}(\Omega)$.  However, if $\mathcal{X}=L^2(\Omega)$ then the single time step \eqref{eq:explicitweakstep} is a well-posed problem.  It is a truncation problem with solution
 \begin{equation}
-u_n = \max\{0,u_{n-1} + \Delta t\,F_n\} \in L^2(\Omega)  \label{eq:explicittruncation}
+u_n = \max\{0,u_{n-1} + \Delta t_n\,F_n\} \in L^2(\Omega)  \label{eq:explicittruncation}
 \end{equation}
-\cite[page 27]{KinderlehrerStampacchia1980}.  But this is not very helpful because $u_n \in L^2(\Omega)$ is not regular enough so that $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}' \in L^2(\Omega)$, even in the case where $\bq = \bX(x) u$ so that $\bq$ is zeroth-order in $u$.  In summary, for explicit steps the solution to a single weakly-posed time step is truncation \eqref{eq:explicittruncation}, but that solution cannot be expected to be regular enough to yield a well-posed problem at the next step.
+\cite[page 27]{KinderlehrerStampacchia1980}.  This is not very helpful because $u_n \in L^2(\Omega)$ is not regular enough so that $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}' \in L^2(\Omega)$, even in the case where $\bq$ is zeroth-order in $u$.  In summary, for explicit steps the solution to a single weakly-posed time step is truncation \eqref{eq:explicittruncation}, but that solution cannot be expected to be regular enough to yield a well-posed problem at the next step.
 
-\subsection{Fully-discrete explicit and semi-explicit schemes} \label{subsec:spaceexplicit}  On the other hand, fully-explicit and \emph{fully-discretized} numerical schemes are in widespread use for solving first-order and even second-order PDE problems.  FIXME:  can be well-posed but regularity concerns different
+\subsection{Fully-discrete explicit and semi-explicit schemes} \label{subsec:spaceexplicit}  On the other hand, explicit and \emph{fully-discretized} numerical schemes are obviously in widespread use for solving first-order and even second-order PDE problems.  FIXME:  can be well-posed but regularity concerns different
 
 
 \section{Conclusion} \label{sec:conclusion}
