@@ -390,62 +390,67 @@ In stating this assertion, we note that the retreat loss $R_n$ should vanish in 
 
 So far we have treated time-dependent free-boundary mass conservation models in time-semi-discretized form, as a sequence of continuous-space free-boundary problems.  We will address well-posedness (section \ref{sec:wellposed}) in such a continuous-space framework also.  However, considering the fully-discrete case shows that we must add to the \emph{a posteriori} computations of the last section if we are to completely balance the conservation books at the free boundary.
 
-In this section we make the mild assumption that the spatial discretization allows an unstructured finite volume \cite{LeVeque2002} interpretation (subsection \ref{subsec:spacenotation}).  Also we will be able to tell a complete story about conservation errors at the free boundary (subsection \ref{subsec:shellerror}).  After that we consider numerical solution methods for the constrained nonlinear problem (subsection \ref{subsec:newtonvi}).   First we set notation for a highly-generic finite volume scheme.
+In this section we make the mild assumption that the spatial discretization allows an unstructured finite volume \cite{LeVeque2002} interpretation (subsection \ref{subsec:spacenotation}), and this is sufficient to give a fully-discrete balance analogous to the continuous-space version \eqref{eq:newbalance} above (subsection \ref{subsec:shellerror}).  After that we consider numerical solution methods for the constrained nonlinear problem (subsection \ref{subsec:newtonvi}).
 
-\subsection{Unstructured finite volume schemes} \label{subsec:spacenotation}  We restrict to $\Omega \subset \RR^d$ for $d=2,3$, and we suppose $\Omega$ is an open polygon (polyhedron).  We assume that $\Omega$ is tiled by open polygonal (polyhedral) cells $\omega_j$, indexed by $j\in J$ and with area (volume) $|\omega_j|=a_j$, as shown Figure \ref{fig:fvmesh-notation}.  These cells may be non-convex and the number of edges (faces) per cell may vary.  Because this is a tiling, $\omega_j \cap \omega_k = \emptyset$ for $j\ne k$ and
+\subsection{Unstructured finite volume method} \label{subsec:spacenotation}  First we set notation for a generic finite volume scheme.  We restrict to $\Omega \subset \RR^d$, for $d=2,3$, which is an open polygon (polyhedron).  We assume that $\Omega$ is tiled by finitely-many open polygonal (polyhedral) cells $\omega_j$, indexed by $j\in J$, with area (volume) $|\omega_j|=a_j$.  These cells may be non-convex and the number of edges (faces) per cell may vary.  Because this is a tiling, $\omega_j \cap \omega_k = \emptyset$ for $j\ne k$ and
 \begin{equation}
 \bar\Omega = \bigcup_{j\in J} \bar \omega_j \quad \text{and} \quad |\Omega| = \sum_{j\in J} a_j.  \label{eq:tiling}
 \end{equation}
+An edge (face), simply denoted by the ordered pair $(j,k)$, exists between cell $j$ and cell $k$ if $\bar\omega_j \cap \bar \omega_k$ has positive $d-1$ measure (i.e.~length or area) $\ell_{(j,k)}>0$.  The set of edges $(j,k)$ for cell $\omega_j$ is denoted $\mathcal{E}_j$.
 
+Our approach is now to discretize the strong form equation \eqref{eq:semimassconserve} using finite volume ideas, but this can be treated as a non-conforming Petrov-Galerkin finite element method for the variational inequality \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.  In that case the test functions are piecewise-constant and discontinuous along the edges of the cells $\omega_j$, as in a so-called ``finite volume element'' method \cite{Bueler2015,Cai1990,EwingLinLin2002}.  The cells $\omega_j$ might be geometrically ``dual'' to the elements in such a scheme (e.g.~\cite{Ringleretal2013}).
 
-The edge (face) between cell $j$ and cell $k$, i.e.~$\bar\omega_j \cap \bar \omega_k$, has length (area) $\ell_{(j,k)}$.  Cell $\omega_j$ has a set of edges $\mathcal{E}_j$ which contains those pairs $(j,k)$ so that $\bar\omega_j \cap \bar \omega_k \ne \emptyset$.  The set of all edges is the (non-disjoint) union $\mathcal{E} = \bigcup_{j\in J} \mathcal{E}_j$.
-
-The representative thickness $u_n^j$ in cell $j$ is given the usual finite volume interpretation as an average \cite{LeVeque2002}, and similarly $F_n^j$ dennote a representative source term for the cell.
+The representative thickness $u_n^j$ in cell $j$ is given the usual finite volume definition as an average \cite{LeVeque2002}, and similarly $F_n^j$ denotes a representative source term for the cell:
 \begin{equation}
-u_n^j \approx \frac{1}{a_j} \int_{\omega_j} u_n(x)\,dx, \qquad F_n^j \approx \frac{1}{a_j} \int_{\omega_j} F_n(u_n,x)\,dx.  \label{eq:fvthickness}
+u_n^j \approx \frac{1}{a_j} \int_{\omega_j} u_n(x), \qquad F_n^j \approx \frac{1}{a_j} \int_{\omega_j} F_n(u_n,x).  \label{eq:fvthickness}
 \end{equation}
-The value $F_n^j$ is computed in some way from the geometry of cell $j$ and from as many values $\{u_n^j\}$ as necessary; the details do not matter here.
+The value $F_n^j$ is computed by some quadrature scheme as necessary, but the details do not matter here.  The discrete (scalar) normal flux across the edge $(j,k)$, outward from cell $j$, is denoted
+\begin{equation}
+Q_n^{(j,k)} \approx \frac{1}{\ell_{(j,k)}} \int_{(j,k)} \bQ_n \cdot \bn_{(j,k)}, \label{eq:fvflux}
+\end{equation}
+as shown Figure \ref{fig:fvmesh-notation}, where $\bn_{(j,k)}$ denotes the unit normal vector to edge $(j,k)$ directed outward from $\omega_j$.  We assume that these fluxes are approximated by some scheme, based on values $\{u_n^l\}$ for $l$ potentially ranging over the entire mesh.  Though the details are not important here, these discrete fluxes might be computed by upwinded and/or flux-limited schemes \cite{LeVeque2002} according to the functional form of the flux $\bQ_n$.
 
 \begin{figure}[ht]
 \begin{center}
 \input{fvmesh-notation.tikz}
 \end{center}
-\caption{Notation for a completely-unstructured finite volume mesh in $\RR^2$.}
+\caption{Notation for an unstructured finite volume method for \eqref{eq:semimassconserve} in $\RR^2$.}
 \label{fig:fvmesh-notation}
 \end{figure}
 
-The discrete scalar normal flux across the edge $(j,k)$, outward from cell $j$, is denoted $Q_n^{(j,k)}$.  We assume that these fluxes are approximated by some scheme, based on some values $\{u_n^j\}$.  The details are not important here, but these discrete fluxes can be computed from the cell-averaged (representative) thicknesses, plus any other data, including by classical (e.g.~Gudonov) or flux-limited schemes \cite{LeVeque2002}.
-
-We make two specific assumptions about the fully-discrete finite volume scheme:\begin{enumerate}
+We make only two specific assumptions about the fully-discrete finite volume scheme:
+\renewcommand{\labelenumi}{(\roman{enumi})}
+\begin{enumerate}
 \item There is local conservation between any two adjacent cells which are fluid-filled:
 \begin{equation}
   u_n^j u_n^k > 0 \quad \implies \quad Q_n^{(k,j)}=-Q_n^{(j,k)}.  \label{eq:fvlocalconservation}
 \end{equation}
-\item The strong form single-time-step problem \eqref{eq:semimassconserve} is approximated by
+\item If $u_n^j>0$ then the strong form single-time-step problem \eqref{eq:semimassconserve} is approximated by
 \begin{equation}
-\frac{u_n^j - u_{n-1}^j}{\Delta t} + \frac{1}{a_j} \sum_{k\in \mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = F_n^j \label{eq:fvmassconserve}
+\frac{u_n^j - u_{n-1}^j}{\Delta t_n} + \frac{1}{a_j} \sum_{k\in \mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = F_n^j. \label{eq:fvmassconserve}
 \end{equation}
-in the sense that \eqref{eq:fvmassconserve} is true for each $j\in J$ such that $u_n^j > 0$.
 \end{enumerate}
 
-Local conservation (i) is completely standard, but we do not expect it at the free boundary because a flux scheme at the edge (face) of a fluid-free cell, facing a fluid-filled cell, cannot easily be expected to generate flux which is compatible with monotonicity or coercivity properties in subsection \ref{subsec:mono}, for example.  Regarding (ii), recall that, at least heuristically, the divergence of a vector field $\bX$ is the limit of line (surface) integrals, $|R|^{-1} \int_{\partial R} \bX\cdot \bn\,ds \to \Div \bX(x)$, where $R\subset \RR^d$ denotes a region with Lipshitz boundary, enclosing $x$, with outward unit normal vector $\bn$ and boundary length (area) element $ds$.  Thus the discrete scheme is assumed to approximate such an integral. 
+Local discrete conservation statement (i) is completely standard, but the fluid-filled hypothesis is important.  We do not expect discrete conservation in the sense $Q_n^{(k,j)}=-Q_n^{(j,k)}$ at the free boundary because a flux scheme at the edge (face) of a fluid-free cell, facing a fluid-filled cell, cannot be expected to generate flux which is compatible with monotonicity or coercivity properties (subsection \ref{subsec:mono} below) which would lead to well-posedness.
 
-Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including structured-grid (i.e.~uniform rectangular cell) finite difference \cite{MortonMayers2005} and finite volume \cite{LeVeque2002} schemes, and unstructured finite volume schemes.  Both the former structured-grid \cite{Winkelmannetal2011} and the latter unstructured-grid \cite{EgholmNielsen2010} schemes are used in ice sheet models.  A framework for unstructured-grid finite volume schemes has been implemented for ocean modeling \cite{Ringleretal2013}.  Furthermore, by considering a dual cell, the above finite volume interpretation can be applied to certain unstructured or structured finite element schemes.  Discontinuous Galerkin schemes can also be interpreted as \eqref{eq:fvmassconserve}.
+Regarding (ii), recall that, at least heuristically, the divergence of a vector field $\bX$ is the limit of line (surface) integrals, $|R|^{-1} \int_{\partial R} \bX\cdot \bn \to \Div \bX$, where $R\subset \RR^d$ denotes a sequence of regions with Lipshitz boundary, enclosing and shrinking down to $x$, with outward unit normal vector $\bn$.  Though \eqref{eq:fvmassconserve} requires the discrete scheme to approximate such an integral, this prescription has great flexibility because of the many possible meanings of approximations \eqref{eq:fvthickness}--\eqref{eq:fvflux}.
 
-\subsection{The discrete-space ``shell error''}  \label{subsec:shellerror}  In the fully-discrete model, using a superscript ``$h$'' to denote the spatially-discrete version of integrated quantities, we define, analogous to \eqref{eq:totalmassseries}, \eqref{eq:climateseries}, and \eqref{eq:retreatlossseries}, respectively, the time-series
+Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including structured-grid (i.e.~uniform rectangular cell) finite difference \cite{Bueler2015,MortonMayers2005} and structured/unstructured finite volume \cite{LeVeque2002} schemes.  A framework for unstructured-grid finite volume schemes, compatible with the fixed-boundary version of the above setup, has been implemented for ocean modeling \cite{Ringleretal2013}.
+
+\subsection{The discrete-space ``shell error''}  \label{subsec:shellerror}  In the fully-discrete model we use a superscript ``$h$'' to denote the spatially-discrete version of integrated quantities.  That is, analogous to \eqref{eq:totalmassseries}, \eqref{eq:climateseries}, and \eqref{eq:retreatlossseries}, we define the time-series
 \begin{equation}
-  M_n^h = \sum_j u_n^j a_j, \quad C_n^h = \Delta t\!\!\sum_{\{j:u_n^j>0\}} F_n^j a_j, \quad \text{ and } \quad R_n^h = \sum_{\{j:u_n^j=0\}} u_{n-1}^j a_j.  \label{eq:fvtimeseriesdefn}
+  M_n^h = \sum_j u_n^j a_j, \quad C_n^h = \Delta t_n\!\!\sum_{\{j:u_n^j>0\}} F_n^j a_j, \quad \text{ and } \quad R_n^h = \sum_{\{j:u_n^j=0\}} u_{n-1}^j a_j.  \label{eq:fvtimeseriesdefn}
 \end{equation}
 Analogous to \eqref{eq:newbalance}, by \eqref{eq:fvmassconserve} we compute
 \begin{align}
 M_n^h - M_{n-1}^h &= \sum_{u_n^j>0} (u_n^j - u_{n-1}^j) a_j - \sum_{u_n^j=0} u_{n-1}^j a_j \notag \\
-   &= - \Delta t\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + \Delta t\,\sum_{u_n^j>0} F_n^j a_j - \sum_{u_n^j=0} u_{n-1}^j a_j \notag \\
-   &= - \Delta t\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + C_n^h - R_n^h.  \label{eq:fvnewbalance}
+   &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + \Delta t_n\,\sum_{u_n^j>0} F_n^j a_j - R_n^h \notag \\
+   &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + C_n^h - R_n^h.  \label{eq:fvnewbalance}
 \end{align}
 
-Though in the continuous-space version \eqref{eq:newbalance} we could eliminate the flux integral, the discrete flux sum in \eqref{eq:fvnewbalance} is not zero.  Local conservation \eqref{eq:fvlocalconservation} only reduces it to a sum over edges which have a positive-thickness cell on one side and a zero-thickness cell on the other.  We call this free-boundary discrete-flux residual sum the \emph{shell error}:
+Though in the continuous-space version \eqref{eq:newbalance} we could eliminate the flux integral, the remaining discrete flux sum in \eqref{eq:fvnewbalance} is not zero.  Local conservation \eqref{eq:fvlocalconservation} only reduces it to a sum over edges which have a positive-thickness cell on one side and a zero-thickness cell on the other.  We call this free-boundary discrete-flux residual sum the \emph{shell error}:
 \begin{equation}
-S_n^h = \sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = \sum_{(j,k)\in\mathcal{E} \,:\, u_j^n > 0 \,\&\, u_k^n = 0} Q_n^{(j,k)} \ell_{(j,k)} \label{eq:fvderiveshellerror}
+S_n^h = \sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = \sum_{u_j^n > 0 \,\&\, (j,k)\in\mathcal{E}_j \,\&\, u_k^n = 0} Q_n^{(j,k)} \ell_{(j,k)} \label{eq:fvderiveshellerror}
 \end{equation}
 
 \begin{figure}[ht]
@@ -456,14 +461,18 @@ S_n^h = \sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} =
 \label{fig:fvmesh-shellerror}
 \end{figure}
 
-As shown in Figure \ref{fig:fvmesh-shellerror}, $S_n^h$ is computed along the finite-volume approximation of the free boundary.  The quantity $S_n^h$ is an ``error'' in the sense that the continuous-space flux along the free-boundary is zero because of flux conditions \eqref{eq:Qiscontinuous}, \eqref{eq:Qiszero}.  Finally, however we can report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,S_n^h\}$ which exactly balance in a fully-discrete free-boundary numerical computation:
+As suggested in Figure \ref{fig:fvmesh-shellerror}, $S_n^h$ is computed along the finite-volume approximation of the free boundary.  The quantity $S_n^h$ is an ``error'' in the sense that the continuous-space flux along the free-boundary would be zero because of flux conditions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.
+
+At this point we can report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,S_n^h\}$ which exactly balance in a fully-discrete free-boundary numerical computation:
 \begin{equation}
-  M_n^h = M_{n-1}^h + C_n^h - R_n^h - \Delta t\,S_n^h. \label{eq:fvfinalbalance}
+  M_n^h = M_{n-1}^h + C_n^h - R_n^h - \Delta t_n\,S_n^h. \label{eq:fvfinalbalance}
 \end{equation}
 
-Furthermore, FIXME: can we \emph{show} using extensions of section \ref{sec:wellposed} technology that $R_n\to 0$ as $\Delta t\to 0$?  also assert $S_n^h\to 0$ as $h\to 0$ \emph{if} free boundary well-behaved, which is beyond scope to show, but evidently $R_n^h + \Delta t\,S_n^h \to 0$ as $\Delta t\to 0$
+FIXME Furthermore, with additional assumptions can show $R_n\to 0$ as $\Delta t_n\to 0$ (section \ref{sec:timeseries}).  FIXME also assert $S_n^h\to 0$ as $h\to 0$ \emph{if} free boundary well-behaved, which is beyond scope to show, but evidently $R_n^h + \Delta t_n\,S_n^h \to 0$ as $\Delta t_n\to 0$
 
-\subsection{Newton-type methods for solving the single time-step variational inequality} \label{subsec:newtonvi}  FIXME: mostly generalities, but factor Jacobian into deriv of apparent stuff in \eqref{eq:theVI} and $\partial Q_n^j/\partial u_n^k$; complementarity problems \cite{BensonMunson2006,BillupsMurty2000}; example in \cite{Bueler2015}
+\subsection{Newton-type methods for solving the single time-step variational inequality} \label{subsec:newtonvi}  FIXME: mostly generalities \cite{Kelley2003}, but factor Jacobian into deriv of apparent stuff in \eqref{eq:theVI} and $\partial Q_n^j/\partial u_n^k$; complementarity problems \cite{BensonMunson2006,BillupsMurty2000}; example in \cite{Bueler2015}
+
+FIXME Condition (ii) could be summarized ``if $u_n^j>0$ then $G_j(u_n^J)=0$,'' using notation $u_n^J$ for a vector formed from all $u_n^j$ with $j\in J$, for some formula $G_j$ which records the residual of equation \eqref{eq:fvmassconserve}.  We also have constraint ``$u_n^j\ge 0$'' on the unknowns.  In these senses we are regarding the system of equations formed from conditions \eqref{eq:fvmassconserve} as combining to give a \emph{complementarity problem} \cite{BillupsMurty2000} of the form $u_j\ge 0$ and $G_j(u^J)\ge 0$ and $u_j G_j(u^J)=0$ for all $j\in J$; see subsection \ref{subsec:newtonvi} below.
 
 
 \section{Well-posedness for the single time-step problem} \label{sec:wellposed}
