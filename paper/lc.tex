@@ -307,31 +307,30 @@ which is the same inequality as \eqref{eq:morallytheVI}.
 
 
 
-\subsection{Interior condition}  \label{subsec:interior}  We can further justify the weak form by showing a converse of Theorem \ref{thm:strongimpliesweak}.  In Theorem \ref{thm:weakimpliesstrong} below, an ``interior condition'', we need no regularity assumptions on set boundaries in decomposition \eqref{eq:omegadecomposition}.  It says that a continuous weak solution $u_n$ of \eqref{eq:theVI} solves the PDE \eqref{eq:semimassconserve} where it is positive, and otherwise it satisfies inequalities \eqref{eq:strongconditionswherezero}.
+\subsection{Interior condition}  \label{subsec:interior}  We can further justify the weak form by showing a converse of Theorem \ref{thm:strongimpliesweak}.  Note that we make no regularity assumptions related to the sets \eqref{eq:omegadecomposition}.
 
 \medskip
-\begin{theorem} \label{thm:weakimpliesstrong}  Assume $\bQ_n$ satisfies \eqref{eq:QisLq}, \eqref{eq:Qiscontinuous}, \eqref{eq:Qiszero}, and \eqref{eq:Qissmooth}, and assume $F_n$ satisfies \eqref{eq:FisLq}.  Suppose $u_n\in\mathcal{K}$ solves the single-time-step weak problem \eqref{eq:theVI}.
+\begin{theorem} \label{thm:weakimpliesstrong}  Assume $\bQ_n$ satisfies the standard flux assumptions and \eqref{eq:Qissmooth}, and assume $F_n$ satisfies \eqref{eq:FisLq}.  Suppose $u_n\in\mathcal{K}$ solves the single-time-step weak problem \eqref{eq:theVI}.
 \renewcommand{\labelenumi}{\emph{(\roman{enumi})}}
 \begin{enumerate}
 \item If $S \subset \Omega_n$ is open, $\overline{S}\subset \Omega$, $u_n\in C(S)$, and $u_n(x)>0$ for all $x\in S$, then equation \eqref{eq:semimassconserve} applies a.e.~$x\in S$.
-\item If $S \subset \Omega_n^0$ is open then $F_n \le 0$ a.e.~$x\in S$.
-\item If $S \subset \Omega_n^r$ is open then $u_{n-1} + \Delta t\,F_n \le 0$ a.e.~$x\in S$.
+\item If $S \subset \Omega_n^0$ is open then $u_{n-1} + \Delta t_n\,F_n \le 0$, and thus $F_n \le 0$, a.e.~$x\in S$.
 \end{enumerate}
 \end{theorem}
 
 \medskip
-\begin{proof}  To prove (i) let $\phi\in C_c^\infty(S)$ be extended by zero to all of $\Omega$; note that $\phi$ can have either sign, but that $\phi=0$ on $\partial\Omega$.  Let $v = u_n + \eps \phi$ and note that $v \in \mathcal{K}$ as long as $\eps\in\RR$ is sufficiently small in magnitude.  Specifically, $\eps$ is sufficiently small if $|\eps|\le \eps_0$ where $\eps_0 = \min u_n(x) / \max |\phi(x)| > 0$, with the minimum and maximum taken over the (compact) closure of the support of $\phi$.  It follows from variational inequality \eqref{eq:theVI} that
-   $$\eps \int_\Omega \left(u_n - \Delta t\,F_n - u_{n-1}\right)\phi - \Delta t\,\bQ_n \cdot \grad \phi \ge 0.$$
-This is true for all $\eps$ of either sign which are sufficiently small (i.e.~for $-\eps_0 \le \eps \le \eps_0$), so the integral is zero.  Integration by parts, using assumption \eqref{eq:Qissmooth} and $\phi\big|_{\partial\Omega}=0$, gives
-   $$\int_\Omega \left[ u_n - \Delta t\,F_n - u_{n-1} + \Delta t\,\Div\bQ_n \right]\phi = 0.$$
-Because $\phi\in C_c^\infty(S)$ is arbitrary, the quantity in square brackets is zero a.e., thus equation \eqref{eq:semimassconserve} applies a.e.
+\begin{proof}  To prove (i) choose any $\phi\in C_c^\infty(S)$ and extend it by zero to all of $\Omega$; note that $\phi$ can have either sign, but that $\phi=0$ on $\partial\Omega$.  Let $v = u_n + \eps \phi$ and note that $v \in \mathcal{K}$ as long as $\eps\in\RR$ is sufficiently small in magnitude.  Specifically, $v \in \mathcal{K}$ if $|\eps|\le \eps_0$ where $\eps_0 = \min u_n(x) / \max |\phi(x)| > 0$, with the minimum and maximum taken over the (compact) closure of the support of $\phi$.  It follows from \eqref{eq:theVI} that
+   $$\eps \int_\Omega \left(u_n - \Delta t_n\,F_n - u_{n-1}\right)\phi - \Delta t_n\,\bQ_n \cdot \grad \phi \ge 0.$$
+This is true for all $-\eps_0 \le \eps \le \eps_0$, so the integral is zero.  Integration by parts, using assumption \eqref{eq:Qissmooth} and $\phi\big|_{\partial\Omega}=0$, gives
+   $$\int_\Omega \left[ u_n - \Delta t_n\,F_n - u_{n-1} + \Delta t_n\,\Div\bQ_n \right]\phi = 0.$$
+Because $\phi\in C_c^\infty(S)$ is arbitrary, the quantity in square brackets is zero a.e.~as claimed.
 
-To prove (ii) and (iii) we start with \emph{nonnegative} $\phi\in C_c^\infty(S)$.  Again extending $\phi$ by zero to all of $\Omega$, let $v = u_n + \phi$, so $v\in\mathcal{K}$.  Because $S\subset \Omega_n^r\cup\Omega_n^0$, $u_n=0$ on the support of $\phi$.  By assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}, $\bQ_n=0$ on the support of $\phi$ also.  Thus by \eqref{eq:theVI}, or equivalently \eqref{eq:morallytheVI},
-    $$0 \ge \int_{\Omega} \left(u_{n-1} + \Delta t\, F_n\right) \phi.$$
-It follows as before that $u_{n-1} + \Delta t\, F_n \le 0$ a.e.~on $S$.  In the case that also $u_{n-1}=0$ on $S$, i.e.~in case (ii), this implies $F_n \le 0$ a.e.~on $S$.\end{proof}
+To prove (ii) we start with nonnegative $\phi\in C_c^\infty(S)$, extend it by $\phi$ by zero, and let $v = u_n + \phi$ so $v\in\mathcal{K}$.  Because $S\subset \Omega_n^r\cup\Omega_n^0$, $u_n=0$ on the support of $\phi$.  By assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}, $\bQ_n=0$ on the support of $\phi$ also.  Thus by \eqref{eq:theVI},
+    $$0 \ge \int_{\Omega} \left(u_{n-1} + \Delta t_n\, F_n\right) \phi,$$
+and it follows as before that $u_{n-1} + \Delta t_n\, F_n \le 0$ a.e.~on $S$.\end{proof}
 
 \medskip
-From now on we will use set decomposition \eqref{eq:omegadecomposition} when referring to a solution $u_n$ of the weak form \eqref{eq:theVI}.
+Thus a continuous weak solution $u_n$ of \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} where it is positive, and otherwise it satisfies inequalities \eqref{eq:strongconditionswherezero}.  From now on we will use set decomposition \eqref{eq:omegadecomposition} when referring to a solution $u_n$ of the weak form \eqref{eq:theVI}.
 
 
 \section{Well-posedness for the single time-step problem} \label{sec:wellposed}  Our goal in this section is to demonstrate that a variety of different fluxes $\bQ_n$ allow a well-posed weak single time-step problem, variational inequality \eqref{eq:theVI}.  The optimistic reader, who already believes in well-posed mass conservation equation models with free boundaries, can proceed to section \ref{sec:spacediscretized} where fully-discretized, and thus implementable, numerical schemes are described.  Note, however, that the \emph{a posterior} analysis of free boundary conservation errors in section \ref{sec:timeseries} distinguishes time-semi-discretized (this section) and fully-discretized (section \ref{sec:spacediscretized}) free boundary conservation errors.
