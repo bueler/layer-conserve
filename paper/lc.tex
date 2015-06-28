@@ -584,71 +584,72 @@ as $\|u\|\to\infty$ because $0<2-p<1$, so $A_n$ is coercive.  We have proven thi
 \begin{theorem}  \label{thm:plapwellposed}  If $\Omega\subset \RR^d$ is bounded, $1<p<\infty$, $F_n=F_n(x)$ is independent of $u$, and $\bQ_n$ is given by \eqref{eq:plapflux} with $k>0$, then for any $\Delta t_n>0$, \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
 
-\subsection{Advective fluxes from differentiable velocity} \label{subsec:advect}  We are interested in hyperbolic problems too.  The simplest such problems involve a flux which comes from considering a layer which is transported by a differentiable velocity field $\bX \in W^{1,\infty}(\Omega;\RR^d)$, so that
+\subsection{Advective fluxes from differentiable velocity} \label{subsec:advect}  We are interested in hyperbolic problems too.  The simplest such problems involve a flux for a layer which is transported by a differentiable velocity field $\bX \in W^{1,\infty}(\Omega;\RR^d)$, so that
 \begin{equation}
   \bQ_n(u,x) = \bX(x) u. \label{eq:advectflux}
 \end{equation}
+It is easy to check that for any $1<p<\infty$, $\bQ_n$ satisfies the standard flux assumptions.
 
-Consider conditions \eqref{eq:Qnmonotone} and \eqref{eq:Qncoercive} applied to \eqref{eq:advectflux}.  Take $u,v\in\mathcal{K}$ and compute
+Now let $u,v\in\mathcal{K}$ and compute
 \begin{align}
    &\int_\Omega \left[\bQ_n(u,x) - \bQ_n(v,x)\right] \cdot \grad (u - v) = \int_\Omega \bX (u-v) \cdot \grad (u - v)   \label{eq:advectQnmono} \\
    &\qquad\qquad = \frac{1}{2}\,\int_\Omega \bX \cdot \grad (u - v)^2 = - \frac{1}{2}\,\int_\Omega \left(\Div\bX\right) (u - v)^2, \notag
 \end{align}
-after integrating by parts, because $u=v=0$ on $\partial \Omega$.
+after integrating by parts, because $u=v=0$ on $\partial \Omega$.  This result can be exploited in a couple of ways.  If the vector field is divergent, i.e.~if $\Div\bX\ge 0$, then \eqref{eq:Qnmonotone} applies with $C=0$, and so $A_n$ is strictly monotone.  Otherwise, \eqref{eq:Qnmonotone} applies with $C = C_\bX = \frac{1}{2}\Delta t_n\,\|\Div\bX\|_{L^\infty(\Omega)}$, so it follows that $A_n$ is monotone if $C_\bX \le 1$, and strictly monotone if $C_\bX < 1$.  Such a bound on the product of $\Delta t_n$ and a norm of the velocity $\bX$ might be regarded as a CFL-type condition \cite{LeVeque2002}, but here the bound involves the amount by which $\bX$ is not volume-preserving.
 
-This result can be exploited in a couple of ways.  If the vector field is divergent, i.e.~if $\Div\bX\ge 0$, then clearly \eqref{eq:Qnmonotone} applies with $C=0$, and so $A_n$ is strictly monotone.  Otherwise, \eqref{eq:Qnmonotone} applies with $C = \frac{1}{2}\Delta t\,\|\Div\bX\|_{L^\infty(\Omega)}$, so it follows that $A_n$ is monotone if $C\le 1$, and strictly monotone if $C<1$.  Any bound on the product of $\Delta t$ and a norm of the velocity $\bX$ can be regarded as a CFL-type condition \cite{LeVeque2002}, but here the bound involves the amount by which $\bX$ is not volume-preserving.
-
-There is no reason to suppose that the operator $A_n$ corresponding to \eqref{eq:advectflux}, defined by \eqref{eq:defineAn} as an operator from the convex subset $\mathcal{K} \subset \mathcal{X} = W_0^{1,p}(\Omega)$ to the dual $\mathcal{X}'$, is coercive.  However, if we add just a little bit of diffusion, here in the form of a $p$-Laplacian leading-order term with $p\ge 2$ for simplicity and coefficient $\eps>0$,
+There is no reason to suppose that the operator $A_n$ corresponding to \eqref{eq:advectflux}, defined by \eqref{eq:defineAn} as an operator from the convex subset $\mathcal{K} \subset \mathcal{X} = W_0^{1,p}(\Omega)$ to the dual $\mathcal{X}'$, is coercive.  However, if we add just a little bit of diffusion, here in the form of a $p$-Laplacian leading-order term with coefficient $\eps>0$ and $p\ge 2$ for simplicity,
 \begin{equation}
   \bQ_n(\grad u,u,x) = -\eps |\grad u|^p \grad u + \bX(x) u,   \label{eq:plapadvectflux}
 \end{equation}
 then the corresponding operator $A_n$ on $W_0^{1,p}(\Omega)$ is coercive.  In fact, combining calculations \eqref{eq:plapQnmono} and \eqref{eq:advectQnmono} gives
 \begin{equation}
-\int_\Omega \left[\bQ_n(u,x) - \bQ_n(v,x)\right] \cdot \grad (u - v) \le - c_0 \|u-v\|^p + c_1 \|u-v\|_{L^2(\Omega)}^2
+\int_\Omega \left[\bQ_n(u,x) - \bQ_n(v,x)\right] \cdot \grad (u - v) \le - \eps c_0 \|u-v\|^p - \frac{1}{2} \int_\Omega (\Div\bX) (u-v)^2
 \end{equation}
-where $c_0=\eps\, 2^{2-p}/C(\Omega,p)>0$ and $c_1 = \frac{1}{2}\|\Div\bX\|_{L^\infty(\Omega)}$.  But then by \eqref{eq:AtoQcalculation} we have
-\begin{equation}
-\ip{A_n(u) - A_n(v)}{u-v} \ge c_0 \Delta t\, \|u-v\|^p + (1-\Delta t\,c_1) \|u-v\|_{L^2(\Omega)}^2.
-\end{equation}
-This proves the following theorem for the variational inequality problem in $W_0^{1,p}(\Omega)$:
+where $c_0=2^{2-p}/C(\Omega,p)>0$.  But then by \eqref{eq:AtoQcalculation} we have
+\begin{align}
+\ip{A_n(u) - A_n(v)}{u-v} &\ge \eps c_0 \Delta t_n\, \|u-v\|^p + \|u-v\|_{L^2(\Omega)}^2 \\
+  &\qquad + \frac{\Delta t_n}{2} \int_\Omega (\Div\bX) (u-v)^2. \notag
+\end{align}
+This proves the following theorem:
 
 \medskip
-\begin{theorem}  \label{thm:plapadvectwellposed}  Suppose $\bQ_n$ is given by \eqref{eq:plapadvectflux} with $\eps>0$, $\bX \in W^{1,\infty}(\Omega;\RR^d)$, and $p\ge 2$.  If either $\Div \bX=0$ or
+\begin{theorem}  \label{thm:plapadvectwellposed}  Suppose $\bQ_n$ is given by \eqref{eq:plapadvectflux} with $\eps>0$.  If $\bX \in W^{1,\infty}(\Omega;\RR^d)$, $F_n=F_n(x)$ is independent of $u$, and $p\ge 2$, then \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$ if either $\Div \bX \ge 0$ or
 \begin{equation}
-  \Delta t \le \frac{4}{\|\Div \bX\|_{L^\infty(\Omega)}}, \label{eq:plapadvectdtcond}
+  \Delta t_n \le \frac{2}{\|\Div \bX\|_{L^\infty(\Omega)}}. \label{eq:plapadvectdtcond}
 \end{equation}
-then \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
+
+Note that condition \eqref{eq:plapadvectdtcond} is independent of $\eps>0$, giving hope that the pure advection problem ($\eps \to 0$) is well-behaved also.
 
 \subsection{Doubly-nonlinear fluxes} \label{subsec:powertransform}  Now consider the doubly-nonlinear \cite{Raviart1970} flux
 \begin{equation}
   \bQ_n(\grad u,u) = - k u^r |\grad u|^{p-2} \grad u \label{eq:doubleflux}
 \end{equation}
-where $k>0$, $r\ge 0$, and $1<p<\infty$.  This includes, as the $r=0$ case, the $p$-Laplacian \eqref{eq:plapflux}.  At the opposite extreme it includes the porous medium equation \cite{Vazquez2007}, where $p=2$ and $r=\gamma-1$ so that the flux is frequently written $- \tilde k \grad(u^\gamma)$.  Both powers are nontrivial for the diffusive shallow water equations \cite{AlonsoSantillanaDawson2008}, where $1<r<2$ and $1<p\le 2$, and for the shallow ice approximation \cite{Bueleretal2005,Calvoetal2002,JouvetBueler2012}, where $r=n+2$ and $p=n+1$ for an experimentally-determined exponent $1 < n \lesssim 4$ \cite{GoldsbyKohlstedt2001}.
+where $k>0$, $r\ge 0$, and $1<p<\infty$.  This includes, as the $r=0$ case, the $p$-Laplacian \eqref{eq:plapflux}.  At the opposite extreme it includes the porous medium equation \cite{Vazquez2007}, where $p=2$ and $r=\gamma-1$, so that the flux may be written $\bQ_n = - \tilde k \grad(u^\gamma)$.  Both powers are nontrivial for the diffusive shallow water equations \cite{AlonsoSantillanaDawson2008}, where $1<r<2$ and $1<p\le 2$, and for the shallow ice approximation \cite{Bueleretal2005,Calvoetal2002,JouvetBueler2012}, where $r=n+2$ and $p=n+1$ for an experimentally-determined exponent $1 < n \lesssim 4$ \cite{GoldsbyKohlstedt2001}.
 
 Leaving the correct Sobolev space undetermined for a moment, we apply a power transformation
 \begin{equation}
-	u = w^m \qquad \text{ where } \quad m = \frac{p-1}{r+p-1} > 0. \label{eq:doubletransform}
+	u = w^m \qquad \text{ where } \quad m = \frac{p-1}{r+p-1}. \label{eq:doubletransform}
 \end{equation}
-Straightforward calculation turns \eqref{eq:doubleflux} into
+Note $0 < m \le 1$.  Straightforward calculation turns \eqref{eq:doubleflux} into
 \begin{equation}
 	\bQ_n(\grad w) = - K |\grad w|^{p-2} \grad w, \label{eq:doublenewflux}
 \end{equation}
 with $K=k m^{p-1}>0$, giving the $p$-Laplacian flux \eqref{eq:plapflux}.
 
-Transformation  \eqref{eq:doubletransform} converts PDE \eqref{eq:semimassconserve} and \eqref{eq:doubleflux} to a $p$-Laplacian equation with additional zeroth-order terms, namely
+In fact, flux \eqref{eq:doubleflux} and transformation  \eqref{eq:doubletransform} converts PDE \eqref{eq:semimassconserve} into a $p$-Laplacian equation with additional zeroth-order terms, namely
 \begin{equation}
     - K \Div\left(|\grad w|^{p-2} \grad w\right) + G(w,x) = 0  \label{eq:doubleplap}
 \end{equation}
 with
 \begin{equation}
-   G(w,x) = w^m - \Delta t\, F_n(w^m,x) - u_{n-1}. \label{eq:doubleGdefn}
+   G(w,x) = w^m - \Delta t_n\, F_n(w^m,x) - u_{n-1}. \label{eq:doubleGdefn}
 \end{equation}
 If $p=2$ then \eqref{eq:doubleplap} is semilinear (i.e.~linear in the highest-order term), so the transformation converts the porous medium equation into semilinear form.
 
-Noting $u\ge 0$ if and only if $w\ge 0$ in transformation \eqref{eq:doubletransform}, define $\mathcal{X} = W_0^{1,p}(\Omega)$, and the admissible functions $\mathcal{K}\subset \mathcal{X}$, just as before in section \ref{sec:weakform}.  Define $A_n: \mathcal{K} \to \mathcal{X}'$ by
+Define $\mathcal{X} = W_0^{1,p}(\Omega)$, and the admissible functions $\mathcal{K}\subset \mathcal{X}$, just as in section \ref{sec:weakform}.  Define $A_n: \mathcal{K} \to \mathcal{X}'$ by
 \begin{equation}
-\ip{A_n(w)}{\phi} = \int_\Omega \Delta t\, K |\grad w|^{p-2} \grad w\cdot \grad \phi + G(w,x)\phi. \label{eq:doubleform}
+\ip{A_n(w)}{\phi} = \int_\Omega \Delta t_n\, K |\grad w|^{p-2} \grad w\cdot \grad \phi + G(w,x)\phi. \label{eq:doubleform}
 \end{equation}
 The weak formulation of \eqref{eq:doubleplap} is precisely \eqref{eq:theVI} with this $A_n$.  The following theorem uses the argument in subsection III.3 of \cite{KinderlehrerStampacchia1980}.
 
@@ -660,14 +661,14 @@ Let $1<p<\infty$ and $r\ge 0$.  Define $m$ by \eqref{eq:doubletransform}.  Suppo
 \begin{proof}
 Suppose $p\ge 2$.  If $w,v\in\mathcal{X}$ then by \eqref{eq:pinequality} and Poincare inequality \eqref{eq:poincare},
 \begin{align*}
-\ip{A_n(w)-A_n(v)}{w-v} &= \int_\Omega \Delta t\, K \left(|\grad w|^{p-2} \grad w - |\grad v|^{p-2} \grad v\right) \cdot \grad (w-v) \\
+\ip{A_n(w)-A_n(v)}{w-v} &= \int_\Omega \Delta t_n\, K \left(|\grad w|^{p-2} \grad w - |\grad v|^{p-2} \grad v\right) \cdot \grad (w-v) \\
   &\qquad\qquad + \left(G(w,x) - G(v,x)\right) (w-v) \\
-  &\ge \frac{\Delta t\,K}{2^{p-2}} \int_\Omega |\grad (w-v)|^p + 0 \ge \frac{\Delta t\,K}{2^{p-2}\, C(\Omega,p)} \|w-v\|^p.
+  &\ge \frac{\Delta t_n\,K}{2^{p-2}} \int_\Omega |\grad (w-v)|^p + 0 \ge \frac{\Delta t_n\,K}{2^{p-2}\, C(\Omega,p)} \|w-v\|^p.
 \end{align*}
 The case $1<p<2$ follows by a trivial modification of the technique used in proving theorem \ref{thm:plapwellposed}.
 \end{proof}
 
-FIXME: of course assumptions on $G$ are assumptions on $F_n$.  if $F_n=F_n(x)$ we are done. because of $\Delta t$ we can still solve with increasing $F_n(u)$ as long as time steps are short
+FIXME: a weaker assumption on $G$ is possible, e.g.~$(G(w,x)-G(v,x))(w-v) \ge - (1-\delta) \tilde C |w-v|^p$ where \dots (Poincare inequality).  of course assumptions on $G$ are assumptions on $F_n$.  if $F_n=F_n(x)$ we are done. because of $\Delta t$ we can still solve with increasing $F_n(u)$ as long as time steps are short
 
 FIXME: major deficiency is no bedrock. compare results in \cite{JouvetBueler2012}
 
