@@ -85,7 +85,7 @@
 \newcommand\vf{\varphi}
 
 
-\title{Free-boundary Problems // in Cryosphere Models}
+\title[Free-boundary problems in cryosphere]{Free-boundary problems \\ in models of the cryosphere}
 
 \author{Ed Bueler}
 
@@ -112,7 +112,7 @@
 
 \section{The problem I'm worried about:}
 
-\subsection{Time-stepping free-boundary fluid layer models.}
+\subsection{time-stepping free-boundary fluid layer models}
 
 \begin{frame}{A fluid layer in a climate}
 
@@ -165,19 +165,19 @@ $$h_t + \Div\bq = f$$
 \end{frame}
 
 
-\begin{frame}{A concern driven by practical modeling}
+\begin{frame}{A concern driven by practical modeling: ice sheets}
 
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
 \small
 \item the icy region is nearly-fractal and disconnected
-\item currently in PISM$^*$:
+\item currently in our ice sheet model$^*$:
   \begin{itemize}
   \item[$\circ$] explicit time-stepping
   \item[$\circ$] free boundary by truncation
   \end{itemize}
-\item want for PISM:
+\item want for our model:
   \begin{itemize}
   \item[$\circ$] implicit time steps
   \item[$\circ$] better conservation accounting to user
@@ -185,7 +185,7 @@ $$h_t + \Div\bq = f$$
 \end{itemize}
 
 \vspace{10mm}
-{\scriptsize $^*$= Parallel Ice Sheet Model, \texttt{pism-docs.org}}
+{\scriptsize $^*$Parallel Ice Sheet Model, \texttt{pism-docs.org}}
 \end{column}
 \begin{column}{0.5\textwidth}
 \vspace{-5mm}
@@ -213,67 +213,54 @@ $$h_t + \Div\bq = f$$
 
 \small tidewater marsh \hfill tsunami inundation
 
-\scriptsize and subglacial hydrology, supraglacial runoff, surface hydrology, \dots
+\medskip
+\scriptsize and also surface hydrology, subglacial hydrology, \dots
 \end{frame}
 
 
-\begin{frame}{Anyone numerically-solved these problems before?}
+\begin{frame}{Has anyone solved these problems before?}
+
+\vspace{-2mm}
 
   \begin{itemize}
   \item yes, of course!
-    \begin{itemize}
-    \item[$\circ$] generic result: \emph{ad hoc} schemes near the free boundary
-    \end{itemize}
+  \item generic result: \emph{ad hoc} schemes near the free boundary
   \end{itemize}
 
 \medskip
 \begin{columns}
-\begin{column}{0.3\textwidth}
-\includegraphics[width=\textwidth,keepaspectratio=true]{JaroschSchoofAnslow2013}
+\begin{column}{0.45\textwidth}
+\includegraphics[width=0.7\textwidth,keepaspectratio=true]{Albrechtetal2011half}
 
-\small glacier ice
+\scriptsize volume-of-fluid method at ice shelf fronts
 
-on steep terrain
+\tiny (Albrecht et al, 2011)
+
+\medskip
+\includegraphics[width=0.45\textwidth,keepaspectratio=true]{JaroschSchoofAnslow2013}
+
+\scriptsize glacier ice on steep terrain
 
 \smallskip
 \tiny (Jarosch, Schoof, Anslow, 2013)
 \end{column}
 
-\begin{column}{0.6\textwidth}
-\includegraphics[width=0.8\textwidth,keepaspectratio=true]{Albrechtetal2011}
+\begin{column}{0.5\textwidth}
+\hfill \includegraphics[width=0.45\textwidth,keepaspectratio=true]{LeVequeGeorgeBerger2011}
 
-\small volume-of-fluid method at ice shelf fronts
+\hfill \scriptsize tsunami run-up on shore
 
-\tiny (Albrecht et al, 2011)
+\smallskip
+\hfill \tiny (LeVeque, George, Berger, 2011)
 
-\small \medskip
-\includegraphics[width=0.5\textwidth,keepaspectratio=true]{jouvet-two-grids}
+\medskip
+\hfill \includegraphics[width=0.55\textwidth,keepaspectratio=true]{jouvet-two-grids}
 
-\small volume-of-fluid method at glacier surface
+\hfill \scriptsize volume-of-fluid method at glacier surface
 
-\tiny (Jouvet et al 2008)
+\hfill \tiny (Jouvet et al 2008)
 \end{column}
 \end{columns}
-\end{frame}
-
-
-\begin{frame}{New goals}
-
-  \begin{itemize}
-  \item I don't mind ``\texttt{if \dots then \dots}'' in my code, \emph{but} I want to know what mathematical problem is behind it
-    \begin{itemize}
-    \item[$\circ$] maintaining code with those \emph{ad hoc} schemes scares the \#!*\& out of me
-    \end{itemize}
-  \item my goals:
-    \begin{itemize}
-    \item[$\circ$]
-       \alert{redefine the problem so free boundary is part of solution}
-    \item[$\circ$]
-       \alert{tell the model user what is going on at the free boundary}
-    \item[$\circ$]
-       \alert{find numerical schemes which automate the details}
-    \end{itemize}
-  \end{itemize}
 \end{frame}
 
 
@@ -283,12 +270,11 @@ $$h_t + \Div\bq = f \qquad \to \qquad \frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_
 
   \begin{itemize}
   \item semi-discretize in time: $H_n(x) \approx h(t_n,x)$
-  \item the new equation is a ``single time-step problem''
+  \item the new equation is strong form ``single time-step problem''
     \begin{itemize}
     \item[$\circ$] a PDE in space \alert{where $H_n>0$}
-    \item[$\circ$] called the ``strong form''
+    \item[$\circ$] details of flux $\bQ_n$ and source $F_n$ come from time-stepping scheme
     \end{itemize}
-  \item details of flux $\bQ_n$ and source $F_n$ come from time-stepping scheme
   \end{itemize}
 \end{frame}
 
@@ -296,59 +282,60 @@ $$h_t + \Div\bq = f \qquad \to \qquad \frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_
 \begin{frame}{1D time-stepping examples}
 
 \begin{columns}
-\begin{column}{0.4\textwidth}
-\only<1>{
+\begin{column}{0.35\textwidth}
+\alert{same:}
 
-\noindent \alert{same:}
-\scriptsize
 \begin{itemize}
+\scriptsize
 \item equation
 
 \tiny
 \hspace{-10mm} $\frac{H_n-H_{n-1}}{\Delta t} + \Div\bQ_n = f$
-
 \scriptsize
+
 \item climate $f$
 \item bed shape
-\item constrained-
+\item constraint-respecting
 
 Newton scheme
 \end{itemize}
 
-\vspace{5mm}
+\vspace{2mm}
 
-\normalsize
-\alert{how different}
+\alert{top:}
 
-\alert{are the fluxes}
-
-\alert{$\bQ_n$?}
-}
-\only<2>{
 \scriptsize
-\vspace{20mm}
 
+\medskip
 $\bQ_n = v_0 H_n$
 
-hyperbolic
+hyperbolic advection with
 
-(constant velocity)
+constant velocity
 
-\vspace{34mm}
+\vspace{5mm}
 
+\normalsize 
+
+\alert{bottom:}
+
+\scriptsize
+
+\medskip
 $\bQ_n = - \Gamma |H_n|^{n+2}$
 
-$\phantom{bQ_n = }\, \cdot |\grad h_n|^{n-1} \grad h_n$
+$\phantom{bQ_n = }\, \cdot |\grad s_n|^{n-1} \grad s_n$
 
-highly-nonlinear diffusion
-}
+nonlinear degenerate
+
+diffusion
 \end{column}
-\begin{column}{0.6\textwidth}
-\hspace{-20mm}
+\begin{column}{0.55\textwidth}
+\hspace{-15mm}
 \animategraphics[autoplay,loop,height=3.5cm]{6}{anim/adv/u-}{1}{50}
 
 \medskip
-\hspace{-20mm}
+\hspace{-15mm}
 \animategraphics[autoplay,loop,height=3.5cm]{6}{anim/sia/u-}{1}{50}
 \end{column}
 \end{columns}
@@ -357,7 +344,7 @@ highly-nonlinear diffusion
 
 \section{Practical consequences:}
 
-\subsection{Limitations to discrete conservation.}
+\subsection{limitations to discrete conservation}
 
 \begin{frame}{Subsets for time-stepping and conservation}
 \begin{itemize}
@@ -400,7 +387,7 @@ highly-nonlinear diffusion
 \begin{itemize}
 \item \alert{the retreat loss $R_n$ is not balanced by the climate}
   \begin{itemize}
-  \item[$\circ$] $R_n$ is \emph{caused} by the climate, but we don't know a \emph{computable integral} to balance it
+  \item[$\circ$] $R_n$ is \emph{caused} by the climate, but we don't know a computable integral of climate $F_n$ to balance it
   \end{itemize}
 \item we must track \alert{three} time series:
   \begin{itemize}
@@ -408,7 +395,7 @@ highly-nonlinear diffusion
 
   \smallskip
   \item[$\circ$] climate (e.g.~surface mass bal.) over current fluid-covered region:
-     $$C_n = \Delta t\, \int_{\Omega_n} F_n \,dx \approx \int_{t_{n-1}}^{t_n} \int_{\Omega_n} f(t,x) \,dx\,dt$$
+     $$C_n = \Delta t\, \int_{\Omega_n} F_n \,dx \qquad \approx \int_{t_{n-1}}^{t_n} \int_{\Omega_n} f(t,x) \,dx\,dt$$
   \item[$\circ$] retreat loss during time step: \qquad $R_n = \int_{\Omega_n^r} H_{n-1} \,dx$
   \end{itemize}
 \item now it balances:
@@ -430,9 +417,9 @@ highly-nonlinear diffusion
 \end{frame}
 
 
-\subsection{Need for weak numerical free boundary solutions.}
+\subsection{need for weak numerical free boundary solutions}
 
-\begin{frame}{Weak form incorporates constraint}
+\begin{frame}{Weak form incorporates nonnegative-thickness constraint}
 
   \begin{itemize}
   \item define:
@@ -445,9 +432,8 @@ highly-nonlinear diffusion
     \begin{itemize}
     \item[$\circ$] derive this \emph{variational inequality} from:
       \begin{itemize}
-      \item[$\diamond$] the strong form \emph{and}
-      \item[$\diamond$] integration-by-parts \emph{and}
-      \item[$\diamond$] arguments about $H_n=0$ areas
+      \item[$\diamond$] integration-by-parts on strong form
+      \item[$\diamond$] thought about $H_n=0$ areas
       \end{itemize}
     \end{itemize}
   \end{itemize}
@@ -461,8 +447,9 @@ highly-nonlinear diffusion
     \begin{itemize}
     \item[$\circ$] this means $\bQ_n$ describes a \emph{layer}
     \end{itemize}
-  \item assume $H_n \in \mathcal{K}$ solves weak single time-step problem
-  \item then
+  \item if $H_n \in \mathcal{K}$ solves weak single time-step problem then
+  
+      \medskip
 	  \begin{enumerate}
 	  \item PDE applies on the set where $H_n>0$:
 	    $$\frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_n = F_n$$
@@ -470,7 +457,7 @@ highly-nonlinear diffusion
 	    $$H_{n-1} + \Delta t\, F_n \le 0$$
 	    \vspace{-6mm}
 	    \begin{itemize}
-	    \item[$\circ$] this means ``mass balance was negative enough during time step to remove old thickness''
+	    \item[$\circ$] ``climate negative enough during time step to remove old thickness''
 	    \end{itemize}
 	  \end{enumerate}
 \end{itemize}
