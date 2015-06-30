@@ -53,8 +53,10 @@
 \newcommand\bq{\mathbf{q}}
 \newcommand\bu{\mathbf{u}}
 \newcommand\bv{\mathbf{v}}
+\newcommand\bx{\mathbf{x}}
 \newcommand\by{\mathbf{y}}
 
+\newcommand\bF{\mathbf{F}}
 \newcommand\bQ{\mathbf{Q}}
 \newcommand\bV{\mathbf{V}}
 \newcommand\bX{\mathbf{X}}
@@ -402,7 +404,19 @@ diffusion
 
 \begin{itemize}
 \item NCP = nonlinear complementarity problem
-\item FIXME
+\item abstractly, NCP is:
+  \begin{itemize}
+  \item[$\circ$]  given differentiable map $\bF:\RR^n \to \RR^n$
+  \item[$\circ$]  solve
+     $$\bx \ge 0, \quad \bF(\bx) \ge 0, \quad \bx^\top \bF(\bx) = 0$$
+  \end{itemize}
+\item our case:
+  \begin{itemize}
+  \item[$\circ$]  $\infty$ dimensions with m.c.~equation $h_t + \Div\bq = f$
+  \item[$\circ$]  $\bx = H_n$ and $\bF(\bx) = (\text{residual from discrete-time m.c.~eqn.})$
+  \end{itemize}
+\item in finite dimensions we have VI $\leftrightarrow$ NCP equivalence:
+  $$\ip{\bF(\bx)}{\by-\bx} \ge 0 \quad \forall \by \in \mathcal{K} \qquad \iff \qquad \text{NCP}$$
 \end{itemize}
 \end{frame}
 
@@ -420,25 +434,40 @@ the weak single time-step problem:
   \item[$\circ$]  see ``SNESVI'' object
   \item[$\circ$]  for NCP there are two implementations (Benson \& Munson, 2006):
     \begin{itemize}
-    \item  reduced set method
+    \item  reduced-set (active-set) method
     \item  semismooth method
     \end{itemize}
   \end{itemize}
 \end{itemize}
 
-
 \vspace{15mm}
 {\scriptsize $^*$Portable Extensible Toolkit for Scientific computation, \texttt{www.mcs.anl.gov/petsc}}
 \end{frame}
 
-\begin{frame}{Example: Greenland ice sheet at 900 m res.}
+
+\begin{frame}{Example: Greenland ice sheet}
 
 \begin{columns}
 \begin{column}{0.6\textwidth}
 \begin{itemize}
-\item question: given steady climate (= precipitation + melt) and bedrock elevations, what is shape of Greenland ice sheet?
+\small
+\item given steady climate and bedrock elevations, what is shape of Greenland ice sheet?
+  \begin{itemize}
+  \scriptsize
+  \item[$\circ$] climate = ``surface mass balance''
+  \item[] \qquad = precipitation $-$ runoff-from-melt
+  \end{itemize}
+\small
 \item assume simplest reasonable dynamics: non-sliding shallow ice approximation
-\item FIXME
+\item solve VI/NCP weak problem
+  \begin{itemize}
+  \scriptsize
+  \item[$\circ$] steady state ($\Delta t\to \infty$)
+  \item[$\circ$] reduced-set Newton method
+  \item[$\circ$] 900 m structured grid
+  \item[$\circ$] $Q^1$ FEs in space
+  \item[$\circ$] $N=7\times 10^6$ d.o.f.
+  \end{itemize}
 \end{itemize}
 
 \vspace{5mm}
@@ -469,7 +498,7 @@ the weak single time-step problem:
 
 \vspace{-3mm}
 \begin{center}
-\includegraphics[width=1.0\textwidth,keepaspectratio=true]{cartoon-sets}
+\includegraphics[width=0.8\textwidth,keepaspectratio=true]{cartoon-sets}
 \end{center}
 \end{frame}
 
