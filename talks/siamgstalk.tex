@@ -128,7 +128,7 @@
     \begin{itemize}
     \vspace{-4mm}
     \item[$\circ$] $h$ is a thickness: $h\ge 0$
-    \item[$\circ$] mass conservation PDE applies \emph{only where} $h>0$
+    \item[$\circ$] mass conservation PDE applies only where $h>0$
     \item[$\circ$] $\bq$ is flow (vertically-integrated)
     \item[$\circ$] source ${\color{blue} f}$ is ``climate''; ${\color{blue} f}>0$ shown downward
     \end{itemize}
@@ -200,7 +200,7 @@ $$h_t + \Div\bq = f$$
   \end{itemize}
 \item want for our model:
   \begin{itemize}
-  \item[$\circ$] implicit time steps
+  \item[$\circ$] long implicit time steps
   \item[$\circ$] better conservation accounting to user
   \end{itemize}
 \end{itemize}
@@ -279,13 +279,15 @@ $$h_t + \Div\bq = f \qquad \to \qquad \frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_
     \begin{itemize}
     \item[$\circ$] a PDE in space where $H_n>0$
     \item[$\circ$] details of flux $\bQ_n$ and source $F_n$ come from time-stepping scheme
-    \item[$\circ$] e.g.~$\theta$-methods or RK
+      \begin{itemize}
+      \item e.g.~$\theta$-methods or RK
+      \end{itemize}
     \end{itemize}
   \end{itemize}
 \end{frame}
 
 
-\begin{frame}{1D time-stepping examples}
+\begin{frame}{1D time-stepping examples (and my $\bq$-agnosticism)}
 
 \begin{columns}
 \begin{column}{0.35\textwidth}
@@ -379,11 +381,11 @@ diffusion
     \begin{itemize}
     \item[$\circ$] this means $\bQ_n$ describes a \emph{layer}
     \end{itemize}
-  \item if $H_n \in \mathcal{K}$ solves weak single time-step problem then
+  \item if $H_n \in \mathcal{K}$ solves weak single time-step problem (VI) then
   
       \medskip
 	  \begin{itemize}
-	  \item[$\circ$] PDE applies on the set where $H_n>0$:
+	  \item[$\circ$] PDE applies on the set where $H_n>0$ (interior condition):
 	    $$\frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_n = F_n$$
 	  \item[$\circ$] plus inequality on the set where $H_n = 0$:
 	    $$H_{n-1} + \Delta t\, F_n \le 0$$
@@ -405,7 +407,7 @@ diffusion
 \end{frame}
 
 
-\subsection{new numerical tools which scale}
+\subsection{newly-available numerical tools}
 
 \begin{frame}{Numerical solution of the weak problem}
 
@@ -413,15 +415,20 @@ the weak single time-step problem:
 \begin{itemize}
 \item is nonlinear because of constraint (even for $\bQ_n$ linear in $H_n$)
 \item can be solved by a Newton method modified for constraint
-  \begin{itemize}
-  \item[$\circ$]  reduced set method
-  \item[$\circ$]  semismooth method
-  \end{itemize}
-\item scalable implementations are in PETSc 3.5
+\item scalable implementations are in PETSc$^*$ 3.5+
   \begin{itemize}
   \item[$\circ$]  see ``SNESVI'' object
+  \item[$\circ$]  for NCP there are two implementations (Benson \& Munson, 2006):
+    \begin{itemize}
+    \item  reduced set method
+    \item  semismooth method
+    \end{itemize}
   \end{itemize}
 \end{itemize}
+
+
+\vspace{15mm}
+{\scriptsize $^*$Portable Extensible Toolkit for Scientific computation, \texttt{www.mcs.anl.gov/petsc}}
 \end{frame}
 
 \begin{frame}{Example: Greenland ice sheet at 900 m res.}
@@ -441,14 +448,14 @@ the weak single time-step problem:
 \vspace{-5mm}
 
 \begin{center}
-\includegraphics[width=0.9\textwidth,keepaspectratio=true]{grnwinset}
+\includegraphics[width=0.95\textwidth,keepaspectratio=true]{grnwinset}
 \end{center}
 \end{column}
 \end{columns}
 \end{frame}
 
 
-\subsection{limitations to discrete conservation}
+\subsection{new (?) limitations to discrete conservation}
 
 \begin{frame}{Conservation reporting: subsets}
 \begin{itemize}
