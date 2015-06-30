@@ -92,7 +92,8 @@
 \institute[UAF] % (optional, but mostly needed)
 {
   Dept of Mathematics and Statistics, and Geophysical Institute\\
-  University of Alaska Fairbanks%
+  University of Alaska Fairbanks \\
+  \tiny (\emph{funded by NASA Modeling, Analysis, and Prediction program})%
 }
 
 \date{SIAM GS 2015}
@@ -165,7 +166,27 @@ $$h_t + \Div\bq = f$$
 \end{frame}
 
 
-\begin{frame}{A concern driven by practical modeling: ice sheets}
+\begin{frame}{Examples}
+
+\includegraphics[width=0.4\textwidth,keepaspectratio=true]{polaris}
+\hfill
+\includegraphics[width=0.45\textwidth,keepaspectratio=true]{supp4rignot-small}
+
+\small glaciers \hfill ice shelves \& sea ice
+
+\medskip
+\includegraphics[width=0.41\textwidth,keepaspectratio=true]{marsh-water}
+\hfill
+\includegraphics[width=0.42\textwidth,keepaspectratio=true]{tsunami-sendai}
+
+\small tidewater marsh \hfill tsunami inundation
+
+\medskip
+\scriptsize and also surface hydrology, subglacial hydrology, \dots
+\end{frame}
+
+
+\begin{frame}{I'm driven here by practical modeling: ice sheets}
 
 \begin{columns}
 \begin{column}{0.5\textwidth}
@@ -195,26 +216,6 @@ $$h_t + \Div\bq = f$$
 \end{center}
 \end{column}
 \end{columns}
-\end{frame}
-
-
-\begin{frame}{Examples}
-
-\includegraphics[width=0.4\textwidth,keepaspectratio=true]{polaris}
-\hfill
-\includegraphics[width=0.45\textwidth,keepaspectratio=true]{supp4rignot-small}
-
-\small glaciers \hfill ice shelves \& sea ice
-
-\medskip
-\includegraphics[width=0.41\textwidth,keepaspectratio=true]{marsh-water}
-\hfill
-\includegraphics[width=0.42\textwidth,keepaspectratio=true]{tsunami-sendai}
-
-\small tidewater marsh \hfill tsunami inundation
-
-\medskip
-\scriptsize and also surface hydrology, subglacial hydrology, \dots
 \end{frame}
 
 
@@ -264,16 +265,21 @@ $$h_t + \Div\bq = f$$
 \end{frame}
 
 
-\begin{frame}{Numerical models \emph{must} discretize time}
+\section{Practical conclusions:}
+
+\subsection{approach I: semi-discretize in time}
+
+\begin{frame}{Approach I: semi-discretize in time}
 
 $$h_t + \Div\bq = f \qquad \to \qquad \frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_n = F_n$$
 
   \begin{itemize}
   \item semi-discretize in time: $H_n(x) \approx h(t_n,x)$
-  \item the new equation is strong form ``single time-step problem''
+  \item the new equation is strong form \alert{single time-step problem}
     \begin{itemize}
-    \item[$\circ$] a PDE in space \alert{where $H_n>0$}
+    \item[$\circ$] a PDE in space where $H_n>0$
     \item[$\circ$] details of flux $\bQ_n$ and source $F_n$ come from time-stepping scheme
+    \item[$\circ$] e.g.~$\theta$-methods or RK
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -293,6 +299,7 @@ $$h_t + \Div\bq = f \qquad \to \qquad \frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_
 \hspace{-10mm} $\frac{H_n-H_{n-1}}{\Delta t} + \Div\bQ_n = f$
 \scriptsize
 
+\item BEuler time-step
 \item climate $f$
 \item bed shape
 \item constraint-respecting
@@ -342,11 +349,108 @@ diffusion
 \end{frame}
 
 
-\section{Practical consequences:}
+\subsection{approach II: each time-step is weakly-posed free-bdry problem}
+
+\begin{frame}{Approach II: weak form incorporates $H_n\ge 0$ constraint}
+
+  \begin{itemize}
+  \item define:
+    $$\mathcal{K} = \left\{v \in W^{1,p}(\Omega) \,\Big|\, v\ge 0\right\} = \text{\alert{admissible thicknesses}}$$
+  \item we say $H_n \in \mathcal{K}$ solves the \alert{weak single time-step problem} if
+    $$\int_\Omega H_n (v - H_n) - \Delta t\, \bQ_n \cdot \grad(v - H_n) \ge \int_\Omega \left(H_{n-1} + \Delta t\, F_n\right) (v - H_n)$$
+  for all $v \in \mathcal{K}$
+  \small
+  \medskip
+    \begin{itemize}
+    \item[$\circ$] derive this \emph{variational inequality} (VI) from:
+      \begin{itemize}
+      \item[$\diamond$] integration-by-parts on strong form
+      \item[$\diamond$] thought about $H_n=0$ areas
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Weak solves strong; gives more info}
+
+\begin{itemize}
+  \item assume $\bQ_n=0$ when $H_n=0$
+    \begin{itemize}
+    \item[$\circ$] this means $\bQ_n$ describes a \emph{layer}
+    \end{itemize}
+  \item if $H_n \in \mathcal{K}$ solves weak single time-step problem then
+  
+      \medskip
+	  \begin{itemize}
+	  \item[$\circ$] PDE applies on the set where $H_n>0$:
+	    $$\frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_n = F_n$$
+	  \item[$\circ$] plus inequality on the set where $H_n = 0$:
+	    $$H_{n-1} + \Delta t\, F_n \le 0$$
+	    \vspace{-6mm}
+	    \begin{itemize}
+	    \item ``climate negative enough during time step to remove old thickness''
+	    \end{itemize}
+	  \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Alternative weak formulation: NCP}
+
+\begin{itemize}
+\item NCP = nonlinear complementarity problem
+\item FIXME
+\end{itemize}
+\end{frame}
+
+
+\subsection{new numerical tools which scale}
+
+\begin{frame}{Numerical solution of the weak problem}
+
+the weak single time-step problem:
+\begin{itemize}
+\item is nonlinear because of constraint (even for $\bQ_n$ linear in $H_n$)
+\item can be solved by a Newton method modified for constraint
+  \begin{itemize}
+  \item[$\circ$]  reduced set method
+  \item[$\circ$]  semismooth method
+  \end{itemize}
+\item scalable implementations are in PETSc 3.5
+  \begin{itemize}
+  \item[$\circ$]  see ``SNESVI'' object
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: Greenland ice sheet at 900 m res.}
+
+\begin{columns}
+\begin{column}{0.6\textwidth}
+\begin{itemize}
+\item question: given steady climate (= precipitation + melt) and bedrock elevations, what is shape of Greenland ice sheet?
+\item assume simplest reasonable dynamics: non-sliding shallow ice approximation
+\item FIXME
+\end{itemize}
+
+\vspace{5mm}
+\tiny (Bueler, submitted to J.~Glaciol.)
+\end{column}
+\begin{column}{0.4\textwidth}
+\vspace{-5mm}
+
+\begin{center}
+\includegraphics[width=0.9\textwidth,keepaspectratio=true]{grnwinset}
+\end{center}
+\end{column}
+\end{columns}
+\end{frame}
+
 
 \subsection{limitations to discrete conservation}
 
-\begin{frame}{Subsets for time-stepping and conservation}
+\begin{frame}{Conservation reporting: subsets}
 \begin{itemize}
 \item suppose $H_n$ solves the single time-step problem
 \item define
@@ -363,7 +467,7 @@ diffusion
 \end{frame}
 
 
-\begin{frame}{Reporting discrete conservation}
+\begin{frame}{Conservation reporting: time-series}
 
 \begin{itemize}
 \item define:
@@ -382,7 +486,7 @@ diffusion
 \end{frame}
 
 
-\begin{frame}{Reporting discrete conservation: \emph{limitation}}
+\begin{frame}{Conservation reporting: \emph{limitation}}
 
 \begin{itemize}
 \item \alert{the retreat loss $R_n$ is not balanced by the climate}
@@ -417,99 +521,31 @@ diffusion
 \end{frame}
 
 
-\subsection{need for weak numerical free boundary solutions}
+\begin{frame}{Summary}
 
-\begin{frame}{Weak form incorporates nonnegative-thickness constraint}
+consider layer flow model \, $h_t + \Div\bq = f$ \, subject to signed climate $f$ and where $h$ is layer thickness
 
   \begin{itemize}
-  \item define:
-    $$\mathcal{K} = \left\{v \in W^{1,p}(\Omega) \,\Big|\, v\ge 0\right\} = \text{\alert{admissible thicknesses}}$$
-  \item we say $H_n \in \mathcal{K}$ solves the \alert{weak single time-step problem} if
-    $$\int_\Omega H_n (v - H_n) - \Delta t\, \bQ_n \cdot \grad(v - H_n) \ge \int_\Omega \left(H_{n-1} + \Delta t\, F_n\right) (v - H_n)$$
-  for all $v \in \mathcal{K}$
-  \small
-  \medskip
+  \item goals/issues:
     \begin{itemize}
-    \item[$\circ$] derive this \emph{variational inequality} from:
+    \item[$\circ$]  long time steps wanted
+    \item[$\circ$]  models have been limited by free-boundary lack-of-clarity
+    \end{itemize}
+  \item approach:
+    \begin{itemize}
+    \item[$\circ$]  include constraint on thickness: $h\ge 0$
+    \item[$\circ$]  consider discrete-time problem before doing FEM/FVM/etc.
+    \item[$\circ$]  pose single time-step problem weakly as VI or NCP
+    \item[$\circ$]  solve by scalable constrained-Newton method (PETSc)
+    \end{itemize}
+  \item new (?) result:
+    \begin{itemize}
+    \item[$\circ$]  discrete conservation requires tracking retreat-loss time-series
       \begin{itemize}
-      \item[$\diamond$] integration-by-parts on strong form
-      \item[$\diamond$] thought about $H_n=0$ areas
+      \item in addition to climate input during time step
       \end{itemize}
     \end{itemize}
   \end{itemize}
-\end{frame}
-
-
-\begin{frame}{Weak solves strong, \emph{and} it gives more info}
-
-\begin{itemize}
-  \item assume $\bQ_n=0$ when $H_n=0$
-    \begin{itemize}
-    \item[$\circ$] this means $\bQ_n$ describes a \emph{layer}
-    \end{itemize}
-  \item if $H_n \in \mathcal{K}$ solves weak single time-step problem then
-  
-      \medskip
-	  \begin{enumerate}
-	  \item PDE applies on the set where $H_n>0$:
-	    $$\frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_n = F_n$$
-	  \item information on the set where $H_n = 0$:
-	    $$H_{n-1} + \Delta t\, F_n \le 0$$
-	    \vspace{-6mm}
-	    \begin{itemize}
-	    \item[$\circ$] ``climate negative enough during time step to remove old thickness''
-	    \end{itemize}
-	  \end{enumerate}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{Numerical solution of the weak problem}
-
-the weak single time-step problem:
-\begin{itemize}
-\item is nonlinear because of constraint (even for $\bQ_n$ linear in $H_n$)
-\item can be solved by a Newton method modified for constraint
-  \begin{itemize}
-  \item[$\circ$]  reduced set method
-  \item[$\circ$]  semismooth method
-  \end{itemize}
-\item scalable implementations are in PETSc 3.5
-  \begin{itemize}
-  \item[$\circ$]  see ``SNESVI'' object
-  \end{itemize}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{Summary}
-
-  \begin{itemize}
-  \item layer flow model has conservation eqn. \, $h_t + \Div\bq = f$
-    \begin{itemize}
-    \item[$\circ$]  long time steps wanted, but this is a free-boundary problem \dots
-    \end{itemize}
-  \item claim: exact discrete conservation requires tracking \emph{retreat loss}
-    \begin{itemize}
-    \item[$\circ$] in addition to computable integrals of climate
-    \item[$\circ$] it only disappears in $\Delta t\to 0$ limit
-    \end{itemize}
-  \item suggestions:
-    \begin{itemize}
-    \item[$\circ$]  \emph{include} constraint on thickness: $h\ge 0$
-    \item[$\circ$]  pose single time-step problem \emph{weakly} as variational inequality
-    \item[$\circ$]  solve it numerically by constrained-Newton method
-    \end{itemize}
-  \item these are agnostic claims/suggestions, with respect to:
-    \begin{itemize}
-    \item[$\circ$]  form of the flux $\bq$
-    \item[$\circ$]  spatial discretization paradigm (i.e.~finite diff./volume/element)
-    \end{itemize}
-  \end{itemize}
-
-\begin{center}
-\animategraphics[autoplay,loop,height=2.0cm]{6}{anim/sia/u-}{1}{50}
-\end{center}
 
 \end{frame}
 
