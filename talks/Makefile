@@ -1,4 +1,4 @@
-all: siamgstalk.pdf
+all:
 
 figures = cartoon-wclimate.pdf cartoon-sensitive-one.pdf cartoon-sensitive-two.pdf cartoon-sensitive-three.pdf cartoon-sets.pdf masstimeseries.pdf
 
