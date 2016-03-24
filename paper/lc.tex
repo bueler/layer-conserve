@@ -195,31 +195,33 @@ so that
 \begin{equation}
 \Omega = \Omega_n \cup \Omega_n^r \cup \Omega_n^0.  \label{eq:omegadecomposition}
 \end{equation}
-Here the superscript ``$r$'' stands for ``retreat,'' and $\Omega_n^r$ is called the \emph{retreat set}.\footnote{A symmetry has been broken.  We could have decomposed $\Omega= \Omega_{n-1} \cup \Omega_n^a \cup \Omega_n^0$ where $\Omega_{n-1}$ is the support of $u_{n-1}$ and $\Omega_n^a = \{u_n(x) > 0 \text{ and } u_{n-1}(x) = 0\}$ is the ``advance'' set.  This alternate theory offers no apparent advantages or disadvantages.}  Figure \ref{fig:domains} illustrates this decomposition in the planar case ($\Omega \subset \RR^2$).  Note that if $u_n$ is continuous then $\Omega_n$ is open, in which case sets $\Omega_n^r \cup \Omega_n^0$ and $\Omega_n^0$ are closed in $\Omega$.
+Here the superscript ``$r$'' stands for ``retreat,'' and $\Omega_n^r$ is called the \emph{retreat set}.  Figure \ref{fig:domains} illustrates this decomposition in the planar case ($\Omega \subset \RR^2$).  If $u_n$ is continuous then $\Omega_n$ is open, in which case sets $\Omega_n^r \cup \Omega_n^0$ and $\Omega_n^0$ are closed in $\Omega$.
 
 \begin{figure}[ht]
 \medskip
 \begin{center}
 \includegraphics[width=2.3in,keepaspectratio=true]{domains-fig}
 \end{center}
-\caption{We decompose $\Omega = \Omega_n \cup \Omega_n^r \cup \Omega_n^0$, where $\Omega_n$ the support of $u_n$, $\Omega_n^r$ is the retreat set, and $\Omega_n^0$ is the set on which both $u_{n-1}$ and $u_n$ are zero.}
+\caption{We decompose $\Omega = \Omega_n \cup \Omega_n^r \cup \Omega_n^0$, where $\Omega_n$ is the support of $u_n$, $\Omega_n^r$ is the retreat set, and $\Omega_n^0$ is the set on which both $u_{n-1}$ and $u_n$ are zero.}
 \label{fig:domains}
 \end{figure}
 
-Assume $F_n(v,x)$ is continuous, and assume $u_n(x)$ is continuous.  Rewrite \eqref{eq:semimassconserve} as
-    $$u_n = u_{n-1} + \Delta t_n\, F_n - \Delta t\, \Div \bQ_n.$$
-If $u_n=0$ then the terms on the right must, apparently, either sum to zero or be negative, as otherwise they should be balanced by a positive value for $u_n$.  Furthermore, at least intuitively, the flux of a zero-thickness layer should be zero, so $\bQ_n=0$ on $\Omega_n^r \cup \Omega_n^0$; see assumption \eqref{eq:Qiszero} below.  Thus, $u_{n-1}+\Delta t_n\, F_n \le 0$ on $\Omega_n^r \cup \Omega_n^0$.  Because also $u_{n-1}\ge 0$ and $\Delta t_n > 0$, we have these two facts
+Assume $F_n(v,x)$ and $u_n(x)$ are continuous.  Rewriting \eqref{eq:semimassconserve} as
 \begin{equation}
-F_n(u_n,x) \le 0 \quad \text{ and } \quad u_{n-1} + \Delta t_n\, F_n(u_n,x) \le 0 \quad \text{ on } \Omega_n^r \cup \Omega_n^0. \label{eq:strongconditionswherezero}
+u_n = u_{n-1} + \Delta t_n\, F_n - \Delta t_n\, \Div \bQ_n,  \label{eq:strongflat}
 \end{equation}
-Note this contrapositive of \eqref{eq:strongconditionswherezero}: if $F_n(u_n,x)>0$ then $u_n(x)>0$.  The intuition behind conditions \eqref{eq:strongconditionswherezero}, which will be used in initially deriving the weak form, should be clear.  The source term must be sufficiently negative in a thickness-zero location where the layer was previously present (i.e.~in $\Omega_n^r$), or where it continues to be absent (in $\Omega_n^0$).
+we see that if $u_n=0$ then the terms on the right side of \eqref{eq:strongflat} must, apparently, either sum to zero or be negative, as otherwise they would be balanced by a positive value for $u_n$.  Furthermore, we will assume (see \eqref{eq:Qiszero} below) that the flux of a zero-thickness layer is zero, so $\bQ_n=0$ on $\Omega_n^r \cup \Omega_n^0$ where $u_n=0$.  Because also $u_{n-1}\ge 0$ and $\Delta t_n > 0$, we expect that on $\Omega_n^r \cup \Omega_n^0$ this inequality holds:
+\begin{equation}
+u_{n-1} + \Delta t_n\, F_n \le 0. \label{eq:strongconditionwherezero}
+\end{equation}
+Note \eqref{eq:strongconditionwherezero} implies $F_n \le 0$ on $\Omega_n^r \cup \Omega_n^0$ as well.
 
-The strong form \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint} of the single time-step problem is not, however, adequate for further mathematical progress.  Though PDE \eqref{eq:semimassconserve} applies on the set where its solution $u_n$ is positive (i.e.~on $\Omega_n$), and inequalities \eqref{eq:strongconditionswherezero} specify behavior on the set where $u_n=0$, we have in fact ``posed'' a problem in terms of its solution.  The next section puts us on firm footing.
+The intuition behind \eqref{eq:strongconditionwherezero}, which will be used in deriving the weak form, is that the source term must be sufficiently negative in a thickness-zero location where the layer was previously present (i.e.~in $\Omega_n^r$), or where it continues to be absent (in $\Omega_n^0$).
 
 
-\section{Weak formulation of the single time-step problem}  \label{sec:weakform}
+\section{Weak formulation of the single time-step problem}  \label{sec:weakform}  The strong form \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint} of the single time-step problem is not, however, adequate for further mathematical progress.  PDE \eqref{eq:semimassconserve} applies on the set where its solution $u_n$ is positive (i.e.~on $\Omega_n$), and inequalities \eqref{eq:strongconditionwherezero} specify behavior on the set where $u_n=0$.  We have in fact ``posed'' a problem in terms of its solution.  The strong form is also inadequate because the boundary conditions satisfied by the solution $u_n$ along the free boundary $\partial\Omega_n$ are not clear.
 
-A strong-form free-boundary problem, such as PDE \eqref{eq:semimassconserve} subject to inequality \eqref{eq:semiconstraint}, is inadequate because the boundary conditions satisfied by the solution $u_n$ along the free boundary $\partial\Omega_n$ are not clear, and because statements \eqref{eq:semimassconserve} and \eqref{eq:strongconditionswherezero}, while intuitively correct, apply on solution-dependent sets.  By contrast, a weak form of the single time-step problem can be well-posed.  Our weak form in this section is a variational inequality \cite{Friedman1982,KinderlehrerStampacchia1980} on a convex set of admissible functions.  Our formulation refers only to the set $\Omega$ and its boundary $\partial\Omega$, not to $\Omega_n$.
+FIXME By contrast, a weak form of the single time-step problem can be well-posed.  Our weak form in this section is a variational inequality \cite{Friedman1982,KinderlehrerStampacchia1980} on a convex set of admissible functions.  Our formulation refers only to the set $\Omega$ and its boundary $\partial\Omega$, not to $\Omega_n$.
 
 We will state conditions on the discrete-time flux $\bQ_n$ first (subsection \ref{subsec:fluxassumptions}), then construct a variational inequality (subsection \ref{subsec:derivevi}), and then show that a sufficiently-smooth solution of this weak problem solves the strong problem (subsection \ref{subsec:interior}).  Only in section \ref{sec:wellposed} do we address well-posedness as it depends on details of $\bQ_n$ which we do not need here.
 
@@ -268,7 +270,7 @@ However, we do not require that $F_n$ be strictly increasing in $v$, which would
 \end{equation}
 
 \medskip
-\begin{theorem} \label{thm:strongimpliesweak}  Suppose $u_n\ge 0$ solves \eqref{eq:semimassconserve} on $\Omega_n$ and \eqref{eq:strongconditionswherezero} on $\Omega_n^r \cup \Omega_n^0$.  Suppose $u_n,v\in C(\overline{\Omega})$, $v\ge 0$, and $\grad u_n,\grad v \in L^p(\Omega)$.  Suppose the boundaries of the sets $\Omega_n$ and $\Omega_n^r \cup \Omega_n^0$ in decomposition \eqref{eq:omegadecomposition} are all sufficiently smooth (e.g.~Lipshitz).  Suppose the function $\bQ_n(\bX,v,x)$ satisfies both the standard flux assumptions and \eqref{eq:Qissmooth}.  Define $\bQ_n=\bQ_n(\grad u_n,u_n,x)$ and $F_n = F_n(u_n,x)$.  Then
+\begin{theorem} \label{thm:strongimpliesweak}  Suppose $u_n\ge 0$ solves \eqref{eq:semimassconserve} on $\Omega_n$ and \eqref{eq:strongconditionwherezero} on $\Omega_n^r \cup \Omega_n^0$.  Suppose $u_n,v\in C(\overline{\Omega})$, $v\ge 0$, and $\grad u_n,\grad v \in L^p(\Omega)$.  Suppose the boundaries of the sets $\Omega_n$ and $\Omega_n^r \cup \Omega_n^0$ in decomposition \eqref{eq:omegadecomposition} are all sufficiently smooth (e.g.~Lipshitz).  Suppose the function $\bQ_n(\bX,v,x)$ satisfies both the standard flux assumptions and \eqref{eq:Qissmooth}.  Define $\bQ_n=\bQ_n(\grad u_n,u_n,x)$ and $F_n = F_n(u_n,x)$.  Then
 \begin{equation}
 -\int_{\Omega} \bQ_n \cdot \grad(v-u_n) \ge \int_{\Omega} \left(F_n - \frac{u_n - u_{n-1}}{\Delta t}\right) (v-u_n). \label{eq:morallytheVI}
 \end{equation}
@@ -283,7 +285,7 @@ Because $u_n$ is continuous, $u_n=0$ on $\partial \Omega_n$ and $\partial(\Omega
 \begin{equation}
 -\int_{\Omega} \bQ_n \cdot \grad w = \int_{\Omega_n} \left(F_n - \frac{u_n - u_{n-1}}{\Delta t}\right) w + \int_{\Omega_n^r \cup \Omega_n^0} (\Div \bQ_n) w. \label{eq:equalitybeforeVI}
 \end{equation}
-By \eqref{eq:Qiszero} and \eqref{eq:Qissmooth} we have $\Div \bQ_n=0$ on $\Omega_n^r \cup \Omega_n^0$.  However, by \eqref{eq:strongconditionswherezero}, $F_n \le 0$ on $\Omega_n^r \cup \Omega_n^0$.  Since also $u_n=0$, $u_{n-1}\ge 0$, and $w = v-u_n = v \ge 0$ on $\Omega_n^r \cup \Omega_n^0$, we have
+By \eqref{eq:Qiszero} and \eqref{eq:Qissmooth} we have $\Div \bQ_n=0$ on $\Omega_n^r \cup \Omega_n^0$.  However, by \eqref{eq:strongconditionwherezero}, $F_n \le 0$ on $\Omega_n^r \cup \Omega_n^0$.  Since also $u_n=0$, $u_{n-1}\ge 0$, and $w = v-u_n = v \ge 0$ on $\Omega_n^r \cup \Omega_n^0$, we have
 \begin{equation}
     \int_{\Omega_n^r \cup \Omega_n^0} (\Div \bQ_n) w = 0 \ge \int_{\Omega_n^r \cup \Omega_n^0} \left(F_n - \frac{u_n - u_{n-1}}{\Delta t}\right) w. \label{eq:inequalitybeforeVI}
 \end{equation}
@@ -334,7 +336,7 @@ To prove (ii) we start with nonnegative $\phi\in C_c^\infty(S)$, extend it by $\
 and it follows as before that $u_{n-1} + \Delta t_n\, F_n \le 0$ a.e.~on $S$.\end{proof}
 
 \medskip
-Thus a continuous weak solution $u_n$ of \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} where it is positive, and otherwise it satisfies inequalities \eqref{eq:strongconditionswherezero}.  From now on we will use set decomposition \eqref{eq:omegadecomposition} when referring to a solution $u_n$ of the weak form \eqref{eq:theVI}.
+Thus a continuous weak solution $u_n$ of \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} where it is positive, and otherwise it satisfies inequalities \eqref{eq:strongconditionwherezero}.  From now on we will use set decomposition \eqref{eq:omegadecomposition} when referring to a solution $u_n$ of the weak form \eqref{eq:theVI}.
 
 
 \section{\emph{A posteriori} analysis of mass conservation on the free boundary}  \label{sec:timeseries}
