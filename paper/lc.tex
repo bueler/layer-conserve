@@ -175,7 +175,7 @@ For example, consider a $\theta$-method discretization \cite{MortonMayers2005} o
   &\frac{u_n - u_{n-1}}{\Delta t_n} + \theta\, \Div \bq(\grad u_n,u_n,x,t_n) + (1-\theta) \Div \bq(\grad u_{n-1},u_{n-1},x,t_{n-1}) \label{eq:thetamethod} \\
   &\qquad =  \theta f(u_n,x,t_n) + (1-\theta) f(u_{n-1},x,t_{n-1}). \notag
 \end{align}
-The $\theta=0$ case of \eqref{eq:thetamethod} is the forward Euler method, $\theta=1/2$ is trapezoid, and $\theta=1$ is backward Euler.  Equation \eqref{eq:thetamethod} is of form \eqref{eq:semimassconserve} with
+The $\theta=0$ case of \eqref{eq:thetamethod} is the forward Euler method, $\theta=1/2$ is trapezoid (Crank-Nicolson), and $\theta=1$ is backward Euler.  Equation \eqref{eq:thetamethod} is of form \eqref{eq:semimassconserve} with
 \begin{align*}
 \bQ_n(\bX,v,x) &= \theta\, \bq(\bX,v,x,t_n), \\
 F_n(v,x)       &= \theta f(v,x,t_n) + (1-\theta) f(u_{n-1},x,t_{n-1}) \\
