@@ -146,7 +146,9 @@ The modeling goals of the tsunumi run-up \cite{LeVequeetal2011} and debris flow 
 In the current work we will see that there is no conservation error under the hypothesis that $f\ge 0$.  Generally, however, and by contrast with the tsunami and debris flow cases just mentioned, the ``$u\ge 0$'' constraint \eqref{eq:constraint} must be actively enforced when $f$ is negative in the vicinity of the free boundary.  The conservation goal of our models is to balance integrals of the effective source processes (e.g.~$\int_{\{u>0\}} f\,dx$ or similar; see sections \ref{sec:timeseries} and \ref{sec:spacediscretized}) by changes in the total fluid mass, as we step forward in time, solving \eqref{eq:massconserve} as a free-boundary problem at each time-step.
 
 
-\section{Time semi-discretization}  \label{sec:strongform}  Let $\{t_n\}_{n=0}^N$ be a sequence of increasing times on $[0,T]$ with $t_0=0$ and $t_N=T>0$.  Let $\Delta t_n = t_n-t_{n-1}>0$.  Corresponding to \eqref{eq:massconserve} and \eqref{eq:constraint}, the strong form of the \emph{single time-step problem} is
+\section{Time semi-discretization}  \label{sec:strongform}
+
+Let $\{t_n\}_{n=0}^N$ be a sequence of increasing times on $[0,T]$ with $t_0=0$ and $t_N=T>0$.  Let $\Delta t_n = t_n-t_{n-1}>0$.  Corresponding to \eqref{eq:massconserve} and \eqref{eq:constraint}, the strong form of the \emph{single time-step problem} is
 \begin{align}
 \frac{u_n - u_{n-1}}{\Delta t_n} + \Div \bQ_n(\grad u_n,u_n,x) &= F_n(u_n,x) &&\text{in } \Omega, \text{ where } u_n > 0 \label{eq:semimassconserve} \\
 u_n &\ge 0 &&\text{in } \overline{\Omega} \label{eq:semiconstraint}
@@ -219,7 +221,9 @@ Note \eqref{eq:strongconditionwherezero} implies $F_n \le 0$ on $\Omega_n^r \cup
 The intuition behind \eqref{eq:strongconditionwherezero}, which will be used in deriving the weak form, is that the source term must be sufficiently negative in a thickness-zero location where the layer was previously present (i.e.~in $\Omega_n^r$), or where it continues to be absent (in $\Omega_n^0$).
 
 
-\section{Weak formulation of the single time-step problem}  \label{sec:weakform}  The strong form \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint} of the single time-step problem is not, however, adequate for further mathematical progress.  PDE \eqref{eq:semimassconserve} applies on the set where its solution $u_n$ is positive (i.e.~on $\Omega_n$).  Likewise, inequality \eqref{eq:strongconditionwherezero} specifies behavior on the set where $u_n=0$.  We have in fact ``posed'' a problem in terms of its solution.  The strong form is also inadequate because the boundary conditions satisfied by the solution $u_n$ along the free boundary $\partial\Omega_n$ are not clear.
+\section{Weak formulation of the single time-step problem}  \label{sec:weakform}
+
+The strong form \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint} of the single time-step problem is not, however, adequate for further mathematical progress.  PDE \eqref{eq:semimassconserve} applies on the set where its solution $u_n$ is positive (i.e.~on $\Omega_n$).  Likewise, inequality \eqref{eq:strongconditionwherezero} specifies behavior on the set where $u_n=0$.  We have in fact ``posed'' a problem in terms of its solution.  The strong form is also inadequate because the boundary conditions satisfied by the solution $u_n$ along the free boundary $\partial\Omega_n$ are not clear.
 
 By contrast, a weak form of the single time-step problem can be well-posed.  Our weak form in this section is a variational inequality \cite{Friedman1982,KinderlehrerStampacchia1980} on a convex set of admissible functions.  This formulation refers only to the set $\Omega$ and its boundary $\partial\Omega$, not to $\Omega_n$.
 
@@ -254,7 +258,6 @@ In summary, assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:QisLq} require $\
 \begin{equation}
 F_n(v,x) \in L^q(\Omega).  \label{eq:FisLq}
 \end{equation}
-
 
 \subsection{Derivation of the variational inequality}  \label{subsec:derivevi}  To use the strong form in deriving a weak form (and vice versa; see subsection \ref{subsec:interior}), we need an extra assumption that $\bQ_n$ is smooth:  For all open $S \subset \Omega$, if $v\in W^{1,p}(S)$ then
 \begin{equation}
@@ -308,7 +311,6 @@ a closed and convex subset of $\mathcal{X}$.
 
 Of course, \eqref{eq:theVI} is the same inequality as \eqref{eq:morallytheVI}.
 
-
 \subsection{Interior condition}  \label{subsec:interior}  We can show a converse of Theorem \ref{thm:strongimpliesweak} which makes no regularity assumptions related to the sets \eqref{eq:omegadecomposition}.
 
 \begin{theorem} \label{thm:weakimpliesstrong}  Assume $\bQ_n$ satisfies the standard flux assumptions and \eqref{eq:Qissmooth}, and assume $F_n$ satisfies \eqref{eq:FisLq}.  Choose $u_{n-1}\in\mathcal{K}$, and suppose that $u_n\in\mathcal{K}$ solves \eqref{eq:theVI}.
@@ -331,160 +333,6 @@ To prove (ii) we start with \emph{nonnegative} $\phi\in C_c^\infty(S)$, extend i
 and it follows as before that $u_{n-1} + \Delta t_n\, F_n \le 0$ a.e.~on $S$.\end{proof}
 
 Thus a weak solution \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} where it is positive, and otherwise it satisfies inequality \eqref{eq:strongconditionwherezero}.  From now on we will use set decomposition \eqref{eq:omegadecomposition} only when referring to a solution $u_n$ of the weak form \eqref{eq:theVI}.
-
-
-FIXME: MOVE WELL-POSEDNESS HERE
-
-\section{\emph{A posteriori} analysis of mass conservation on the free boundary}  \label{sec:timeseries}
-
-From now on until section \ref{sec:wellposed} we assume that the weak problem for a single time-step, i.e.~\eqref{eq:theVI}, is well-posed.  In particular, given an initial state $u_0\in\mathcal{K}$ there is a unique sequence $\{u_n\}_1^N \subset \mathcal{K}$ which solves the $n=1,\dots,N$ problems \eqref{eq:theVI}.
-
-Define
-\begin{equation}
-M_n = \int_\Omega u_n(x)\,dx = \int_{\Omega_n} u_n(x)\,dx \ge 0, \label{eq:totalmassseries}
-\end{equation}
-the \emph{(total) mass} at time $t_n$, and define
-\begin{equation}
-C_n = \Delta t_n\, \int_{\Omega_n} F_n(u_n,x)\,dx, \label{eq:climateseries}
-\end{equation}
-the \emph{climate input} during the $n$th time step.  Note that the climate input $C_n$ into the fluid layer is computed by integration over locations where the fluid exists ($\Omega_n$), and not over all of $\Omega$, nor over where the fluid previously existed ($\Omega_{n-1}$).
-
-Practical models compute approximations to time-series $M_n$ and $C_n$ as model outputs, so as to help a model user model mass transfers.  A well-implemented numerical model of a fixed-boundary fluid layer problem would achieve exact discrete mass conservation in the sense that
-\begin{equation}
-M_n = M_{n-1} + C_n \label{eq:oldbalance}
-\end{equation}
-at each time $t_n$, to within rounding error.  That is, one can easily show \eqref{eq:oldbalance} under a Neumann condition $\bQ_n=0$ on $\partial \Omega$ in strong problem \eqref{eq:semimassconserve} if $\Omega_n=\Omega$.  Under additional fluid-layer-type assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}, which force the flux to zero at the boundary because the thickness $u_n$ goes to zero there, \eqref{eq:oldbalance} also holds under a Dirichlet condition $u_n\in W_0^{1,p}(\Omega)$ if $\Omega_n=\Omega$.  However, balance \eqref{eq:oldbalance} does not follow from definitions \eqref{eq:totalmassseries} and \eqref{eq:climateseries} when there is a free boundary, that is, when $\Omega_n \subsetneq \Omega$.
-
-To quantify the situation for the free-boundary case, recall $\Omega_n^r$ is the retreat set in the $n$th time-step (subsection \ref{subsec:setdecompose}).  Define
-\begin{equation}
-R_n = \int_{\Omega_n^r} u_{n-1}\,dx \ge 0, \label{eq:retreatlossseries}
-\end{equation}
-which we call the \emph{retreat loss} during the $n$th time step.  Then by \eqref{eq:semimassconserve} we have
-\begin{align}
-M_n - M_{n-1} &= \int_{\Omega_n} (u_n - u_{n-1})\,dx + \int_{\Omega_n^r} (0 - u_{n-1})\,dx \label{eq:newbalance} \\
-   &= \Delta t \int_{\Omega_n} (- \Div \bQ_n + F_n) \,dx \, - R_n \notag \\
-   &= C_n - R_n \notag
-\end{align}
-because $\bQ_n=0$ along $\partial \Omega_n$ by \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.
-
-The distinction between \eqref{eq:oldbalance} and \eqref{eq:newbalance} is a major point of our paper.  That is, the achievable space-integrated mass conservation statement for free-boundary problems at each time-step is the new \emph{a posteriori} statement \eqref{eq:newbalance}.  Computing $R_n$, or an equivalent quantity, is thus an essential step in understanding moving-boundary models of fluid motion.  Furthermore, the retreat loss $R_n$ can be bounded \emph{a priori} if we have additional information about the solution of variational inequality \eqref{eq:theVI}.  This would allow approximation of the earlier, preferred mass conservation relation \eqref{eq:oldbalance} to within some tolerance.
-
-In particular, consider the solution of \eqref{eq:theVI} for time step $\Delta t>0$.  By Theorem \ref{thm:weakimpliesstrong} (ii) we have
-\begin{equation}
-R_n \le - \Delta t\,\int_{\Omega_n^r} F_n(u_n,x)\,dx  \label{eq:earlyretreatbound}
-\end{equation}
-because $u_{n-1} + \Delta t\,F_n \le 0$ a.e.~in $\Omega_n^r$.
-
-FIXME Assume that $F_n$ is uniformly Lipshitz as a function of $v$: there is $L>0$ so that for all $x\in\Omega$ and $v_1,v_2 \in [0,\infty)$, we have
-\begin{equation}
-\left|F_n(v_1,x)-F_n(v_2,x)\right| \le L |v_1-v_2|.  \label{eq:Fislip}
-\end{equation}
-In particular, $F_n$ is continuous as a function of $v$.
-
-If we also assume Lipshitz continuity \eqref{eq:Fislip} for $F_n$, and we assume there is a stability bound
-\begin{equation}
-\|u_n-u_{n-1}\|_{L^1(\Omega)} \le \Phi_n(\Delta t)
-\end{equation}
-for some bounded function $\Phi_n : [0,\infty) \to [0,\infty)$, then
-\begin{equation}
-R_n \le \Delta t\,\left(C_{n-1} + L \Phi_n(\Delta t)\right),   \label{eq:retreatbound}
-\end{equation}
-for a constant $C_{n-1}=\left|\int_{\Omega} F_n(u_{n-1},x)\,dx\right|$ which is computable \emph{a priori} on each single time-step problem \eqref{eq:theVI}.  If $\Phi_n$ is bounded by $M>0$, or better if $\Phi_n(z) \le A \Delta t^q$ for $A,q>0$, then a time-step $\Delta t=\Delta t_n$ can be computed so that $R_n$ is less than a desired tolerance.
-
-As an operational statement about discrete-time models, we can rephrase our major assertion from the Introduction as
-\begin{quote}
-\emph{The model for a moving-boundary fluid layer should store a time series for $R_n$, in addition to the expected time series $C_n$, in order to provide auditable mass conservation.}
-\end{quote}
-In stating this assertion, we note that the retreat loss $R_n$ should vanish in the $\Delta t_n\to 0$ limit, which is a consistency statement about the time-discretized model, and that we can show $R_n\to 0$ in that limit with additional stability results on the solution of the weak single time-step problem \eqref{eq:theVI}.
-
-
-\section{The fully-discrete single time-step problem}  \label{sec:spacediscretized}
-
-So far we have treated time-dependent free-boundary mass conservation models in time-semi-discretized form, as a sequence of continuous-space free-boundary problems.  We will address well-posedness (section \ref{sec:wellposed}) in such a continuous-space framework also.  However, considering the fully-discrete case shows that we must add to the \emph{a posteriori} computations of the last section if we are to completely balance the conservation books at the free boundary.
-
-In this section we make the mild assumption that the spatial discretization allows an unstructured finite volume \cite{LeVeque2002} interpretation (subsection \ref{subsec:spacenotation}), and this is sufficient to give a fully-discrete balance analogous to the continuous-space version \eqref{eq:newbalance} above (subsection \ref{subsec:shellerror}).  After that we consider numerical solution methods for the constrained nonlinear problem (subsection \ref{subsec:newtonvi}).
-
-\subsection{Unstructured finite volume method} \label{subsec:spacenotation}  First we set notation for a generic finite volume scheme.  We restrict to $\Omega \subset \RR^d$, for $d=2,3$, which is an open polygon (polyhedron).  We assume that $\Omega$ is tiled by finitely-many open polygonal (polyhedral) cells $\omega_j$, indexed by $j\in J$, with area (volume) $|\omega_j|=a_j$.  These cells may be non-convex and the number of edges (faces) per cell may vary.  Because this is a tiling, $\omega_j \cap \omega_k = \emptyset$ for $j\ne k$ and
-\begin{equation}
-\bar\Omega = \bigcup_{j\in J} \bar \omega_j \quad \text{and} \quad |\Omega| = \sum_{j\in J} a_j.  \label{eq:tiling}
-\end{equation}
-An edge (face), simply denoted by the ordered pair $(j,k)$, exists between cell $j$ and cell $k$ if $\bar\omega_j \cap \bar \omega_k$ has positive $d-1$ measure (i.e.~length or area) $\ell_{(j,k)}>0$.  The set of edges $(j,k)$ for cell $\omega_j$ is denoted $\mathcal{E}_j$.
-
-Our approach is now to discretize the strong form equation \eqref{eq:semimassconserve} using finite volume ideas, but this can be treated as a non-conforming Petrov-Galerkin finite element method for the variational inequality \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.  In that case the test functions are piecewise-constant and discontinuous along the edges of the cells $\omega_j$, as in a so-called ``finite volume element'' method \cite{Bueler2016,Cai1990,EwingLinLin2002}.  The cells $\omega_j$ might be geometrically ``dual'' to the elements in such a scheme (e.g.~\cite{Ringleretal2013}).
-
-The representative thickness $u_n^j$ in cell $j$ is given the usual finite volume definition as an average \cite{LeVeque2002}, and similarly $F_n^j$ denotes a representative source term for the cell:
-\begin{equation}
-u_n^j \approx \frac{1}{a_j} \int_{\omega_j} u_n(x), \qquad F_n^j \approx \frac{1}{a_j} \int_{\omega_j} F_n(u_n,x).  \label{eq:fvthickness}
-\end{equation}
-The value $F_n^j$ is computed by some quadrature scheme as necessary, but the details do not matter here.  The discrete (scalar) normal flux across the edge $(j,k)$, outward from cell $j$, is denoted
-\begin{equation}
-Q_n^{(j,k)} \approx \frac{1}{\ell_{(j,k)}} \int_{(j,k)} \bQ_n \cdot \bn_{(j,k)}, \label{eq:fvflux}
-\end{equation}
-as shown Figure \ref{fig:fvmesh-notation}, where $\bn_{(j,k)}$ denotes the unit normal vector to edge $(j,k)$ directed outward from $\omega_j$.  We assume that these fluxes are approximated by some scheme, based on values $\{u_n^l\}$ for $l$ potentially ranging over the entire mesh.  Though the details are not important here, these discrete fluxes might be computed by upwinded and/or flux-limited schemes \cite{LeVeque2002} according to the functional form of the flux $\bQ_n$.
-
-\begin{figure}[ht]
-\begin{center}
-\input{fvmesh-notation.tikz}
-\end{center}
-\caption{Notation for an unstructured finite volume method for \eqref{eq:semimassconserve} in $\RR^2$.}
-\label{fig:fvmesh-notation}
-\end{figure}
-
-We make only two specific assumptions about the fully-discrete finite volume scheme:
-\renewcommand{\labelenumi}{(\roman{enumi})}
-\begin{enumerate}
-\item There is local conservation between any two adjacent cells which are fluid-filled:
-\begin{equation}
-  u_n^j u_n^k > 0 \quad \implies \quad Q_n^{(k,j)}=-Q_n^{(j,k)}.  \label{eq:fvlocalconservation}
-\end{equation}
-\item If $u_n^j>0$ then the strong form single-time-step problem \eqref{eq:semimassconserve} is approximated by
-\begin{equation}
-\frac{u_n^j - u_{n-1}^j}{\Delta t_n} + \frac{1}{a_j} \sum_{k\in \mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = F_n^j. \label{eq:fvmassconserve}
-\end{equation}
-\end{enumerate}
-
-Local discrete conservation statement (i) is completely standard, but the fluid-filled hypothesis is important.  We do not expect discrete conservation in the sense $Q_n^{(k,j)}=-Q_n^{(j,k)}$ at the free boundary because a flux scheme at the edge (face) of a fluid-free cell, facing a fluid-filled cell, cannot be expected to generate flux which is compatible with monotonicity or coercivity properties (subsection \ref{subsec:mono} below) which would lead to well-posedness.
-
-Regarding (ii), recall that, at least heuristically, the divergence of a vector field $\bX$ is the limit of line (surface) integrals, $|R|^{-1} \int_{\partial R} \bX\cdot \bn \to \Div \bX$, where $R\subset \RR^d$ denotes a sequence of regions with Lipshitz boundary, enclosing and shrinking down to $x$, with outward unit normal vector $\bn$.  Though \eqref{eq:fvmassconserve} requires the discrete scheme to approximate such an integral, this prescription has great flexibility because of the many possible meanings of approximations \eqref{eq:fvthickness}--\eqref{eq:fvflux}.
-
-Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including structured-grid (i.e.~uniform rectangular cell) finite difference \cite{Bueler2016,MortonMayers2005} and structured/unstructured finite volume \cite{LeVeque2002} schemes.  A framework for unstructured-grid finite volume schemes, compatible with the fixed-boundary version of the above setup, has been implemented for ocean modeling \cite{Ringleretal2013}.
-
-\subsection{The discrete-space ``shell error''}  \label{subsec:shellerror}  In the fully-discrete model we use a superscript ``$h$'' to denote the spatially-discrete version of integrated quantities.  That is, analogous to \eqref{eq:totalmassseries}, \eqref{eq:climateseries}, and \eqref{eq:retreatlossseries}, we define the time-series
-\begin{equation}
-  M_n^h = \sum_j u_n^j a_j, \quad C_n^h = \Delta t_n\!\!\sum_{\{j:u_n^j>0\}} F_n^j a_j, \quad \text{ and } \quad R_n^h = \sum_{\{j:u_n^j=0\}} u_{n-1}^j a_j.  \label{eq:fvtimeseriesdefn}
-\end{equation}
-Analogous to \eqref{eq:newbalance}, by \eqref{eq:fvmassconserve} we compute
-\begin{align}
-M_n^h - M_{n-1}^h &= \sum_{u_n^j>0} (u_n^j - u_{n-1}^j) a_j - \sum_{u_n^j=0} u_{n-1}^j a_j \notag \\
-   &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + \Delta t_n\,\sum_{u_n^j>0} F_n^j a_j - R_n^h \notag \\
-   &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + C_n^h - R_n^h.  \label{eq:fvnewbalance}
-\end{align}
-
-Though in the continuous-space version \eqref{eq:newbalance} we could eliminate the flux integral, the remaining discrete flux sum in \eqref{eq:fvnewbalance} is not zero.  Local conservation \eqref{eq:fvlocalconservation} only reduces it to a sum over edges which have a positive-thickness cell on one side and a zero-thickness cell on the other.  We call this free-boundary discrete-flux residual sum the \emph{shell error}:
-\begin{equation}
-S_n^h = \sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = \sum_{u_j^n > 0 \,\&\, (j,k)\in\mathcal{E}_j \,\&\, u_k^n = 0} Q_n^{(j,k)} \ell_{(j,k)} \label{eq:fvderiveshellerror}
-\end{equation}
-
-\begin{figure}[ht]
-\begin{center}
-\input{fvmesh-shellerror.tikz}
-\end{center}
-\caption{The shell error $S_n^h$ is computed along those edges (strong line) where $u_n$ changes from positive (``$+$'') to zero (``$0$'').}
-\label{fig:fvmesh-shellerror}
-\end{figure}
-
-As suggested in Figure \ref{fig:fvmesh-shellerror}, $S_n^h$ is computed along the finite-volume approximation of the free boundary.  The quantity $S_n^h$ is an ``error'' in the sense that the continuous-space flux along the free-boundary would be zero because of flux conditions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.
-
-At this point we can report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,S_n^h\}$ which exactly balance in a fully-discrete free-boundary numerical computation:
-\begin{equation}
-  M_n^h = M_{n-1}^h + C_n^h - R_n^h - \Delta t_n\,S_n^h. \label{eq:fvfinalbalance}
-\end{equation}
-
-FIXME Furthermore, with additional assumptions can show $R_n\to 0$ as $\Delta t_n\to 0$ (section \ref{sec:timeseries}).  FIXME also assert $S_n^h\to 0$ as $h\to 0$ \emph{if} free boundary well-behaved, which is beyond scope to show, but evidently $R_n^h + \Delta t_n\,S_n^h \to 0$ as $\Delta t_n\to 0$
-
-\subsection{Newton-type methods for solving the single time-step variational inequality} \label{subsec:newtonvi}  FIXME: mostly generalities \cite{Kelley2003}, but factor Jacobian into deriv of apparent stuff in \eqref{eq:theVI} and $\partial Q_n^j/\partial u_n^k$; complementarity problems \cite{BensonMunson2006,BillupsMurty2000}; example in \cite{Bueler2016}
-
-FIXME Condition (ii) could be summarized ``if $u_n^j>0$ then $G_j(u_n^J)=0$,'' using notation $u_n^J$ for a vector formed from all $u_n^j$ with $j\in J$, for some formula $G_j$ which records the residual of equation \eqref{eq:fvmassconserve}.  We also have constraint ``$u_n^j\ge 0$'' on the unknowns.  In these senses we are regarding the system of equations formed from conditions \eqref{eq:fvmassconserve} as combining to give a \emph{complementarity problem} \cite{BillupsMurty2000} of the form $u_j\ge 0$ and $G_j(u^J)\ge 0$ and $u_j G_j(u^J)=0$ for all $j\in J$; see subsection \ref{subsec:newtonvi} below.
 
 
 \section{Well-posedness for the single time-step problem} \label{sec:wellposed}
@@ -750,7 +598,160 @@ u_n = \max\{0,u_{n-1} + \Delta t_n\,F_n\} \in L^2(\Omega)  \label{eq:explicittru
 \end{equation}
 \cite[page 27]{KinderlehrerStampacchia1980}.  This is not very helpful because $u_n \in L^2(\Omega)$ is not regular enough so that $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}' \in L^2(\Omega)$, even in the case where $\bq$ is zeroth-order in $u$.  In summary, for explicit steps the solution to a single weakly-posed time step is truncation \eqref{eq:explicittruncation}, but that solution cannot be expected to be regular enough to yield a well-posed problem at the next step.
 
-\subsection{Fully-discrete explicit and semi-explicit schemes} \label{subsec:spaceexplicit}  On the other hand, explicit and \emph{fully-discretized} numerical schemes are obviously in widespread use for solving first-order and even second-order PDE problems.  FIXME:  can be well-posed but regularity concerns different
+
+\section{\emph{A posteriori} analysis of mass conservation on the free boundary}  \label{sec:timeseries}
+
+From now on until section \ref{sec:wellposed} we assume that the weak problem for a single time-step, i.e.~\eqref{eq:theVI}, is well-posed.  In particular, given an initial state $u_0\in\mathcal{K}$ there is a unique sequence $\{u_n\}_1^N \subset \mathcal{K}$ which solves the $n=1,\dots,N$ problems \eqref{eq:theVI}.
+
+Define
+\begin{equation}
+M_n = \int_\Omega u_n(x)\,dx = \int_{\Omega_n} u_n(x)\,dx \ge 0, \label{eq:totalmassseries}
+\end{equation}
+the \emph{(total) mass} at time $t_n$, and define
+\begin{equation}
+C_n = \Delta t_n\, \int_{\Omega_n} F_n(u_n,x)\,dx, \label{eq:climateseries}
+\end{equation}
+the \emph{climate input} during the $n$th time step.  Note that the climate input $C_n$ into the fluid layer is computed by integration over locations where the fluid exists ($\Omega_n$), and not over all of $\Omega$, nor over where the fluid previously existed ($\Omega_{n-1}$).
+
+Practical models compute approximations to time-series $M_n$ and $C_n$ as model outputs, so as to help a model user model mass transfers.  A well-implemented numerical model of a fixed-boundary fluid layer problem would achieve exact discrete mass conservation in the sense that
+\begin{equation}
+M_n = M_{n-1} + C_n \label{eq:oldbalance}
+\end{equation}
+at each time $t_n$, to within rounding error.  That is, one can easily show \eqref{eq:oldbalance} under a Neumann condition $\bQ_n=0$ on $\partial \Omega$ in strong problem \eqref{eq:semimassconserve} if $\Omega_n=\Omega$.  Under additional fluid-layer-type assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}, which force the flux to zero at the boundary because the thickness $u_n$ goes to zero there, \eqref{eq:oldbalance} also holds under a Dirichlet condition $u_n\in W_0^{1,p}(\Omega)$ if $\Omega_n=\Omega$.  However, balance \eqref{eq:oldbalance} does not follow from definitions \eqref{eq:totalmassseries} and \eqref{eq:climateseries} when there is a free boundary, that is, when $\Omega_n \subsetneq \Omega$.
+
+To quantify the situation for the free-boundary case, recall $\Omega_n^r$ is the retreat set in the $n$th time-step (subsection \ref{subsec:setdecompose}).  Define
+\begin{equation}
+R_n = \int_{\Omega_n^r} u_{n-1}\,dx \ge 0, \label{eq:retreatlossseries}
+\end{equation}
+which we call the \emph{retreat loss} during the $n$th time step.  Then by \eqref{eq:semimassconserve} we have
+\begin{align}
+M_n - M_{n-1} &= \int_{\Omega_n} (u_n - u_{n-1})\,dx + \int_{\Omega_n^r} (0 - u_{n-1})\,dx \label{eq:newbalance} \\
+   &= \Delta t \int_{\Omega_n} (- \Div \bQ_n + F_n) \,dx \, - R_n \notag \\
+   &= C_n - R_n \notag
+\end{align}
+because $\bQ_n=0$ along $\partial \Omega_n$ by \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.
+
+The distinction between \eqref{eq:oldbalance} and \eqref{eq:newbalance} is a major point of our paper.  That is, the achievable space-integrated mass conservation statement for free-boundary problems at each time-step is the new \emph{a posteriori} statement \eqref{eq:newbalance}.  Computing $R_n$, or an equivalent quantity, is thus an essential step in understanding moving-boundary models of fluid motion.  Furthermore, the retreat loss $R_n$ can be bounded \emph{a priori} if we have additional information about the solution of variational inequality \eqref{eq:theVI}.  This would allow approximation of the earlier, preferred mass conservation relation \eqref{eq:oldbalance} to within some tolerance.
+
+In particular, consider the solution of \eqref{eq:theVI} for time step $\Delta t>0$.  By Theorem \ref{thm:weakimpliesstrong} (ii) we have
+\begin{equation}
+R_n \le - \Delta t\,\int_{\Omega_n^r} F_n(u_n,x)\,dx  \label{eq:earlyretreatbound}
+\end{equation}
+because $u_{n-1} + \Delta t\,F_n \le 0$ a.e.~in $\Omega_n^r$.
+
+FIXME Assume that $F_n$ is uniformly Lipshitz as a function of $v$: there is $L>0$ so that for all $x\in\Omega$ and $v_1,v_2 \in [0,\infty)$, we have
+\begin{equation}
+\left|F_n(v_1,x)-F_n(v_2,x)\right| \le L |v_1-v_2|.  \label{eq:Fislip}
+\end{equation}
+In particular, $F_n$ is continuous as a function of $v$.
+
+If we also assume Lipshitz continuity \eqref{eq:Fislip} for $F_n$, and we assume there is a stability bound
+\begin{equation}
+\|u_n-u_{n-1}\|_{L^1(\Omega)} \le \Phi_n(\Delta t)
+\end{equation}
+for some bounded function $\Phi_n : [0,\infty) \to [0,\infty)$, then
+\begin{equation}
+R_n \le \Delta t\,\left(C_{n-1} + L \Phi_n(\Delta t)\right),   \label{eq:retreatbound}
+\end{equation}
+for a constant $C_{n-1}=\left|\int_{\Omega} F_n(u_{n-1},x)\,dx\right|$ which is computable \emph{a priori} on each single time-step problem \eqref{eq:theVI}.  If $\Phi_n$ is bounded by $M>0$, or better if $\Phi_n(z) \le A \Delta t^q$ for $A,q>0$, then a time-step $\Delta t=\Delta t_n$ can be computed so that $R_n$ is less than a desired tolerance.
+
+As an operational statement about discrete-time models, we can rephrase our major assertion from the Introduction as
+\begin{quote}
+\emph{The model for a moving-boundary fluid layer should store a time series for $R_n$, in addition to the expected time series $C_n$, in order to provide auditable mass conservation.}
+\end{quote}
+In stating this assertion, we note that the retreat loss $R_n$ should vanish in the $\Delta t_n\to 0$ limit, which is a consistency statement about the time-discretized model, and that we can show $R_n\to 0$ in that limit with additional stability results on the solution of the weak single time-step problem \eqref{eq:theVI}.
+
+
+\section{The fully-discrete single time-step problem}  \label{sec:spacediscretized}
+
+So far we have treated time-dependent free-boundary mass conservation models in time-semi-discretized form, as a sequence of continuous-space free-boundary problems.  We will address well-posedness (section \ref{sec:wellposed}) in such a continuous-space framework also.  However, considering the fully-discrete case shows that we must add to the \emph{a posteriori} computations of the last section if we are to completely balance the conservation books at the free boundary.
+
+In this section we make the mild assumption that the spatial discretization allows an unstructured finite volume \cite{LeVeque2002} interpretation (subsection \ref{subsec:spacenotation}), and this is sufficient to give a fully-discrete balance analogous to the continuous-space version \eqref{eq:newbalance} above (subsection \ref{subsec:shellerror}).  After that we consider numerical solution methods for the constrained nonlinear problem (subsection \ref{subsec:newtonvi}).
+
+\subsection{Unstructured finite volume method} \label{subsec:spacenotation}  First we set notation for a generic finite volume scheme.  We restrict to $\Omega \subset \RR^d$, for $d=2,3$, which is an open polygon (polyhedron).  We assume that $\Omega$ is tiled by finitely-many open polygonal (polyhedral) cells $\omega_j$, indexed by $j\in J$, with area (volume) $|\omega_j|=a_j$.  These cells may be non-convex and the number of edges (faces) per cell may vary.  Because this is a tiling, $\omega_j \cap \omega_k = \emptyset$ for $j\ne k$ and
+\begin{equation}
+\bar\Omega = \bigcup_{j\in J} \bar \omega_j \quad \text{and} \quad |\Omega| = \sum_{j\in J} a_j.  \label{eq:tiling}
+\end{equation}
+An edge (face), simply denoted by the ordered pair $(j,k)$, exists between cell $j$ and cell $k$ if $\bar\omega_j \cap \bar \omega_k$ has positive $d-1$ measure (i.e.~length or area) $\ell_{(j,k)}>0$.  The set of edges $(j,k)$ for cell $\omega_j$ is denoted $\mathcal{E}_j$.
+
+Our approach is now to discretize the strong form equation \eqref{eq:semimassconserve} using finite volume ideas, but this can be treated as a non-conforming Petrov-Galerkin finite element method for the variational inequality \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.  In that case the test functions are piecewise-constant and discontinuous along the edges of the cells $\omega_j$, as in a so-called ``finite volume element'' method \cite{Bueler2016,Cai1990,EwingLinLin2002}.  The cells $\omega_j$ might be geometrically ``dual'' to the elements in such a scheme (e.g.~\cite{Ringleretal2013}).
+
+The representative thickness $u_n^j$ in cell $j$ is given the usual finite volume definition as an average \cite{LeVeque2002}, and similarly $F_n^j$ denotes a representative source term for the cell:
+\begin{equation}
+u_n^j \approx \frac{1}{a_j} \int_{\omega_j} u_n(x), \qquad F_n^j \approx \frac{1}{a_j} \int_{\omega_j} F_n(u_n,x).  \label{eq:fvthickness}
+\end{equation}
+The value $F_n^j$ is computed by some quadrature scheme as necessary, but the details do not matter here.  The discrete (scalar) normal flux across the edge $(j,k)$, outward from cell $j$, is denoted
+\begin{equation}
+Q_n^{(j,k)} \approx \frac{1}{\ell_{(j,k)}} \int_{(j,k)} \bQ_n \cdot \bn_{(j,k)}, \label{eq:fvflux}
+\end{equation}
+as shown Figure \ref{fig:fvmesh-notation}, where $\bn_{(j,k)}$ denotes the unit normal vector to edge $(j,k)$ directed outward from $\omega_j$.  We assume that these fluxes are approximated by some scheme, based on values $\{u_n^l\}$ for $l$ potentially ranging over the entire mesh.  Though the details are not important here, these discrete fluxes might be computed by upwinded and/or flux-limited schemes \cite{LeVeque2002} according to the functional form of the flux $\bQ_n$.
+
+\begin{figure}[ht]
+\begin{center}
+\input{fvmesh-notation.tikz}
+\end{center}
+\caption{Notation for an unstructured finite volume method for \eqref{eq:semimassconserve} in $\RR^2$.}
+\label{fig:fvmesh-notation}
+\end{figure}
+
+We make only two specific assumptions about the fully-discrete finite volume scheme:
+\renewcommand{\labelenumi}{(\roman{enumi})}
+\begin{enumerate}
+\item There is local conservation between any two adjacent cells which are fluid-filled:
+\begin{equation}
+  u_n^j u_n^k > 0 \quad \implies \quad Q_n^{(k,j)}=-Q_n^{(j,k)}.  \label{eq:fvlocalconservation}
+\end{equation}
+\item If $u_n^j>0$ then the strong form single-time-step problem \eqref{eq:semimassconserve} is approximated by
+\begin{equation}
+\frac{u_n^j - u_{n-1}^j}{\Delta t_n} + \frac{1}{a_j} \sum_{k\in \mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = F_n^j. \label{eq:fvmassconserve}
+\end{equation}
+\end{enumerate}
+
+Local discrete conservation statement (i) is completely standard, but the fluid-filled hypothesis is important.  We do not expect discrete conservation in the sense $Q_n^{(k,j)}=-Q_n^{(j,k)}$ at the free boundary because a flux scheme at the edge (face) of a fluid-free cell, facing a fluid-filled cell, cannot be expected to generate flux which is compatible with monotonicity or coercivity properties (subsection \ref{subsec:mono} below) which would lead to well-posedness.
+
+Regarding (ii), recall that, at least heuristically, the divergence of a vector field $\bX$ is the limit of line (surface) integrals, $|R|^{-1} \int_{\partial R} \bX\cdot \bn \to \Div \bX$, where $R\subset \RR^d$ denotes a sequence of regions with Lipshitz boundary, enclosing and shrinking down to $x$, with outward unit normal vector $\bn$.  Though \eqref{eq:fvmassconserve} requires the discrete scheme to approximate such an integral, this prescription has great flexibility because of the many possible meanings of approximations \eqref{eq:fvthickness}--\eqref{eq:fvflux}.
+
+Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including structured-grid (i.e.~uniform rectangular cell) finite difference \cite{Bueler2016,MortonMayers2005} and structured/unstructured finite volume \cite{LeVeque2002} schemes.  A framework for unstructured-grid finite volume schemes, compatible with the fixed-boundary version of the above setup, has been implemented for ocean modeling \cite{Ringleretal2013}.
+
+\subsection{The discrete-space ``shell error''}  \label{subsec:shellerror}  In the fully-discrete model we use a superscript ``$h$'' to denote the spatially-discrete version of integrated quantities.  That is, analogous to \eqref{eq:totalmassseries}, \eqref{eq:climateseries}, and \eqref{eq:retreatlossseries}, we define the time-series
+\begin{equation}
+  M_n^h = \sum_j u_n^j a_j, \quad C_n^h = \Delta t_n\!\!\sum_{\{j:u_n^j>0\}} F_n^j a_j, \quad \text{ and } \quad R_n^h = \sum_{\{j:u_n^j=0\}} u_{n-1}^j a_j.  \label{eq:fvtimeseriesdefn}
+\end{equation}
+Analogous to \eqref{eq:newbalance}, by \eqref{eq:fvmassconserve} we compute
+\begin{align}
+M_n^h - M_{n-1}^h &= \sum_{u_n^j>0} (u_n^j - u_{n-1}^j) a_j - \sum_{u_n^j=0} u_{n-1}^j a_j \notag \\
+   &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + \Delta t_n\,\sum_{u_n^j>0} F_n^j a_j - R_n^h \notag \\
+   &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + C_n^h - R_n^h.  \label{eq:fvnewbalance}
+\end{align}
+
+Though in the continuous-space version \eqref{eq:newbalance} we could eliminate the flux integral, the remaining discrete flux sum in \eqref{eq:fvnewbalance} is not zero.  Local conservation \eqref{eq:fvlocalconservation} only reduces it to a sum over edges which have a positive-thickness cell on one side and a zero-thickness cell on the other.  We call this free-boundary discrete-flux residual sum the \emph{shell error}:
+\begin{equation}
+S_n^h = \sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = \sum_{u_j^n > 0 \,\&\, (j,k)\in\mathcal{E}_j \,\&\, u_k^n = 0} Q_n^{(j,k)} \ell_{(j,k)} \label{eq:fvderiveshellerror}
+\end{equation}
+
+\begin{figure}[ht]
+\begin{center}
+\input{fvmesh-shellerror.tikz}
+\end{center}
+\caption{The shell error $S_n^h$ is computed along those edges (strong line) where $u_n$ changes from positive (``$+$'') to zero (``$0$'').}
+\label{fig:fvmesh-shellerror}
+\end{figure}
+
+As suggested in Figure \ref{fig:fvmesh-shellerror}, $S_n^h$ is computed along the finite-volume approximation of the free boundary.  The quantity $S_n^h$ is an ``error'' in the sense that the continuous-space flux along the free-boundary would be zero because of flux conditions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.
+
+At this point we can report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,S_n^h\}$ which exactly balance in a fully-discrete free-boundary numerical computation:
+\begin{equation}
+  M_n^h = M_{n-1}^h + C_n^h - R_n^h - \Delta t_n\,S_n^h. \label{eq:fvfinalbalance}
+\end{equation}
+
+FIXME Furthermore, with additional assumptions can show $R_n\to 0$ as $\Delta t_n\to 0$ (section \ref{sec:timeseries}).  FIXME also assert $S_n^h\to 0$ as $h\to 0$ \emph{if} free boundary well-behaved, which is beyond scope to show, but evidently $R_n^h + \Delta t_n\,S_n^h \to 0$ as $\Delta t_n\to 0$
+
+\subsection{Fully-discrete explicit and semi-explicit schemes} \label{subsec:spaceexplicit}
+FIXME  On the other hand, explicit and \emph{fully-discretized} numerical schemes are obviously in widespread use for solving first-order and even second-order PDE problems.  FIXME:  can be well-posed but regularity concerns different
+
+\subsection{Newton-type methods for solving the single time-step variational inequality} \label{subsec:newtonvi}  FIXME: mostly generalities \cite{Kelley2003}, but factor Jacobian into deriv of apparent stuff in \eqref{eq:theVI} and $\partial Q_n^j/\partial u_n^k$; complementarity problems \cite{BensonMunson2006,BillupsMurty2000}; example in \cite{Bueler2016}
+
+FIXME Condition (ii) could be summarized ``if $u_n^j>0$ then $G_j(u_n^J)=0$,'' using notation $u_n^J$ for a vector formed from all $u_n^j$ with $j\in J$, for some formula $G_j$ which records the residual of equation \eqref{eq:fvmassconserve}.  We also have constraint ``$u_n^j\ge 0$'' on the unknowns.  In these senses we are regarding the system of equations formed from conditions \eqref{eq:fvmassconserve} as combining to give a \emph{complementarity problem} \cite{BillupsMurty2000} of the form $u_j\ge 0$ and $G_j(u^J)\ge 0$ and $u_j G_j(u^J)=0$ for all $j\in J$; see subsection \ref{subsec:newtonvi} below.
 
 
 \section{Conclusion} \label{sec:conclusion}
