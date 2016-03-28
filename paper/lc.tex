@@ -337,9 +337,9 @@ Thus a weak solution \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} whe
 
 \section{Well-posedness for the single time-step problem} \label{sec:wellposed}
 
-Our goal in this section is to demonstrate that a variety of different fluxes $\bQ_n$ produce a well-posed single time-step problem, variational inequality \eqref{eq:theVI}.  Note that the \emph{a posteriori} analysis of free boundary conservation errors in sections \ref{sec:timeseries} and \ref{sec:spacediscretized} was based upon these problems being well-posed.
+We show in this section that for a variety of different fluxes $\bQ_n$, variational inequality \eqref{eq:theVI} is a well-posed problem.  The \emph{a posteriori} analysis of conservation errors in section \ref{sec:timeseries} (below) assumes that these problems are well-posed.
 
-Techniques for proving well-posedness of time-independent variational inequalities in Banach spaces are relatively well-established for certain linear and some nonlinear elliptic problems, namely for monotone variational inequalities \cite{KinderlehrerStampacchia1980}.  We recall these tools in subsection \ref{subsec:mono}, in the case where the source term $F_n$ is solution-independent.  Then in the next four subsections we prove existence and uniqueness of problem \eqref{eq:theVI} for these flux cases:
+Techniques for proving well-posedness of variational inequalities in Banach spaces are relatively well-established for certain linear and some nonlinear elliptic problems, especially monotone variational inequalities \cite{KinderlehrerStampacchia1980}.  We recall these tools in subsection \ref{subsec:mono}, as they apply in the case where the source term $F_n$ is solution-independent.  Then in the next four subsections we prove existence and uniqueness of problem \eqref{eq:theVI} for the following flux cases:
 \begin{itemize}
 \item[\ref{subsec:plap}] $p$-Laplacian-type parabolic (diffusion) fluxes for $1<p<\infty$,
 \item[\ref{subsec:advect}] linear advection fluxes with differentiable velocity fields, with the addition of small parabolic leading-order terms,
