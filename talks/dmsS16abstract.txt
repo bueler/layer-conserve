@@ -1,0 +1,8 @@
+SPEAKER: Ed Bueler
+
+TITLE: Fluid layers, climates, and weak formulations
+
+ABSTRACT: Models of the Earth's climate now need to include the sea ice and ice sheets of the polar regions.  Such problems, and the evolution of Alaska's glaciers and the movement of ocean shores too, are for moving fluids wherein the rest of the climate has a leading-order effect on the geometry of the fluid layer.  However, existing models for such fluid layers miss the point.  It ought to be possible, as we do for other systems, to numerically-determine the mass distribution and velocity field given an assumption of steady-state inputs; they can't directly do that.  One ought to be able to take long time steps even when inputs are changing; no luck there either.
+
+I'll show a new class of continuum and numerical models for such problems, with demonstrated success for glaciers and ice sheets.  These mathematical models are weak formulations as either nonlinear complementarity problems or variational inequalities.  My presentation is aimed at a general graduate student audience.
+
