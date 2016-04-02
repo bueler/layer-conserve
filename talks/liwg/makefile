@@ -1,0 +1,44 @@
+all: talk.pdf
+
+figures = cartoon-wclimate.pdf cartoon-sensitive-one.pdf cartoon-sensitive-two.pdf cartoon-sensitive-three.pdf cartoon-sets.pdf masstimeseries.pdf
+
+cartoon-wclimate.pdf cartoon-sensitive-one.pdf cartoon-sensitive-two.pdf cartoon-sensitive-three.pdf cartoon-sets.pdf: ../figs1d.py
+	python ../figs1d.py
+	pdfcrop cartoon-sets.pdf cartoon-sets.pdf
+
+../../petsc/layer: ../../petsc/layer.c
+	(cd ../../petsc/ && make layer)
+
+anim/adv/u-1.png: ../genfigs.py ../../petsc/layer
+	(cd anim/ && rm -rf adv/ && mkdir adv/)
+	../../petsc/layer -lay_noshow -lay_genfigs anim/adv/ -da_refine 3 -lay_dt 0.04 -lay_steps 50 -lay_adscheme 1 -lay_jac
+	python ../genfigs.py anim/adv/ --stride 1 --uscale 12.0
+
+anim/sia/u-1.png: ../genfigs.py ../../petsc/layer
+	(cd anim/ && rm -rf sia/ && mkdir sia/)
+	../../petsc/layer -lay_noshow -lay_genfigs anim/sia/ -da_refine 3 -lay_dt 0.02 -lay_steps 1000 -lay_adscheme 1 -lay_lambda 1.0 -lay_gamma 0.1 -lay_glenn 3.0 -lay_jac
+	python ../genfigs.py anim/sia/ --stride 20 --uscale 0.9
+
+anim/tdep/u-1.png: ../genfigs.py ../../petsc/layer
+	(cd anim/ && rm -rf tdep/ && mkdir tdep/)
+	../../petsc/layer -lay_noshow -lay_genfigs anim/tdep/ -da_refine 3 -lay_dt 0.04 -lay_steps 250 -lay_adscheme 1 -lay_jac -lay_timedependentsource
+	python ../genfigs.py anim/tdep/ --stride 1 --uscale 12.0 --taxis 250
+
+masstimeseries.pdf: ../refinemass/masstimeseries.pdf
+	ln -s ../refinemass/masstimeseries.pdf
+
+
+talk.aux: talk.tex $(figures) anim/adv/u-1.png anim/sia/u-1.png anim/tdep/u-1.png
+	pdflatex talk
+
+talk.pdf: talk.aux $(figures) anim/adv/u-1.png anim/sia/u-1.png anim/tdep/u-1.png
+	pdflatex talk
+
+
+.PHONY: clean
+
+clean:
+	@rm -f *.pyc *.out *.aux *.log *.bbl *.blg *.synctex.gz *.nav *.snm *.toc *~
+	@rm -f *cartoon*.pdf masstimeseries.pdf
+	(cd anim/ && rm -rf adv/ sia/ tdep/)
+

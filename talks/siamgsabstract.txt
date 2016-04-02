@@ -1,7 +1,0 @@
-speaker's name: Ed Bueler
-
-title: Free boundary problems in cryosphere models
-
-abstract: Thin flowing layers, such as ice sheets, ice shelves, sea ice, subglacial liquid water, and supraglacial liquid water, are common components of cyrospheric climate models.  These flows are characterized by interaction with other climate components (e.g. atmosphere and ocean), which adds or removes fluid.  Thus there are free boundaries, in the map-plane, between where the fluid is present and not.  We advocate a common approach to the construction of numerical models for these thin layer flows: semi-discretize in time, treat the nonnegativity of layer thickness as a constraint, and solve a well-posed spatial free boundary problem at each time step.  Advanced numerical tools are available for solving each time step problem, namely parallel-scalable and constraint-respecting Newton solvers based on Krylov subspace methods.  The approach clarifies the degree to which exact discrete conservation, a goal of climate modeling, is achievable.  Non-trivial examples will be shown.
-
-
