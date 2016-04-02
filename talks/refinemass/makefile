@@ -10,4 +10,5 @@ masstimeseries.pdf: fig.py mass0.txt
 .PHONY: clean
 
 clean:
-	@rm -f *~
+	@rm -f *~ masstimeseries.pdf
+

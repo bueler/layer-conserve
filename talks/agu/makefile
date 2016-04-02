@@ -1,10 +1,15 @@
 all: talk.pdf
 
-figures = cartoon-wclimate.pdf cartoon-sensitive-one.pdf cartoon-sensitive-two.pdf cartoon-sensitive-three.pdf cartoon-sets.pdf masstimeseries.pdf
+cartoonfigures = cartoon-wclimate.pdf cartoon-sensitive-one.pdf cartoon-sensitive-two.pdf cartoon-sensitive-three.pdf cartoon-sets.pdf
+cartoonfigures := $(addprefix ../cartoon/, $(cartoonfigures))
 
-cartoon-wclimate.pdf cartoon-sensitive-one.pdf cartoon-sensitive-two.pdf cartoon-sensitive-three.pdf cartoon-sets.pdf: ../figs1d.py
-	python ../figs1d.py
-	pdfcrop cartoon-sets.pdf cartoon-sets.pdf
+massfigures = ../refinemass/masstimeseries.pdf
+
+$(cartoonfigures): ../cartoon/figs1d.py
+	(cd ../cartoon/ && make)
+
+$(massfigures): ../refinemass/fig.py
+	(cd ../refinemass/ && make)
 
 ../../petsc/layer: ../../petsc/layer.c
 	(cd ../../petsc/ && make layer)
@@ -19,14 +24,11 @@ anim/sia/u-1.png: ../genfigs.py ../../petsc/layer
 	../../petsc/layer -lay_noshow -lay_genfigs anim/sia/ -da_refine 3 -lay_dt 0.02 -lay_steps 1000 -lay_adscheme 1 -lay_lambda 1.0 -lay_gamma 0.1 -lay_glenn 3.0 -lay_jac
 	python ../genfigs.py anim/sia/ --stride 20 --uscale 0.9
 
-masstimeseries.pdf: ../refinemass/masstimeseries.pdf
-	ln -s ../refinemass/masstimeseries.pdf
 
-
-talk.aux: talk.tex $(figures) anim/adv/u-1.png anim/sia/u-1.png
+talk.aux: talk.tex $(massfigures) $(cartoonfigures) anim/adv/u-1.png anim/sia/u-1.png
 	pdflatex talk
 
-talk.pdf: talk.aux $(figures) anim/adv/u-1.png anim/sia/u-1.png
+talk.pdf: talk.aux $(massfigures) $(cartoonfigures) anim/adv/u-1.png anim/sia/u-1.png
 	pdflatex talk
 
 
@@ -34,6 +36,5 @@ talk.pdf: talk.aux $(figures) anim/adv/u-1.png anim/sia/u-1.png
 
 clean:
 	@rm -f *.pyc *.out *.aux *.log *.bbl *.blg *.synctex.gz *.nav *.snm *.toc *~
-	@rm -f *cartoon*.pdf masstimeseries.pdf
 	(cd anim/ && rm -rf adv/ sia/)
 
