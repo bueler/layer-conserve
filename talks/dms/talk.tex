@@ -18,6 +18,7 @@
 
 \usepackage{animate}
 
+\usepackage[normalem]{ulem}  % for "\sout" strikethrough
 
 \newif\ifclipme\clipmetrue
 \tikzset{labelstyle/.style={LabelStyle/.append style={#1}},linestyle/.style={LineStyle/.append style={#1}}}
@@ -102,16 +103,30 @@
 %\begin{frame}{outline}
 %  \tableofcontents
 %\end{frame}
+%
+%\AtBeginSection[] % Do nothing for \section*
+%{
+%\begin{frame}<beamer>
+%\frametitle{outline}
+%\tableofcontents[currentsection]
+%\end{frame}
+%}
 
-\AtBeginSection[] % Do nothing for \section*
-{
-\begin{frame}<beamer>
-\frametitle{outline}
-\tableofcontents[currentsection]
+
+\begin{frame}{glacier models}
+
+\begin{itemize}
+\item<1> glacier problem:
+   \begin{quote}
+   given geometry of glacier, and stress boundary conditions, determine velocity of ice
+   \end{quote}
+\item<2> glacier problem:
+   \begin{quote}
+   given climate and topography, determine glaciated area, thicknesses of glaciers, and velocity of ice
+   \end{quote}
+\end{itemize}
 \end{frame}
-}
 
-\section{NCPs and VIs, a superficial intro}
 
 \begin{frame}{nonlinear complementarity problems (NCP)}
 
@@ -169,7 +184,8 @@ $\mathcal{K} = \{{\color{red} u_j} \ge {\color{blue} \psi(x_j)}\}$ and
 \begin{column}{0.6\textwidth}
 \includegraphics[width=\textwidth,keepaspectratio=true]{vi1d}
 \end{column}
-\end{columns}\end{frame}
+\end{columns}
+\end{frame}
 
 
 \begin{frame}{NCP/VI generalities}
@@ -241,8 +257,6 @@ two Newton line search NCP methods in PETSc SNES:\footnote{Benson \& Munson (200
 \end{itemize}
 \end{frame}
 
-
-\section{glacier geometry-evolution models}
 
 \begin{frame}{glacier (and ice sheet) notation}
 
@@ -419,7 +433,30 @@ $$h_t + \Div\bq = a$$
 \end{frame}
 
 
-\section{every time-step is free-boundary problem}
+\begin{frame}{time scales for major changes}
+
+\begin{tabular}{rcc}
+\emph{fluid} & \emph{lateral transport} & \emph{accumulation/ablation} \\ \hline
+\alert<2>{glacier/ice sheet} & \alert<2>{100 years} & \alert<2>{100 years} \\
+\alert<2>{sea ice} & \alert<2>{1 month} & \alert<2>{1 year} \\ \hline
+\only<1>{tsunami & 10 seconds & 1 year \\}
+\only<2>{\sout{tsunami} & \sout{10 seconds} & \sout{1 year} \\}
+\only<1>{Aral Sea & & 1 year \\}
+\only<2>{\sout{Aral Sea} & & \sout{1 year} \\}
+\alert<2>{tidewater marsh} & \alert<2>{1 hour} & \alert<2>{1 day}
+\end{tabular}
+
+\bigskip
+
+\begin{itemize}
+\item consider time-scales for major changes in geometry of the fluid layer from two sources:
+   \begin{itemize}
+   \item[$\circ$] motion of the fluid from forces applied at boundary (or to body); \emph{lateral transport}
+   \item[$\circ$] \emph{accumulation} (e.g.~precipitation or aggregation) and \emph{ablation} (melting, evaporation, sublimation)
+   \end{itemize}
+\item<2> this talk is about cases where the time-scales are comparable
+\end{itemize}
+\end{frame}
 
 \newcommand{\singletsmc}{\frac{h^\ell - h^{\ell-1}}{\Delta t} + \Div \bq^\ell = a^\ell}
 \begin{frame}{semi-discretize in time}
@@ -497,8 +534,6 @@ for all $v \in \mathcal{K}$
 \end{itemize}
 \end{frame}
 
-
-\section{proposed approach: FVE discretization + Newton + continuation}
 
 \begin{frame}{finite volume element (FVE) discretization}
 
@@ -725,8 +760,6 @@ for all $v \in \mathcal{K}$
 \end{frame}
 
 
-\section{partial success \dots and the essential difficulty}
-
 \begin{frame}{example: Greenland ice sheet}
 
 \begin{columns}
@@ -889,10 +922,6 @@ poorer Newton-solver convergence
 \end{frame}
 
 
-\section{Practical conclusions:}
-
-\subsection{approach I: semi-discretize in time}
-
 \begin{frame}{Approach I: semi-discretize in time}
 
 $$h_t + \Div\bq = f \qquad \to \qquad \frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_n = F_n$$
@@ -975,8 +1004,6 @@ diffusion
 \end{frame}
 
 
-\subsection{approach II: each time-step is weakly-posed free-bdry problem}
-
 \begin{frame}{Approach II: weak form incorporates $H_n\ge 0$ constraint}
 
   \begin{itemize}
@@ -1043,8 +1070,6 @@ diffusion
 \end{frame}
 
 
-\subsection{newly-available numerical tools}
-
 \begin{frame}{Numerical solution of the weak problem}
 
 the weak single time-step problem:
@@ -1105,8 +1130,6 @@ the weak single time-step problem:
 \end{columns}
 \end{frame}
 
-
-\subsection{new (?) limitations to discrete conservation}
 
 \begin{frame}{Conservation reporting: subsets}
 \begin{itemize}
