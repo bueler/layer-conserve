@@ -1,27 +1,36 @@
 all: talk.pdf
 
+cartoonfigures = cartoon-wclimate.pdf cartoon-sensitive-one.pdf cartoon-sensitive-two.pdf cartoon-sensitive-three.pdf cartoon-sets.pdf
+cartoonfigures := $(addprefix ../cartoon/, $(cartoonfigures))
+
+massfigures = ../refinemass/masstimeseries.pdf
+
+obsfigures = obstacle1d.pdf ncp1d.pdf vi1d.pdf
+obsfigures := $(addprefix ../obstacle/, $(obsfigures))
+
 # no rules to make these; location = talks-public/commonfigs/; see \graphicspath{} in .tex
 commonfigs = groundedscheme.pdf polaris.png supp4rignot-small.png marsh-water.jpg tsunami-sendai.jpg grnwinset.pdf
 
 # no rules to make these; location = sia-fve/talks/; see \graphicspath{} in .tex
 siafvefigs = newtonconv.pdf scale-greenland-bed-mcb.png scale-greenland-bed-old-oib.png insetinset.pdf rseps.pdf
 
-# rules to make these:
-figures = cartoon-wclimate.pdf obstacle1d.pdf ncp1d.pdf vi1d.pdf
-#figures := $(addprefix chaps/, $(addsuffix .tex, $(chapsroots)))
+$(cartoonfigures): ../cartoon/figs1d.py
+	(cd ../cartoon/ && make)
 
-SIAFVETALKS = ../../../sia-fve/talks/
+$(massfigures): ../refinemass/fig.py
+	(cd ../refinemass/ && make)
 
-cartoon-wclimate.pdf: $(SIAFVETALKS)figs1d.py
-	python $(SIAFVETALKS)figs1d.py
+$(obsfigures): ../obstacle/figs1d.py
+	(cd ../obstacle/ && make)
 
-obstacle1d.pdf ncp1d.pdf vi1d.pdf: $(SIAFVETALKS)obstacle1d.py
-	python $(SIAFVETALKS)obstacle1d.py
+#../anim/adv/u-1.png ../anim/sia/u-1.png ../anim/tdep/u-1.png: ../anim/genfigs.py
+#	(cd ../anim/ && make)
 
-talk.aux: talk.tex $(figures)
+
+talk.aux: talk.tex $(cartoonfigures) $(massfigures) $(obsfigures)
 	pdflatex talk
 
-talk.pdf: talk.tex $(figures)
+talk.pdf: talk.tex $(cartoonfigures) $(massfigures) $(obsfigures)
 	pdflatex talk
 	pdflatex talk
 
@@ -30,5 +39,4 @@ talk.pdf: talk.tex $(figures)
 
 clean:
 	@rm -f *.pyc *.out *.aux *.log *.bbl *.blg *.synctex.gz *.nav *.snm *.toc *~
-	@rm -f cartoon*.pdf *1d.pdf
 
