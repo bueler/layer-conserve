@@ -16,6 +16,38 @@
 
 \usepackage{tikz,amsmath,verbatim,wasysym}
 
+\usepackage{animate}
+
+
+\newif\ifclipme\clipmetrue
+\tikzset{labelstyle/.style={LabelStyle/.append style={#1}},linestyle/.style={LineStyle/.append style={#1}}}
+\tikzset{LabelStyle/.initial={},LineStyle/.initial={}}
+
+\newcommand{\mathWithDescription}[4][]{{%
+    \tikzset{#1}%
+    \tikz[baseline]{
+        \node[draw=red,rounded corners,anchor=base] (m#4) {$\displaystyle#2$};
+        \ifclipme\begin{pgfinterruptboundingbox}\fi
+            \node[above of=m#4,font=\strut, LabelStyle] (l#4) {#3};
+            \draw[-,red, LineStyle] (l#4) to (m#4);
+        \ifclipme\end{pgfinterruptboundingbox}\fi
+    }%
+}}
+
+\newcommand{\mathWithDescriptionStarred}[3][]{{%
+    \clipmefalse%
+    \mathWithDescription[#1]{#2}{#3}{\themathLabelNode}%
+}}
+
+\newcounter{mathLabelNode}
+
+\newcommand{\mathLabelBox}[3][]{%
+   \stepcounter{mathLabelNode}%
+   \mathWithDescription[#1]{#2}{#3}{\themathLabelNode}%
+   \vphantom{\mathWithDescriptionStarred[#1]{#2}{#3}{\themathLabelNode}}%
+}
+
+
 % math macros
 \newcommand\bb{\mathbf{b}}
 \newcommand\bbf{\mathbf{f}}
@@ -60,7 +92,7 @@
 
 
 \begin{document}
-\graphicspath{{../obstacle/}{../cartoon/}{../refinemass}{../../../talks-public/commonfigs/}{../../../sia-fve/talks/}}
+\graphicspath{{../obstacle/}{../cartoon/}{../refinemass/}{../../images/}{../../../talks-public/commonfigs/}{../../../sia-fve/talks/}}
 
 \begin{frame}
   \titlepage
@@ -333,9 +365,39 @@ h_t + \Div\bq = {\color{blue} a}  \tag{$\ast$} \label{mc}
     \vspace{-4mm}
     \item[$\circ$] $h$ is a thickness so $h\ge 0$
     \item[$\circ$] \eqref{mc} applies only where $h>0$
-    \item[$\circ$] signed source ${\color{blue} a}$ is the ``climate''
+    \item[$\circ$] signed source ${\color{blue} a}$ is the ``climate''; ${\color{blue} a}>0$ shown downward
     \end{itemize}
 \end{itemize}
+\end{frame}
+
+
+\begin{frame}{A fluid layer in a climate: \emph{the troubles}}
+
+\vspace{-1.2mm}
+
+\begin{center}
+\only<1>{\includegraphics[width=0.95\textwidth,keepaspectratio=true]{cartoon-sensitive-three}}
+\only<2>{\includegraphics[width=0.95\textwidth,keepaspectratio=true]{cartoon-sensitive-one}}
+\only<3>{\includegraphics[width=0.95\textwidth,keepaspectratio=true]{cartoon-sensitive-two}}
+\end{center}
+
+\vspace{-18mm}
+$$h_t + \Div\bq = a$$
+
+  \begin{itemize}
+  \item<1-> $h=0$ \emph{and what else} at free boundary?
+     \begin{itemize}
+     \item<1->[$\circ$] shape at free boundary depends on both $\bq$ and $a$
+     \end{itemize}
+  \item<2-> $a<0$ not ``detected'' by model where $h=0$
+     \begin{itemize}
+     \item<2->[$\circ$] how to do mass conservation accounting?
+     \end{itemize}
+  \item<3> $a\approx 0$ threshold behavior
+     \begin{itemize}
+     \item<3>[$\circ$] $h>0$ as soon as $a<0$ switches to $a>0$
+     \end{itemize}
+  \end{itemize}
 \end{frame}
 
 
@@ -748,6 +810,375 @@ poorer Newton-solver convergence
 \end{frame}
 
 
+\begin{frame}{I'm driven here by practical modeling: ice sheets}
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\small
+\item the icy region is nearly-fractal and disconnected
+\item currently in our ice sheet model$^*$:
+  \begin{itemize}
+  \item[$\circ$] explicit time-stepping
+  \item[$\circ$] free boundary by truncation
+  \end{itemize}
+\item want for our model:
+  \begin{itemize}
+  \item[$\circ$] long implicit time steps
+  \item[$\circ$] better conservation accounting to user
+  \end{itemize}
+\end{itemize}
+
+\vspace{10mm}
+{\scriptsize $^*$Parallel Ice Sheet Model, \texttt{pism-docs.org}}
+\end{column}
+\begin{column}{0.5\textwidth}
+\vspace{-5mm}
+
+\begin{center}
+\includegraphics[width=0.8\textwidth,keepaspectratio=true]{ice-mask-900m}
+\end{center}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Has anyone solved these problems before?}
+
+\vspace{-2mm}
+
+  \begin{itemize}
+  \item yes, of course!
+  \item generic result: \emph{ad hoc} schemes near the free boundary
+  \end{itemize}
+
+\medskip
+\begin{columns}
+\begin{column}{0.45\textwidth}
+\includegraphics[width=0.7\textwidth,keepaspectratio=true]{Albrechtetal2011half}
+
+\scriptsize volume-of-fluid method at ice shelf fronts
+
+\tiny (Albrecht et al, 2011)
+
+\medskip
+\includegraphics[width=0.45\textwidth,keepaspectratio=true]{JaroschSchoofAnslow2013}
+
+\scriptsize glacier ice on steep terrain
+
+\smallskip
+\tiny (Jarosch, Schoof, Anslow, 2013)
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\hfill \includegraphics[width=0.45\textwidth,keepaspectratio=true]{LeVequeGeorgeBerger2011}
+
+\hfill \scriptsize tsunami run-up on shore
+
+\smallskip
+\hfill \tiny (LeVeque, George, Berger, 2011)
+
+\medskip
+\hfill \includegraphics[width=0.55\textwidth,keepaspectratio=true]{jouvet-two-grids}
+
+\hfill \scriptsize volume-of-fluid method at glacier surface
+
+\hfill \tiny (Jouvet et al 2008)
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\section{Practical conclusions:}
+
+\subsection{approach I: semi-discretize in time}
+
+\begin{frame}{Approach I: semi-discretize in time}
+
+$$h_t + \Div\bq = f \qquad \to \qquad \frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_n = F_n$$
+
+  \begin{itemize}
+  \item semi-discretize in time: $H_n(x) \approx h(t_n,x)$
+  \item the new equation is strong form \alert{single time-step problem}
+    \begin{itemize}
+    \item[$\circ$] a PDE in space where $H_n>0$
+    \item[$\circ$] details of flux $\bQ_n$ and source $F_n$ come from time-stepping scheme
+      \begin{itemize}
+      \item e.g.~$\theta$-methods or RK
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{1D time-stepping examples (and my $\bq$-agnosticism)}
+
+\begin{columns}
+\begin{column}{0.35\textwidth}
+\alert{same:}
+
+\begin{itemize}
+\scriptsize
+\item equation
+
+\tiny
+\hspace{-10mm} $\frac{H_n-H_{n-1}}{\Delta t} + \Div\bQ_n = f$
+\scriptsize
+
+\item BEuler time-step
+\item climate $f$
+\item bed shape
+\item constraint-respecting
+
+Newton scheme
+\end{itemize}
+
+\vspace{2mm}
+
+\alert{top:}
+
+\scriptsize
+
+\medskip
+$\bQ_n = v_0 H_n$
+
+hyperbolic advection with
+
+constant velocity
+
+\vspace{5mm}
+
+\normalsize 
+
+\alert{bottom:}
+
+\scriptsize
+
+\medskip
+$\bQ_n = - \Gamma |H_n|^{n+2}$
+
+$\phantom{bQ_n = }\, \cdot |\grad s_n|^{n-1} \grad s_n$
+
+nonlinear degenerate
+
+diffusion
+\end{column}
+\begin{column}{0.4\textwidth}
+\hspace{-15mm}
+\animategraphics[autoplay,loop,height=2.5cm]{6}{../anim/adv/u-}{1}{50}
+
+\medskip
+\hspace{-15mm}
+\animategraphics[autoplay,loop,height=2.5cm]{6}{../anim/sia/u-}{1}{50}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\subsection{approach II: each time-step is weakly-posed free-bdry problem}
+
+\begin{frame}{Approach II: weak form incorporates $H_n\ge 0$ constraint}
+
+  \begin{itemize}
+  \item define:
+    $$\mathcal{K} = \left\{v \in W^{1,p}(\Omega) \,\Big|\, v\ge 0\right\} = \text{\alert{admissible thicknesses}}$$
+  \item we say $H_n \in \mathcal{K}$ solves the \alert{weak single time-step problem} if
+    $$\int_\Omega H_n (v - H_n) - \Delta t\, \bQ_n \cdot \grad(v - H_n) \ge \int_\Omega \left(H_{n-1} + \Delta t\, F_n\right) (v - H_n)$$
+  for all $v \in \mathcal{K}$
+  \small
+  \medskip
+    \begin{itemize}
+    \item[$\circ$] derive this \emph{variational inequality} (VI) from:
+      \begin{itemize}
+      \item[$\diamond$] integration-by-parts on strong form
+      \item[$\diamond$] thought about $H_n=0$ areas
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Weak solves strong; gives more info}
+
+\begin{itemize}
+  \item assume $\bQ_n=0$ when $H_n=0$
+    \begin{itemize}
+    \item[$\circ$] this means $\bQ_n$ describes a \emph{layer}
+    \end{itemize}
+  \item if $H_n \in \mathcal{K}$ solves weak single time-step problem (VI) then
+  
+      \medskip
+	  \begin{itemize}
+	  \item[$\circ$] PDE applies on the set where $H_n>0$ (interior condition):
+	    $$\frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_n = F_n$$
+	  \item[$\circ$] plus inequality on the set where $H_n = 0$:
+	    $$H_{n-1} + \Delta t\, F_n \le 0$$
+	    \vspace{-6mm}
+	    \begin{itemize}
+	    \item ``climate negative enough during time step to remove old thickness''
+	    \end{itemize}
+	  \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Alternative weak formulation: NCP}
+
+\begin{itemize}
+\item NCP = nonlinear complementarity problem
+\item abstractly, NCP is:
+  \begin{itemize}
+  \item[$\circ$]  given differentiable map $\bF:\RR^n \to \RR^n$
+  \item[$\circ$]  solve
+     $$\bx \ge 0, \quad \bF(\bx) \ge 0, \quad \bx^\top \bF(\bx) = 0$$
+  \end{itemize}
+\item our case:
+  \begin{itemize}
+  \item[$\circ$]  $\infty$ dimensions with m.c.~equation $h_t + \Div\bq = f$
+  \item[$\circ$]  $\bx = H_n$ and $\bF(\bx) = (\text{residual from discrete-time m.c.~eqn.})$
+  \end{itemize}
+\item in finite dimensions we have VI $\leftrightarrow$ NCP equivalence:
+  $$\ip{\bF(\bx)}{\by-\bx} \ge 0 \quad \forall \by \in \mathcal{K} \qquad \iff \qquad \text{NCP}$$
+\end{itemize}
+\end{frame}
+
+
+\subsection{newly-available numerical tools}
+
+\begin{frame}{Numerical solution of the weak problem}
+
+the weak single time-step problem:
+\begin{itemize}
+\item is nonlinear because of constraint (even for $\bQ_n$ linear in $H_n$)
+\item can be solved by a Newton method modified for constraint
+\item scalable implementations are in PETSc$^*$ 3.5+
+  \begin{itemize}
+  \item[$\circ$]  see ``SNESVI'' object
+  \item[$\circ$]  for NCP there are two implementations (Benson \& Munson, 2006):
+    \begin{itemize}
+    \item  reduced-set (active-set) method
+    \item  semismooth method
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\vspace{15mm}
+{\scriptsize $^*$Portable Extensible Toolkit for Scientific computation, \texttt{www.mcs.anl.gov/petsc}}
+\end{frame}
+
+
+\begin{frame}{Example: Greenland ice sheet}
+
+\begin{columns}
+\begin{column}{0.6\textwidth}
+\begin{itemize}
+\small
+\item given steady climate and bedrock elevations, what is shape of Greenland ice sheet?
+  \begin{itemize}
+  \scriptsize
+  \item[$\circ$] climate = ``surface mass balance''
+  \item[] \qquad = precipitation $-$ runoff-from-melt
+  \end{itemize}
+\small
+\item assume simplest reasonable dynamics: non-sliding shallow ice approximation
+\item solve VI/NCP weak problem
+  \begin{itemize}
+  \scriptsize
+  \item[$\circ$] steady state ($\Delta t\to \infty$)
+  \item[$\circ$] reduced-set Newton method
+  \item[$\circ$] 900 m structured grid
+  \item[$\circ$] $Q^1$ FEs in space
+  \item[$\circ$] $N=7\times 10^6$ d.o.f.
+  \end{itemize}
+\end{itemize}
+
+\vspace{5mm}
+\tiny (Bueler, submitted to J.~Glaciol.)
+\end{column}
+\begin{column}{0.4\textwidth}
+\vspace{-5mm}
+
+\begin{center}
+\includegraphics[width=0.95\textwidth,keepaspectratio=true]{grnwinset}
+\end{center}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\subsection{new (?) limitations to discrete conservation}
+
+\begin{frame}{Conservation reporting: subsets}
+\begin{itemize}
+\item suppose $H_n$ solves the single time-step problem
+\item define
+	\begin{align*}
+	\Omega_n &= \left\{H_n(x) > 0\right\} \\
+	\Omega_n^r &= \left\{H_n(x)= 0 \text{ and } H_{n-1}(x) > 0\right\} \quad \text{\alert{$\leftarrow$ retreat set}}
+	\end{align*}
+\end{itemize}
+
+\vspace{-3mm}
+\begin{center}
+\includegraphics[width=0.8\textwidth,keepaspectratio=true]{cartoon-sets}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Conservation reporting: time-series}
+
+\begin{itemize}
+\item define:
+   $$M_n = \int_\Omega H_n(x)\,dx \qquad \text{\emph{mass at time} $t_n$}$$
+\item then \vspace{-5mm}
+	\begin{align*}
+	M_n - M_{n-1} &= \int_{\Omega_n} \mathLabelBox[
+    labelstyle={xshift=1cm,yshift=2mm},
+    linestyle={out=270,in=90, -latex}
+    ]{H_n - H_{n-1}}{$\boxed{\Delta t\, (-\Div\bQ_n + F_n)}$} \,dx + \int_{\Omega_n^r} 0 - H_{n-1} \,dx \\
+	   &= \Delta t\, \left(0 + \int_{\Omega_n} F_n \,dx\right) - \int_{\Omega_n^r} H_{n-1} \,dx
+	\end{align*}
+\item new term:
+     $$R_n = \int_{\Omega_n^r} H_{n-1} \,dx \qquad \text{\emph{\alert{retreat loss} during step} $n$}$$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Conservation reporting: \emph{limitation}}
+
+\begin{itemize}
+\item \alert{the retreat loss $R_n$ is not balanced by the climate}
+  \begin{itemize}
+  \item[$\circ$] $R_n$ is \emph{caused} by the climate, but we don't know a computable integral of climate $F_n$ to balance it
+  \end{itemize}
+\item we must track \alert{three} time series:
+  \begin{itemize}
+  \item[$\circ$] mass at time $t_n$: \qquad $M_n = \int_\Omega H_n(x)\,dx$
+
+  \smallskip
+  \item[$\circ$] climate (e.g.~surface mass bal.) over current fluid-covered region:
+     $$C_n = \Delta t\, \int_{\Omega_n} F_n \,dx \qquad \approx \int_{t_{n-1}}^{t_n} \int_{\Omega_n} f(t,x) \,dx\,dt$$
+  \item[$\circ$] retreat loss during time step: \qquad $R_n = \int_{\Omega_n^r} H_{n-1} \,dx$
+  \end{itemize}
+\item now it balances:
+     $$M_n = M_{n-1} + C_n - R_n$$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Reporting discrete conservation: $R_n\to 0$ as $\Delta t\to 0$}
+
+\begin{center}
+\vspace{-3.3mm}
+
+\animategraphics[autoplay,loop,height=2.9cm]{15}{../anim/tdep/u-}{1}{250}
+
+\vspace{-1.1mm}
+\includegraphics[width=0.59\textwidth,keepaspectratio=true]{masstimeseries} \, \phantom{!}
+\end{center}
+\end{frame}
+
+
 \begin{frame}{summary}
 
   \begin{itemize}
@@ -777,7 +1208,8 @@ poorer Newton-solver convergence
     \item[$\circ$]  \alert{every time step generates a near-fractal icy domain (e.g.~continental ice sheet), via free-boundary problem, on which momentum solve must be accurate especially near the boundary}
     \end{itemize}
   \end{itemize}
-
 \end{frame}
+
+
 
 \end{document}

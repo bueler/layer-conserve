@@ -23,14 +23,14 @@ $(massfigures): ../refinemass/fig.py
 $(obsfigures): ../obstacle/figs1d.py
 	(cd ../obstacle/ && make)
 
-#../anim/adv/u-1.png ../anim/sia/u-1.png ../anim/tdep/u-1.png: ../anim/genfigs.py
-#	(cd ../anim/ && make)
+../anim/adv/u-1.png ../anim/sia/u-1.png ../anim/tdep/u-1.png: ../anim/genfigs.py
+	(cd ../anim/ && make)
 
 
-talk.aux: talk.tex $(cartoonfigures) $(massfigures) $(obsfigures)
+talk.aux: talk.tex $(cartoonfigures) $(massfigures) $(obsfigures) ../anim/adv/u-1.png ../anim/sia/u-1.png ../anim/tdep/u-1.png
 	pdflatex talk
 
-talk.pdf: talk.tex $(cartoonfigures) $(massfigures) $(obsfigures)
+talk.pdf: talk.tex $(cartoonfigures) $(massfigures) $(obsfigures) ../anim/adv/u-1.png ../anim/sia/u-1.png ../anim/tdep/u-1.png
 	pdflatex talk
 	pdflatex talk
 
