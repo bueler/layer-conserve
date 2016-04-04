@@ -280,7 +280,7 @@ h_t + \Div\bq = a
 \end{itemize}
 \end{column}
 \begin{column}{0.3\textwidth}
-\includegraphics[width=1.3\textwidth,keepaspectratio=true]{domainfig}
+\includegraphics[width=1.1\textwidth,keepaspectratio=true]{domainfig}
 
 \vspace{0.5in}
 \includegraphics[width=1.0\textwidth,keepaspectratio=true]{polaris}
@@ -367,7 +367,7 @@ h_t + \Div\bq &= a \qquad \text{in } I_t = \{h>0\} \subset \RR^2 \\
 
 \vspace{-7mm}
 \begin{itemize}
-\item mass conservation equation on last slide applies to broader class:
+\item mass conservation eqn applies to broader class:
   \begin{center}
   \alert{a fluid layer on a substrate, evolving in a climate}
   \end{center}
@@ -380,6 +380,7 @@ h_t + \Div\bq = {\color{blue} a}  \tag{$\ast$} \label{mc}
     \item[$\circ$] $h$ is a thickness so $h\ge 0$
     \item[$\circ$] \eqref{mc} applies only where $h>0$
     \item[$\circ$] signed source ${\color{blue} a}$ is the ``climate''; ${\color{blue} a}>0$ shown downward
+    \item[$\circ$] hidden, but important, part of the model: $\bq=\bq[h,b]$
     \end{itemize}
 \end{itemize}
 \end{frame}
@@ -395,27 +396,37 @@ h_t + \Div\bq = {\color{blue} a}  \tag{$\ast$} \label{mc}
 \only<3>{\includegraphics[width=0.95\textwidth,keepaspectratio=true]{cartoon-sensitive-two}}
 \end{center}
 
-\vspace{-18mm}
-$$h_t + \Div\bq = a$$
+\vspace{-16mm}
+$$h_t + \Div\bq = a \qquad \text{in } I_t$$
 
   \begin{itemize}
-  \item<1-> $h=0$ \emph{and what else} at free boundary?
+  \item<1-> $h=0$ \emph{and what else} at \alert<1>{free boundary}?
      \begin{itemize}
-     \item<1->[$\circ$] shape at free boundary depends on both $\bq$ and $a$
+     \item<1->[$\circ$] fluid shape at free boundary depends on both $\bq$ and $a$
      \end{itemize}
   \item<2-> $a<0$ not ``detected'' by model where $h=0$
      \begin{itemize}
-     \item<2->[$\circ$] how to do mass conservation accounting?
+     \item<2->[$\circ$] how to do mass conservation accounting \alert<2>{here}?
      \end{itemize}
-  \item<3> $a\approx 0$ threshold behavior
+  \item<3> $a\approx 0$ sensitive-threshold behavior
      \begin{itemize}
-     \item<3>[$\circ$] $h>0$ as soon as $a<0$ switches to $a>0$
+     \item<3>[$\circ$] nucleate new fluid model \alert<3>{here} if $a<0$ switches to $a>0$
      \end{itemize}
   \end{itemize}
 \end{frame}
 
 
-\begin{frame}{fluid layers in climates}
+\begin{frame}{actual glacier free boundary}
+
+\begin{center}
+\includegraphics[width=0.95\textwidth,keepaspectratio=true]{truffertaku2016}
+\end{center}
+
+\tiny \hfill Martin Truffer, Taku Glacier SE Alaska, March 2016
+\end{frame}
+
+
+\begin{frame}{examples: fluid layers in climates}
 
 \includegraphics[width=0.4\textwidth,keepaspectratio=true]{polaris}
 \hfill
@@ -437,12 +448,12 @@ $$h_t + \Div\bq = a$$
 \begin{tabular}{rcc}
 \emph{fluid} & \emph{lateral transport} & \emph{accumulation/ablation} \\ \hline
 \alert<2>{glacier/ice sheet} & \alert<2>{100 years} & \alert<2>{100 years} \\
-\alert<2>{sea ice} & \alert<2>{1 month} & \alert<2>{1 year} \\ \hline
+\alert<2>{sea ice} & \alert<2>{1 week} & \alert<2>{1 month} \\ \hline
 \alert<2>{tidewater marsh} & \alert<2>{1 hour} & \alert<2>{1 day} \\
 \only<1>{tsunami & 10 seconds & 1 year \\}
 \only<2>{\sout{tsunami} & \sout{10 seconds} & \sout{1 year} \\}
-\only<1>{Aral Sea & & 1 year \\}
-\only<2>{\sout{Aral Sea} & & \sout{1 year}}
+\only<1>{Aral Sea & ? & 1 year \\}
+\only<2>{\sout{Aral Sea} & \sout{?} & \sout{1 year}}
 \end{tabular}
 
 \bigskip
@@ -450,32 +461,13 @@ $$h_t + \Div\bq = a$$
 \begin{itemize}
 \item consider time-scales for major changes in geometry of the fluid layer from two sources:
    \begin{itemize}
-   \item[$\circ$] motion of the fluid from forces applied at boundary (or to body); \emph{lateral transport}
+   \item[$\circ$] motion of the fluid from forces applied at boundary (or body forces); \emph{lateral transport}
    \item[$\circ$] \emph{accumulation} (e.g.~precipitation or aggregation) and \emph{ablation} (melting, evaporation, sublimation)
    \end{itemize}
-\item<2> this talk is about cases where the time-scales are comparable
+
+\medskip
+\item<2> this talk: cases where these time-scales are comparable
 \end{itemize}
-\end{frame}
-
-
-\begin{frame}{momentary pause: tsunamis}
-
-\begin{center}
-\includegraphics[width=0.8\textwidth,keepaspectratio=true]{tsunami-sendai}
-\end{center}
-\end{frame}
-
-
-\begin{frame}{momentary pause: Aral Sea}
-
-\begin{itemize}
-\item top row: 1964, 1975?, 1990?,
-\item bottom row: 1999, 2002?, 2014
-\end{itemize}
-
-\begin{center}
-\includegraphics[width=0.7\textwidth,keepaspectratio=true]{aral-sea-1964-2014}
-\end{center}
 \end{frame}
 
 
@@ -485,18 +477,44 @@ $$h_t + \Div\bq = a$$
 \hfill
 \includegraphics[width=0.45\textwidth,keepaspectratio=true]{supp4rignot-small}
 
-\small glaciers \& ice sheets \hfill sea ice
+\small glaciers \& ice sheets $\checkmark$ \hfill sea ice $\checkmark$
 
 \medskip
 \begin{center}
-\includegraphics[width=0.33\textwidth,keepaspectratio=true]{marsh-water}
+\includegraphics[width=0.25\textwidth,keepaspectratio=true]{marsh-water}
 
-\small tidewater marsh
+\small tidewater marsh ?
 \end{center}
 \end{frame}
 
 
-\begin{frame}{Has anyone solved these problems before?}
+\begin{frame}{pause: tsunamis}
+
+\begin{center}
+\includegraphics[width=0.9\textwidth,keepaspectratio=true]{tsunami-sendai}
+\end{center}
+
+\begin{itemize}
+\item flux $\bq$ dominates \dots climate $a$ irrelevant
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{pause: Aral Sea on  Kazakhstan/Uzbekistan border}
+
+\begin{center}
+\includegraphics[width=0.65\textwidth,keepaspectratio=true]{aral-sea-1964-2014}
+\end{center}
+
+\begin{itemize}
+\item top row: 1964, 1989, 1995?
+\item bottom row: 1999, 2002?, 2014
+\item climate $a$ dominates \dots flux $\bq$ irrelevant
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{has anyone solved these problems before?}
 
 \vspace{-2mm}
 
