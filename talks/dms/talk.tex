@@ -104,10 +104,11 @@
 \begin{itemize}
 \item gradual realization, during sabbatical last year:
 \begin{center}
-\alert{there is a whole class of climate modeling problems which people (scientists/modelers) are doing the wrong way}
+\alert{there is a whole class of climate modeling problems which people are doing the wrong way}
 \end{center}
   \begin{itemize}
-  \item[$\circ$] especially in choice of mathematical formulation
+  \item[$\circ$] ``people'' = scientists/modelers
+  \item[$\circ$] special concern: choice of mathematical formulation
   \end{itemize}
 \visible<2>{
 
@@ -134,12 +135,34 @@
 \begin{frame}{glaciers and ice sheets}
 
 \begin{columns}
-\begin{column}{0.4\textwidth}
+\begin{column}{0.45\textwidth}
 \begin{itemize}
-\item FIXME
+\small
+\item about 66 m (= 215 ft) of sea level rise equivalent
+  \begin{itemize}
+  \scriptsize
+  \item[$\circ$] Antarctic ice sheet $=$ 60
+  \item[$\circ$] Greenland ice sheet $=$ 6
+  \item[$\circ$] Alaska's glaciers $<$ 0.5
+  \end{itemize}
+\small
+\item they move (flow and slide) under their own weight
+  \begin{itemize}
+  \scriptsize
+  \item[$\circ$] speed $1$ cm/yr -- $10$ km/yr
+  \item[$\circ$] shape controlled in part by flow
+  \end{itemize}
+\small
+\item they accumulate snow, or melt, as sensitive function of global climate
+  \begin{itemize}
+  \scriptsize
+  \item[$\circ$] Canadians should be grateful
+  \end{itemize}
+\small
+\item ice sheet = big glacier
 \end{itemize}
 \end{column}
-\begin{column}{0.6\textwidth}
+\begin{column}{0.55\textwidth}
 \includegraphics[width=\textwidth,keepaspectratio=true]{polaris}
 
 \includegraphics[width=\textwidth,keepaspectratio=true]{mass-bal-atmos}
@@ -148,16 +171,16 @@
 \end{frame}
 
 
-\begin{frame}{practical modeling: ice sheets}
+\begin{frame}{practical mathematical/numerical modeling}
 
 \begin{itemize}
 \small
-\item the icy region (e.g.~Greenland) is evolving \dots and nearly-fractal
-\item limitations in our big ice sheet model:\footnote{$^*$Parallel Ice Sheet Model, \texttt{pism-docs.org}}
+\item some limitations in our big ice sheet model:\footnote{$^*$Parallel Ice Sheet Model, \texttt{pism-docs.org}}
   \begin{itemize}
   \item[$\circ$] explicit time-stepping
   \item[$\circ$] free boundary by truncation
   \end{itemize}
+\item issue?: flowing ice (e.g.~Greenland) is nearly-fractal
 \end{itemize}
 
 \begin{center}
@@ -166,14 +189,20 @@
 \end{frame}
 
 
-\begin{frame}{glacier (and ice sheet) model paradigms}
+\begin{frame}{glacier model paradigms}
 
 \begin{itemize}
-\item<1> glacier problem \alert<1>{(most numerical modelers)}:
+\item<1> glacier problem \alert<1>{(to most numerical glacier modelers)}:
    \begin{quote}
    given geometry of glacier, and stress boundary conditions, determine velocity of ice
    \end{quote}
-\item<2> glacier problem \alert<2>{(most glaciologists)}:
+\vspace{-4mm}
+  \begin{itemize}
+  \item[$\circ$] a slow flow ($\operatorname{Re} \ll 1$) allows you to think this way
+  \end{itemize}
+
+\bigskip
+\item<2> glacier problem \alert<2>{(to most actual glaciologists)}:
    \begin{quote}
    given climate and topography, determine glaciated area and thicknesses of glaciers
    \end{quote}
@@ -198,20 +227,20 @@
   \item[$\circ$]  $b(x,y)$ bed elevation \only<2>{\quad \alert{\dots improving for ice sheets}}
   \item[$\circ$]  $a(t,x,y,z)$ surface mass balance  \only<2>{\quad \alert{\dots from GCM}}
     \begin{itemize}
-    \item accumulation/ablation function; $=$ precipitation $-$ melt
+    \item a.k.a.~accumulation/ablation function
+    \item $a=$ precipitation $-$ melt
     \end{itemize}
   \end{itemize}
 \item ignored in this talk:
   \begin{itemize}
   \item[$\circ$]  conservation of energy (temperature/enthalpy)
   \item[$\circ$]  floating ice
-  \item[$\circ$]  solid-earth deformation
   \end{itemize}
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{solve coupled mass and momentum equations}
+\begin{frame}{models solve coupled mass and momentum equations}
 
 \begin{itemize}
 \item two coupled conservation equations:
@@ -297,7 +326,7 @@ v_z
 \end{frame}
 }
 
-\section{fluid layers (and their climates)}
+\section{generalize to fluid layers and their climates}
 
 \begin{frame}{a fluid layer}
 
