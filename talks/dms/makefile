@@ -8,6 +8,8 @@ massfigures = ../refinemass/masstimeseries.pdf
 obsfigures = obstacle1d.pdf ncp1d.pdf vi1d.pdf
 obsfigures := $(addprefix ../obstacle/, $(obsfigures))
 
+domainfigures = ../domains/domainfig.pdf
+
 # no rules to make these; location = talks-public/commonfigs/; see \graphicspath{} in .tex
 commonfigs = groundedscheme.pdf polaris.png supp4rignot-small.png marsh-water.jpg tsunami-sendai.jpg grnwinset.pdf
 
@@ -23,14 +25,17 @@ $(massfigures): ../refinemass/fig.py
 $(obsfigures): ../obstacle/figs1d.py
 	(cd ../obstacle/ && make)
 
+$(domainfigures): ../domains/fig.py
+	(cd ../domains/ && make)
+
 ../anim/adv/u-1.png ../anim/sia/u-1.png ../anim/tdep/u-1.png: ../anim/genfigs.py
 	(cd ../anim/ && make)
 
 
-talk.aux: talk.tex $(cartoonfigures) $(massfigures) $(obsfigures) ../anim/adv/u-1.png ../anim/sia/u-1.png ../anim/tdep/u-1.png
+talk.aux: talk.tex $(cartoonfigures) $(massfigures) $(obsfigures) $(domainfigures) ../anim/adv/u-1.png ../anim/sia/u-1.png ../anim/tdep/u-1.png
 	pdflatex talk
 
-talk.pdf: talk.tex $(cartoonfigures) $(massfigures) $(obsfigures) ../anim/adv/u-1.png ../anim/sia/u-1.png ../anim/tdep/u-1.png
+talk.pdf: talk.tex $(cartoonfigures) $(massfigures) $(obsfigures) $(domainfigures) ../anim/adv/u-1.png ../anim/sia/u-1.png ../anim/tdep/u-1.png
 	pdflatex talk
 	pdflatex talk
 

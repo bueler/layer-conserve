@@ -93,7 +93,7 @@
 
 
 \begin{document}
-\graphicspath{{../obstacle/}{../cartoon/}{../refinemass/}{../../images/}{../../../talks-public/commonfigs/}{../../../sia-fve/talks/}}
+\graphicspath{{../domains/}{../obstacle/}{../cartoon/}{../refinemass/}{../../images/}{../../../talks-public/commonfigs/}{../../../sia-fve/talks/}}
 
 \begin{frame}
   \titlepage
@@ -107,7 +107,7 @@
 \alert{there is a whole class of climate modeling problems which people are doing the wrong way}
 \end{center}
   \begin{itemize}
-  \item[$\circ$] ``people'' = scientists/modelers
+  \item[$\circ$] ``people'' = scientists/modelers who study cryosphere
   \item[$\circ$] special concern: choice of mathematical formulation
   \end{itemize}
 \visible<2>{
@@ -175,7 +175,7 @@
 
 \begin{itemize}
 \small
-\item some limitations in our big ice sheet model:\footnote{$^*$Parallel Ice Sheet Model, \texttt{pism-docs.org}}
+\item some limitations in our big ice sheet model PISM:\footnote{$^*$Parallel Ice Sheet Model, \texttt{pism-docs.org}}
   \begin{itemize}
   \item[$\circ$] explicit time-stepping
   \item[$\circ$] free boundary by truncation
@@ -192,7 +192,7 @@
 \begin{frame}{glacier model paradigms}
 
 \begin{itemize}
-\item<1> glacier problem \alert<1>{(to most numerical glacier modelers)}:
+\item<1> glacier problem \alert<1>{(to most numerical modelers)}:
    \begin{quote}
    given geometry of glacier, and stress boundary conditions, determine velocity of ice
    \end{quote}
@@ -240,31 +240,52 @@
 \end{frame}
 
 
-\begin{frame}{models solve coupled mass and momentum equations}
+\begin{frame}{models solve coupled conservation equations}
 
+\begin{columns}
+\begin{column}{0.7\textwidth}
 \begin{itemize}
-\item two coupled conservation equations:
-  \begin{itemize}
-  \item[$\circ$]  \alert{mass conservation}
+\small
+\item \emph{mass conservation}
 \begin{equation*}
 h_t + \Div\bq = a
 \end{equation*}
     \begin{itemize}
+    \footnotesize
     \vspace{-5mm}
-    \item $\bq = h\, \ip{\bar u}{\bar v}$ is vertically-integrated ice flux
-    \item equivalent to ``surface kinematical equation'' (ice incompressible)
+    \item[$\circ$] in ice-covered set $I_t = \{h>0\} \subset \RR^2$
+        \begin{itemize}
+        \item changes in time
+        \item climate $a$ and bed $b$ defined on $\Omega\subset \RR^2$ s.t.~$I_t\subset\Omega$
+        \end{itemize}
+    \item[$\circ$] $\bq$ is vertically-integrated ice flux
     \end{itemize}
-  \item[$\circ$]  \alert{momentum conservation}
+\item \emph{momentum conservation}
 \begin{equation*}
-  \nabla \cdot \bU = 0 \qquad \text{and} \qquad - \nabla \cdot \tau_{ij} + \nabla p - \rho\, \mathbf{g} = 0
+  \nabla \cdot \bU = 0 \quad \text{and} \quad - \nabla \cdot \tau_{ij} + \nabla p - \rho\, \mathbf{g} = 0
 \end{equation*}
     \begin{itemize}
+    \footnotesize
     \vspace{-5mm}
-    \item incompressible power-law Stokes ($D_{ij} = A \tau^{\nu-1} \tau_{ij}$ for $\nu=3$)
-    \item geometry ($h$ \& $b$) enters into boundary conditions
+    \item[$\circ$] in $E_t \subset \RR^3$; changes in time
+        \begin{itemize}
+        \item $I_t = \Pi_z E_t$
+        \end{itemize}
+    \item[$\circ$] incompressible power-law Stokes
+        \begin{itemize}
+        \item $D_{ij} = A \tau^{2} \tau_{ij}$
+        \end{itemize}
+    \item[$\circ$] geometry ($h$ \& $b$) enters into b.c.s
     \end{itemize}
-  \end{itemize}
 \end{itemize}
+\end{column}
+\begin{column}{0.3\textwidth}
+\includegraphics[width=1.3\textwidth,keepaspectratio=true]{domainfig}
+
+\vspace{0.5in}
+\includegraphics[width=1.0\textwidth,keepaspectratio=true]{polaris}
+\end{column}
+\end{columns}
 \end{frame}
 
 
@@ -272,7 +293,7 @@ h_t + \Div\bq = a
 
   \begin{itemize}
   \scriptsize
-  \item[$\circ$] incompressible power-law Stokes
+  \item[$\circ$] incompressible Stokes
 \begin{equation*}
   \nabla \cdot \bU = 0 \qquad \text{and} \qquad - \nabla \cdot \tau_{ij} + \nabla p - \rho\, \mathbf{g} = 0
 \end{equation*}
@@ -296,24 +317,34 @@ v_z
   \end{itemize}
 
 \begin{itemize}
-\item slow fluid momentum-conservation models all
+\item slow-fluid momentum-conservation models always
 \begin{center}
 \alert{generate velocity $\bU=\left<u,v,w\right>$ from geometry $h$ \& $b$}
 \end{center}
-\item momentum equations are $\mathcal{M}(\bU,h,b)=0$
+\item abstract momentum equations: \qquad $\mathcal{M}(\bU,h,b)=0$
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{toward better glacier and ice sheet models}
+\begin{frame}{toward better models}
 
 \begin{itemize}
-\item my goal: better ice sheet models \only<2>{\hfill\alert{vs PISM}}
+\item mathematical model of glacier, in outline:
+\begin{align*}
+h_t + \Div\bq &= a \qquad \text{in } I_t = \{h>0\} \subset \RR^2 \\
+\mathcal{M}(\bU,h,b) &= 0 \qquad \text{in } E_t \subset \RR^3 \\
+\bU &= \left<u,v,w\right> \\
+\bq &= \int_b^h \left<u,v\right>\,dz
+\end{align*}
+
+\medskip
+\item \emph{my goal}: better numerical glacier models
   \begin{itemize}
-  \item[$\circ$] effective for long ($\sim 100$ka) and high res ($\sim 1$ km) \only<2>{\hfill\alert{$\sim\checkmark$}}
+  \item[$\circ$] effective for long runs ($\sim 100$ka) at high res ($\sim 1$ km) \only<2>{\hfill\alert{\large\frownie{}}}
   \item[$\circ$] without time-splitting \only<2>{\hfill\alert{\large\frownie{}}}
   \item[$\circ$] without explicit time-step restrictions \only<2>{\hfill\alert{\large\frownie{}}}
   \end{itemize}
+\visible<2>{\item \alert{vs PISM}}
 \end{itemize}
 \end{frame}
 
