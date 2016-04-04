@@ -761,49 +761,7 @@ for all $v \in \mathcal{K}$
 \end{frame}
 
 
-\begin{frame}{weak form incorporates $H_n\ge 0$ constraint}
-
-  \begin{itemize}
-  \item define:
-    $$\mathcal{K} = \left\{v \in W^{1,p}(\Omega) \,\Big|\, v\ge 0\right\} = \text{\alert{admissible thicknesses}}$$
-  \item we say $H_n \in \mathcal{K}$ solves the \alert{weak single time-step problem} if
-    $$\int_\Omega H_n (v - H_n) - \Delta t\, \bQ_n \cdot \grad(v - H_n) \ge \int_\Omega \left(H_{n-1} + \Delta t\, F_n\right) (v - H_n)$$
-  for all $v \in \mathcal{K}$
-  \small
-  \medskip
-    \begin{itemize}
-    \item[$\circ$] derive this \emph{variational inequality} (VI) from:
-      \begin{itemize}
-      \item[$\diamond$] integration-by-parts on strong form
-      \item[$\diamond$] thought about $H_n=0$ areas
-      \end{itemize}
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-
-\begin{frame}{Alternative weak formulation: NCP}
-
-\begin{itemize}
-\item NCP = nonlinear complementarity problem
-\item abstractly, NCP is:
-  \begin{itemize}
-  \item[$\circ$]  given differentiable map $\bF:\RR^n \to \RR^n$
-  \item[$\circ$]  solve
-     $$\bx \ge 0, \quad \bF(\bx) \ge 0, \quad \bx^\top \bF(\bx) = 0$$
-  \end{itemize}
-\item our case:
-  \begin{itemize}
-  \item[$\circ$]  $\infty$ dimensions with m.c.~equation $h_t + \Div\bq = f$
-  \item[$\circ$]  $\bx = H_n$ and $\bF(\bx) = (\text{residual from discrete-time m.c.~eqn.})$
-  \end{itemize}
-\item in finite dimensions we have VI $\leftrightarrow$ NCP equivalence:
-  $$\ip{\bF(\bx)}{\by-\bx} \ge 0 \quad \forall \by \in \mathcal{K} \qquad \iff \qquad \text{NCP}$$
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{Numerical solution of the weak problem}
+\begin{frame}{numerical solution of the weak problem}
 
 the weak single time-step problem:
 \begin{itemize}
