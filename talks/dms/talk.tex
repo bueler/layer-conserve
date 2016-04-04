@@ -488,32 +488,6 @@ $$h_t + \Div\bq = a \qquad \text{in } I_t$$
 \end{frame}
 
 
-\begin{frame}{pause: tsunamis}
-
-\begin{center}
-\includegraphics[width=0.9\textwidth,keepaspectratio=true]{tsunami-sendai}
-\end{center}
-
-\begin{itemize}
-\item flux $\bq$ dominates \dots climate $a$ irrelevant
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{pause: Aral Sea on  Kazakhstan/Uzbekistan border}
-
-\begin{center}
-\includegraphics[width=0.65\textwidth,keepaspectratio=true]{aral-sea-1964-2014}
-\end{center}
-
-\begin{itemize}
-\item top row: 1964, 1989, 1995?
-\item bottom row: 1999, 2002?, 2014
-\item climate $a$ dominates \dots flux $\bq$ irrelevant
-\end{itemize}
-\end{frame}
-
-
 \begin{frame}{has anyone solved these problems before?}
 
 \vspace{-2mm}
@@ -560,37 +534,74 @@ $$h_t + \Div\bq = a \qquad \text{in } I_t$$
 \end{frame}
 
 
+\begin{frame}{interlude: tsunamis}
+
+\begin{center}
+\includegraphics[width=0.9\textwidth,keepaspectratio=true]{tsunami-sendai}
+\end{center}
+
+\begin{itemize}
+\item flux $\bq$ dominates \dots climate $a$ irrelevant
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{interlude: Aral Sea on  Kazakhstan/Uzbekistan border}
+
+\begin{center}
+\includegraphics[width=0.65\textwidth,keepaspectratio=true]{aral-sea-1964-2014}
+\end{center}
+
+\begin{itemize}
+\item top row: 1964, 1989, 1995?
+\item bottom row: 1999, 2002?, 2014
+\item climate $a$ dominates \dots flux $\bq$ irrelevant
+\end{itemize}
+\end{frame}
+
 
 \section{weak formulations}
 
 \begin{frame}{nonlinear complementarity problems (NCP)}
 
 \begin{itemize}
-\item in finite dimensions, an NCP is to find $\bz\in\RR^n$ for which
-\begin{equation}
-\bz \ge 0, \quad \bF(\bz) \ge 0, \quad \bz^\top \bF(\bz) = 0, \label{ncp}
-\end{equation}
-given a differentiable map $\bF:\RR^n \to \RR^n$
+\item in finite dimensions $\RR^n$
+\item given differentiable $\bF:\RR^n \to \RR^n$, the NCP seeks $\bz\in\RR^n$ s.t.
+\begin{equation*}
+\bz \ge 0, \quad \bF(\bz) \ge 0, \quad \bz^\top \bF(\bz) = 0
+\end{equation*}
 \end{itemize}
+\end{frame}
+
+
+\begin{frame}{example NCP}
 
 \begin{columns}
-\begin{column}{0.45\textwidth}
+\begin{column}{0.5\textwidth}
 \begin{itemize}
-\footnotesize
-\item example: given $\psi(x)$, the 1d \alert{obstacle problem} is to find $u(x)$ so that $u(x) \ge \psi(x)$ and $-u''(x) = 0$ where $u>\psi$
-\item \dots think about the gap \dots
-\item discretized and in form \eqref{ncp}:
+\small
+\item \alert{1d obstacle problem}: given $\psi(x)$, find $u(x)$ so that 
+   $$u(x) \ge \psi(x)$$
+and
+   $$-u''(x) = 0 \quad \text{where } u>\psi$$
+\item discretize \dots
+\item note $-u''\ge 0$ \dots and think about the gap \dots
+\item in NCP form:
 \begin{align*}
-{\color{red} z_j} &= u_j - \psi(x_j) \\
-{\color{ForestGreen} F_j}(\bz) &= - \frac{z_{j+1} - 2 z_j + z_{j-1}}{\Delta x^2} - \psi_j''
+{\color{red} z_j} &= u_j - \psi_j \ge 0\\
+{\color{ForestGreen} F_j}(\bz) &= - \frac{z_{j+1} - 2 z_j + z_{j-1}}{\Delta x^2} - \psi_j'' \ge 0 \\
+\sum_j &{\color{red} z_j} {\color{ForestGreen} F_j}(\bz) = 0
 \end{align*}
 \end{itemize}
 \end{column}
-\begin{column}{0.55\textwidth}
-\includegraphics[width=\textwidth,keepaspectratio=true]{obstacle1d}
+\begin{column}{0.5\textwidth}
+\includegraphics[width=1.05\textwidth,keepaspectratio=true]{obstacle1d}
 
 \medskip
-\includegraphics[width=\textwidth,keepaspectratio=true]{ncp1d}
+\includegraphics[width=1.05\textwidth,keepaspectratio=true]{vi1d}
+
+\medskip
+\includegraphics[width=1.05\textwidth,keepaspectratio=true]{ncp1d}
 \end{column}
 \end{columns}
 \end{frame}
@@ -599,20 +610,20 @@ given a differentiable map $\bF:\RR^n \to \RR^n$
 \begin{frame}{variational inequalities (VI)}
 
 \begin{itemize}
-\item in finite dimensions, a VI is to find $\bu\in\mathcal{K}$, where $\mathcal{K}\subseteq \RR^n$ is convex and closed, for which
-\begin{equation}
-     \ip{\bF(\bu)}{\bv-\bu} \ge 0 \quad \forall \bv \in \mathcal{K},
-\end{equation}
-given a differentiable map $\bF:\RR^n \to \RR^n$
+\item suppose $\mathcal{K}\subseteq \RR^n$ is convex and closed
+\item given differentiable $\bF:\RR^n \to \RR^n$, the VI seeks $\bu\in\mathcal{K}$ s.t.
+\begin{equation*}
+     \ip{\bF(\bu)}{\bv-\bu} \ge 0 \qquad \forall \bv \in \mathcal{K}
+\end{equation*}
+\item also makes sense in $\infty$ dimensions
 \end{itemize}
 
 \begin{columns}
 \begin{column}{0.4\textwidth}
 \small
 \begin{itemize}
-\item obstacle problem:
-
-$\mathcal{K} = \{{\color{red} u_j} \ge {\color{blue} \psi(x_j)}\}$ and
+\item \alert{1d obstacle problem}:
+  $$\mathcal{K} = \{{\color{red} u_j} \ge {\color{blue} \psi_j}\}$$
   $$F_j(\bu) = - \frac{u_{j+1} - 2 u_j + u_{j-1}}{\Delta x^2}$$
 \end{itemize}
 \end{column}
@@ -626,47 +637,48 @@ $\mathcal{K} = \{{\color{red} u_j} \ge {\color{blue} \psi(x_j)}\}$ and
 \begin{frame}{NCP/VI generalities}
 
 \begin{itemize}
-\item in finite dimensions when $\mathcal{K}$ is a cone (as in this talk):
+\item suppose $\mathcal{K}\subseteq \RR^n$ is a cone (always in this talk)
+\item then
 \begin{center}
 \alert{NCP $\iff$ VI}
 \end{center}
-\item both 
+\item both formulations
   \begin{itemize}
-  \item[$\circ$]  generalize nonlinear eqns ``$\bF(\bz)=0$'' to allow constraints on $\bz$
+  \item[$\circ$]  generalize nonlinear eqns $\bF(\bx)=0$ to allow constraints
   \item[$\circ$]  are nonlinear, even if $\bF$ is linear or affine
   \item[$\circ$]  in practice: need iterative approach to solve
   \end{itemize}
-\item constrained optimization $\implies$ VI $\iff$ NCP
+\item (convex optimization) $\implies$ VI $\iff$ NCP
   \begin{itemize}
   \item[$\circ$]  i.e.~find minimum of $\Phi[\bz]$ from $\mathcal{K}$
-  \item[$\circ$]  symmetric Jacobian/Hessian in optimizations ($J = \bF' = \Phi''$)
+  \item[$\circ$]  symmetric Jacobian/Hessian ($\bF' = \Phi''$)
+  \item[$\circ$]  \emph{but}: NCP/VI arising in fluid layer problems are never optimizations (to my knowledge)
   \end{itemize}
-\item \emph{but}: NCP and VI arising in glacier problems are \alert{not} optimizations
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}{algorithms}
 
-two Newton line search NCP methods in PETSc SNES:\footnote{Benson \& Munson (2006), and Barry Smith}
+two Newton line search NCP methods:
 \begin{itemize}
 \item  ``reduced-space'' = \alert{RS}
     \begin{itemize}
-    \item[$\circ$] active set $\mathcal{A} = \{i \,:\, z_i = 0 \text{ and } F_i(\bz) > 0\}$
     \item[$\circ$] inactive set $\mathcal{I} = \{i \,:\, z_i > 0 \text{ or } F_i(\bz) \le 0\}$
     \item[$\circ$] \emph{algorithm}: compute Newton step $\bs^k$ by
      $$\big[J(\bz^k)\big]_{\mathcal{I}^k,\mathcal{I}^k} \bs_{\mathcal{I}^k} = - \bF_{\mathcal{I}^k}(\bz^k)$$
-     then do projected line search onto $\{\bz\ge 0\}$
+     then do projected ($\{\bz\ge 0\}$) line search
     \end{itemize}
 \item  ``semi-smooth'' = \alert{SS}
     \begin{itemize}
-    \item[$\circ$] ``NCP function'':
+    \item[$\circ$] choose ``NCP function'':
 \vspace{-2mm}
     $$\phi(a,b)=0 \quad \iff \quad a\ge 0, b\ge 0, ab=0$$
     \item[$\circ$] \emph{algorithm}: compute Newton step $\bs^k$ by
     $$L^k \bs^k = - \phi(\bz^k,\bF^k(\bz^k))$$
     where $L^k$ is element of $\partial_B \phi(\bz^k,\bF^k(\bz^k))$; then do line search
     \end{itemize}
+\item both implemented in PETSc
 \end{itemize}
 \end{frame}
 
