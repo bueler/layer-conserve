@@ -311,7 +311,7 @@ v_z
 \begin{frame}{toward better models}
 
 \begin{itemize}
-\item mathematical model of glacier, in outline:
+\item abstracted, mathematical model of glaciers:
 \begin{align*}
 h_t + \Div\bq &= a \qquad \text{in } I_t = \{h>0\} \subset \RR^2 \\
 \mathcal{M}(\bU,h,b) &= 0 \qquad \text{in } E_t \subset \RR^3 \\
@@ -372,15 +372,15 @@ h_t + \Div\bq &= a \qquad \text{in } I_t = \{h>0\} \subset \RR^2 \\
   \alert{a fluid layer on a substrate, evolving in a climate}
   \end{center}
 \item mass conservation PDE:
-\begin{equation}
-h_t + \Div\bq = {\color{blue} a}  \tag{$\ast$} \label{mc}
-\end{equation}
+\begin{equation*}
+h_t + \Div\bq = {\color{blue} a}
+\end{equation*}
     \begin{itemize}
     \vspace{-4mm}
     \item[$\circ$] $h$ is a thickness so $h\ge 0$
-    \item[$\circ$] \eqref{mc} applies only where $h>0$
     \item[$\circ$] signed source ${\color{blue} a}$ is the ``climate''; ${\color{blue} a}>0$ shown downward
     \item[$\circ$] hidden, but important, part of the model: $\bq=\bq[h,b]$
+    \item[$\circ$] \alert{PDE applies only where $h>0$}
     \end{itemize}
 \end{itemize}
 \end{frame}
@@ -397,7 +397,7 @@ h_t + \Div\bq = {\color{blue} a}  \tag{$\ast$} \label{mc}
 \end{center}
 
 \vspace{-16mm}
-$$h_t + \Div\bq = a \qquad \text{in } I_t$$
+$$h_t + \Div\bq = a$$
 
   \begin{itemize}
   \item<1-> $h=0$ \emph{and what else} at \alert<1>{free boundary}?
@@ -471,6 +471,32 @@ $$h_t + \Div\bq = a \qquad \text{in } I_t$$
 \end{frame}
 
 
+\begin{frame}{case: tsunamis}
+
+\begin{center}
+\includegraphics[width=0.9\textwidth,keepaspectratio=true]{tsunami-sendai}
+\end{center}
+
+\begin{itemize}
+\item flux $\bq$ dominates \dots climate $a$ irrelevant
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{case: Aral Sea on  Kazakhstan/Uzbekistan border}
+
+\begin{center}
+\includegraphics[width=0.65\textwidth,keepaspectratio=true]{aral-sea-1964-2014}
+\end{center}
+
+\begin{itemize}
+\item top row: 1964, 1989, 1995?
+\item bottom row: 1999, 2002?, 2014
+\item climate $a$, and bdry fluxes, dominate \dots flux $\bq$ irrelevant
+\end{itemize}
+\end{frame}
+
+
 \begin{frame}{fluid layers in climates: my actual examples}
 
 \includegraphics[width=0.4\textwidth,keepaspectratio=true]{polaris}
@@ -488,7 +514,7 @@ $$h_t + \Div\bq = a \qquad \text{in } I_t$$
 \end{frame}
 
 
-\begin{frame}{anyone numerically modeled this stuff before?}
+\begin{frame}{anyone numerically modeled this situation before?}
 
 \vspace{-2mm}
 
@@ -534,32 +560,6 @@ $$h_t + \Div\bq = a \qquad \text{in } I_t$$
 \hfill \tiny (Jouvet et al 2008)
 \end{column}
 \end{columns}
-\end{frame}
-
-
-\begin{frame}{interlude: tsunamis}
-
-\begin{center}
-\includegraphics[width=0.9\textwidth,keepaspectratio=true]{tsunami-sendai}
-\end{center}
-
-\begin{itemize}
-\item flux $\bq$ dominates \dots climate $a$ irrelevant
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{interlude: Aral Sea on  Kazakhstan/Uzbekistan border}
-
-\begin{center}
-\includegraphics[width=0.65\textwidth,keepaspectratio=true]{aral-sea-1964-2014}
-\end{center}
-
-\begin{itemize}
-\item top row: 1964, 1989, 1995?
-\item bottom row: 1999, 2002?, 2014
-\item climate $a$, and bdry fluxes, dominate \dots flux $\bq$ irrelevant
-\end{itemize}
 \end{frame}
 
 
@@ -612,6 +612,7 @@ and
 \begin{frame}{variational inequalities (VI)}
 
 \begin{itemize}
+\item more general than NCP
 \item suppose $\mathcal{K}\subseteq \RR^n$ is convex and closed
 \item given differentiable $\bF:\RR^n \to \RR^n$, the VI seeks $\bu\in\mathcal{K}$ s.t.
 \begin{equation*}
@@ -660,38 +661,14 @@ and
 \end{frame}
 
 
-\begin{frame}{constrained-Newton algorithms}
-
-two Newton line search NCP methods:
-\begin{itemize}
-\item  ``reduced-space'' = \alert{RS}
-    \begin{itemize}
-    \item[$\circ$] inactive set $\mathcal{I} = \{i \,:\, z_i > 0 \text{ or } F_i(\bz) \le 0\}$
-    \item[$\circ$] \emph{algorithm}: compute Newton step $\bs^k$ by
-     $$\big[J(\bz^k)\big]_{\mathcal{I}^k,\mathcal{I}^k} \bs_{\mathcal{I}^k} = - \bF_{\mathcal{I}^k}(\bz^k)$$
-     then do projected ($\{\bz\ge 0\}$) line search
-    \end{itemize}
-\item  ``semi-smooth'' = \alert{SS}
-    \begin{itemize}
-    \item[$\circ$] choose ``NCP function'':
-\vspace{-2mm}
-    $$\phi(a,b)=0 \quad \iff \quad a\ge 0, b\ge 0, ab=0$$
-    \item[$\circ$] \emph{algorithm}: compute Newton step $\bs^k$ by
-    $$L^k \bs^k = - \phi(\bz^k,\bF^k(\bz^k))$$
-    where $L^k$ is element of $\partial_B \phi(\bz^k,\bF^k(\bz^k))$; then do line search
-    \end{itemize}
-\end{itemize}
-\end{frame}
-
-
 \newcommand{\singletsmc}{\frac{h^\ell - h^{\ell-1}}{\Delta t} + \Div \bq^\ell = a^\ell}
 
 
 \begin{frame}{semi-discretize in time}
 
 \begin{itemize}
-\item back to our fluid layer equation \dots
-\item semi-discretize coupled model:
+\item back to our fluid layer coupled model \dots
+\item semi-discretize:
 $$\begin{matrix}
  h_t + \Div\bq = a \\
  \phantom{foo} \\
@@ -719,7 +696,7 @@ $$\begin{matrix}
 \begin{itemize}
 \item single time-step mass conservation equation
 \begin{equation}
-\singletsmc \tag{MC} \label{mcstrong}
+\singletsmc \tag{MC} \label{mc}
 \end{equation}
     \begin{itemize}
     \item[$\circ$] \emph{strong form} of (MC)
@@ -741,17 +718,17 @@ $$\begin{matrix}
 \begin{frame}{mass conservation: VI form}
 
 \begin{itemize}
-\item first weak formulations of \eqref{mcstrong} for glaciers were VIs
+\item first weak formulations of \eqref{mc} for glaciers were VIs
     \begin{itemize}
     \item[$\circ$] Calvo et al (2002): 1d glacier on flat bed
     \item[$\circ$] Jouvet \& Bueler (2012): 2d glacier on general bed
     \end{itemize}
 \item define $\mathcal{K} = \left\{v \in W^{1,p}(\Omega) \,\Big|\, v\ge 0\right\}$
-\item VI form of \eqref{mcstrong}: \quad find $h^\ell\in\mathcal{K}$ s.t.
+\item VI form of \eqref{mc}: \quad find $h^\ell\in\mathcal{K}$ s.t.
     $$\int_\Omega h^\ell (v - h^\ell) - \Delta t\, \bq^\ell \cdot \grad(v - h^\ell) \ge \int_\Omega \left(h^{\ell-1} + \Delta t\, a^\ell\right) (v - h^\ell)$$
 for all $v \in \mathcal{K}$
     \begin{itemize}
-    \item[$\circ$] derive from strong form \eqref{mcstrong} by integration-by-parts plus thoughts about $h^\ell=0$ areas
+    \item[$\circ$] derive from strong form \eqref{mc} by integration-by-parts plus thoughts about $h^\ell=0$ areas
     \end{itemize}
 \end{itemize}
 \end{frame}
@@ -762,12 +739,12 @@ for all $v \in \mathcal{K}$
 \begin{itemize}
 \item define
     $$F(h) = h - h^{\ell-1} + \Delta t\, \Div \bq - \Delta t\, a$$
-\item NCP form of \eqref{mcstrong}: \quad find $h^\ell$ s.t.
+\item NCP form of \eqref{mc}: \quad find $h^\ell$ s.t.
    $$h^\ell \ge 0, \quad F(h^\ell) \ge 0, \quad h^\ell F(h^\ell) = 0$$
 \item setwise statements from the NCP:
     \begin{itemize}
     \item[$\circ$] where $h^\ell > 0$,
-        $$F(h^\ell) = 0 \qquad \iff \qquad \text{strong form \eqref{mcstrong}}$$
+        $$F(h^\ell) = 0 \qquad \iff \qquad \text{strong form \eqref{mc}}$$
         \vspace{-4mm}
         \begin{itemize}
         \item interior condition
@@ -776,7 +753,8 @@ for all $v \in \mathcal{K}$
         $$h^{\ell-1} + \Delta t\, a^\ell \le 0$$
         \vspace{-4mm}
         \begin{itemize}
-        \item says ``surface mass balance is negative enough during time step to remove old thickness''
+        \item says ``climate is sufficiently negative to remove old thickness''
+        \item i.e.~during time step
         \end{itemize}
     \end{itemize}
 \end{itemize}
@@ -785,22 +763,45 @@ for all $v \in \mathcal{K}$
 
 \begin{frame}{numerical solution of the weak problem}
 
-for weak formulation (NCP or VI) of \eqref{mcstrong}:
+for weak formulation (NCP or VI) of \eqref{mc}:
 \begin{itemize}
-\item nonlinear problem because of constraint
+\item a nonlinear problem because of constraint
   \begin{itemize}
   \item[$\circ$]  even for $\bq$ linear in $h$
   \end{itemize}
 \item can be solved by a Newton method modified for constraint
 \item scalable \& parallel implementations in C are in PETSc$^*$
   \begin{itemize}
-  \item[$\circ$]  RS and SS methods for NCP (earlier slide)
+  \item[$\circ$]  RS and SS methods for NCP (next slide)
   \end{itemize}
-\item we need a momentum conservation model, a specific $\bq$, and a spatial discretization approach to proceed
 \end{itemize}
 
 \vspace{15mm}
 {\scriptsize $^*$Portable Extensible Toolkit for Scientific computation, \texttt{www.mcs.anl.gov/petsc}}
+\end{frame}
+
+
+\begin{frame}{constrained-Newton algorithms}
+
+two Newton line search NCP methods:
+\begin{itemize}
+\item  ``reduced-space'' = \alert{RS}
+    \begin{itemize}
+    \item[$\circ$] inactive set $\mathcal{I} = \{i \,:\, z_i > 0 \text{ or } F_i(\bz) \le 0\}$
+    \item[$\circ$] \emph{algorithm}: compute Newton step $\bs^k$ by
+     $$\big[J(\bz^k)\big]_{\mathcal{I}^k,\mathcal{I}^k} \bs_{\mathcal{I}^k} = - \bF_{\mathcal{I}^k}(\bz^k)$$
+     then do projected ($\{\bz\ge 0\}$) line search
+    \end{itemize}
+\item  ``semi-smooth'' = \alert{SS}
+    \begin{itemize}
+    \item[$\circ$] choose ``NCP function'':
+\vspace{-2mm}
+    $$\phi(a,b)=0 \quad \iff \quad a\ge 0, b\ge 0, ab=0$$
+    \item[$\circ$] \emph{algorithm}: compute Newton step $\bs^k$ by
+    $$L^k \bs^k = - \phi(\bz^k,\bF^k(\bz^k))$$
+    where $L^k$ is element of $\partial_B \phi(\bz^k,\bF^k(\bz^k))$; then do line search
+    \end{itemize}
+\end{itemize}
 \end{frame}
 
 
@@ -812,7 +813,7 @@ for weak formulation (NCP or VI) of \eqref{mcstrong}:
 
 \begin{itemize}
 \scriptsize
-\item equation \eqref{mcstrong}
+\item equation \eqref{mc}
 \item BEuler time-step
 \item climate $a$
 \item bed shape $b$
@@ -867,9 +868,9 @@ diffusion
 \begin{frame}{finite volume element (FVE) discretization}
 
 \begin{itemize}
-\item this section of talk: steady case ($\Delta t = \infty$)
+\item this slide: steady case ($\Delta t = \infty$)
     \begin{itemize}
-    \item[$\circ$] extreme case of long time steps
+    \item[$\circ$] hard case for numerics
     \end{itemize}
 \item thickness $h(x,y)$ lives in $Q^1$ FEM space $\subset W^{1,\nu+1}(\Omega)$
     \begin{itemize}
@@ -1092,106 +1093,6 @@ diffusion
 \end{frame}
 
 
-\section{conservation: failures and fixes}
-
-
-\begin{frame}{my use of the word ``climate''}
-
-\begin{itemize}
-\item I have hijacked the word ``climate'' so as to define it to mean whatever I want
-     \begin{itemize}
-     \item[$\circ$] \emph{typical mathematician behavior} \dots
-     \visible<2>{\item[$\circ$] want a selfie?}
-     \end{itemize}
-
-\bigskip
-\item<2> my \emph{Definition}: for a fluid layer model, with governing weak formulation as above (and NCP/VI), the \emph{\alert{climate}} is the function $a(t,x,y,z)$ defined on the whole domain $\Omega$
-
-\bigskip
-\item<2> the climate is \emph{only} a source term in the PDE ``$h_t + \Div \bq = a$'' in those locations where $h>0$
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{conservation reporting: subsets}
-\begin{itemize}
-\item back to finite time-steps $\Delta t>0$
-\item suppose $h^\ell$ solves the weak form \eqref{mcstrong}
-\item define
-	\begin{align*}
-	\Omega^\ell &= \left\{h^\ell(x,y) > 0\right\} \\
-	\Omega^\ell_r &= \left\{h^\ell(x,y) = 0 \text{ and } h^{\ell-1}(x,y) > 0\right\} \quad \text{\alert{$\leftarrow$ retreat set}}
-	\end{align*}
-\end{itemize}
-
-\vspace{-3mm}
-\begin{center}
-\includegraphics[width=0.8\textwidth,keepaspectratio=true]{cartoon-sets}
-\end{center}
-\end{frame}
-
-
-\begin{frame}{conservation reporting: time-series}
-
-\begin{itemize}
-\item define:
-   $$M^\ell = \int_\Omega h^\ell(x,y)\,dx\,dy, \qquad \text{\emph{the \alert{mass} (volume) at time} $t^\ell$}$$
-\item then
-
-\vspace{-8mm}
-	\begin{align*}
-	M^\ell - M^{\ell-1} &= \int_{\Omega^\ell} \mathLabelBox[
-    labelstyle={xshift=1cm,yshift=2mm},
-    linestyle={out=270,in=90, -latex}
-    ]{h^\ell-h^{\ell-1}}{$\boxed{\Delta t\, (-\Div\bq^\ell + a^\ell)}$} \,dx\,dy + \int_{\Omega^\ell_r} 0 - h^{\ell-1} \,dx\,dy \\
-	   &= \Delta t\, \left(0 + \int_{\Omega^\ell} a^\ell \,dx\,dy\right) - \int_{\Omega^\ell_r} h^{\ell-1} \,dx\,dy
-	\end{align*}
-
-	\begin{itemize}
-\vspace{-1mm}
-	\item[$\circ$] this assumes $\bq\to 0$ as $(x,y) \to \partial \Omega^\ell$
-	\end{itemize}
-\item new term:
-     $$R^\ell = \int_{\Omega^\ell_r} h^{\ell-1} \,dx\,dy \qquad \text{the \emph{\alert{retreat loss} during step} $\ell$}$$
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{conservation reporting: the limitation}
-
-\begin{itemize}
-\item \alert{the retreat loss $R^\ell$ is not balanced by the climate}
-  \begin{itemize}
-  \item[$\circ$] retreat $R^\ell$ is \emph{caused} by the climate, but we don't know computable integral of $a^\ell$ to balance it
-  \end{itemize}
-\item we must track \alert{three} time series:
-  \begin{itemize}
-  \item[$\circ$] mass at time $t^\ell$: \qquad $M^\ell = \int_\Omega h^\ell(x,y)\,dx\,dy$
-
-  \smallskip
-  \item[$\circ$] climate over current fluid-covered region:
-     $$C^\ell = \Delta t\, \int_{\Omega^\ell} a^\ell \,dx\,dy \qquad \approx \int_{t^{\ell-1}}^{t^\ell} \int_{I_t} a(t,x,y) \,dx\,dy\,dt$$
-  \item[$\circ$] retreat loss during time step: \qquad $R^\ell = \int_{\Omega^\ell_r} h^{\ell-1} \,dx\,dy$
-  \end{itemize}
-\item now it balances:
-     $$M^\ell = M^{\ell-1} + C^\ell - R^\ell$$
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{conservation reporting: illustration}
-
-\begin{center}
-\vspace{-3.3mm}
-
-\animategraphics[autoplay,loop,height=2.9cm]{15}{../anim/tdep/u-}{1}{250}
-
-\vspace{-1.1mm}
-\includegraphics[width=0.64\textwidth,keepaspectratio=true]{masstimeseries} \, \phantom{!}
-\end{center}
-\end{frame}
-
-
 \section{results}
 
 \begin{frame}{example: Greenland ice sheet}
@@ -1204,7 +1105,7 @@ diffusion
 \medskip
 \item \emph{method} for steady SIA:
   \begin{itemize}
-  \item[$\circ$] NCP form of \eqref{mcstrong}
+  \item[$\circ$] NCP form of \eqref{mc}
   \item[$\circ$] RS constrained-Newton
   \item[$\circ$] 900 m structured grid
   \item[$\circ$] $Q^1$ FEs in space
@@ -1253,7 +1154,6 @@ diffusion
 \end{frame}
 
 
-
 \begin{frame}{convergence consequences}
 
 \begin{itemize}
@@ -1261,7 +1161,7 @@ diffusion
   \begin{itemize}
   \item[$\circ$] old bed: Bamber (2001) on 5 km grid
   \item[$\circ$] new bed: Morlighem (2014) on 150 m grid
-  \item[$\circ$] results shown for RS on NCP \eqref{mcstrong}; SS is similar
+  \item[$\circ$] results shown for RS on NCP \eqref{mc}; SS is similar
   \end{itemize}
 \end{itemize}
 
@@ -1280,6 +1180,108 @@ poorer Newton convergence
 \end{frame}
 
 
+\section{conservation: failures and fixes}
+
+\begin{frame}{my use of the word ``climate''}
+
+\begin{itemize}
+\item I have hijacked the word ``climate'' so as to define it to mean whatever I want
+     \begin{itemize}
+     \item[$\circ$] \emph{typical mathematician behavior} \dots
+     \visible<2>{\item[$\circ$] want a selfie?}
+     \end{itemize}
+
+\bigskip
+\item<2> my \emph{Definition}: for a fluid layer model, with governing weak formulation as above (and NCP/VI), the \emph{\alert{climate}} is the function $a(t,x,y,z)$ defined on the whole domain $\Omega$
+
+\bigskip
+\item<2> the climate is \emph{only} a source term in the PDE ``$h_t + \Div \bq = a$'' in those locations where $h>0$ (i.e.~$I_t$)
+\item<2> we should be able to report how much mass was transferred to/from the fluid layer by the climate
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{conservation reporting: subsets}
+\begin{itemize}
+\item back to time-stepping cases $\Delta t>0$
+\item suppose $h^\ell$ solves the weak form \eqref{mc}
+\item define
+	\begin{align*}
+	\Omega^\ell &= \left\{h^\ell(x,y) > 0\right\} \\
+	\Omega^\ell_r &= \left\{h^\ell(x,y) = 0 \text{ and } h^{\ell-1}(x,y) > 0\right\} \quad \text{\alert{$\leftarrow$ retreat set}}
+	\end{align*}
+\end{itemize}
+
+\vspace{-3mm}
+\begin{center}
+\includegraphics[width=0.8\textwidth,keepaspectratio=true]{cartoon-sets}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{conservation reporting: time-series}
+
+\begin{itemize}
+\item define:
+   $$M^\ell = \int_\Omega h^\ell(x,y)\,dx\,dy, \qquad \text{\emph{the \alert{mass} (volume) at time} $t^\ell$}$$
+\item then
+
+\vspace{-8mm}
+	\begin{align*}
+	M^\ell - M^{\ell-1} &= \int_{\Omega^\ell} \mathLabelBox[
+    labelstyle={xshift=1cm,yshift=2mm},
+    linestyle={out=270,in=90, -latex}
+    ]{h^\ell-h^{\ell-1}}{$\boxed{\Delta t\, (-\Div\bq^\ell + a^\ell)}$} \,dx\,dy + \int_{\Omega^\ell_r} 0 - h^{\ell-1} \,dx\,dy \\
+	   &= \Delta t\, \left(0 + \int_{\Omega^\ell} a^\ell \,dx\,dy\right) - \int_{\Omega^\ell_r} h^{\ell-1} \,dx\,dy
+	\end{align*}
+
+	\begin{itemize}
+\vspace{-1mm}
+	\item[$\circ$] this assumes $\bq\to 0$ as $(x,y) \to \partial \Omega^\ell$
+	\end{itemize}
+\item new term:
+     $$R^\ell = \int_{\Omega^\ell_r} h^{\ell-1} \,dx\,dy \qquad \text{the \emph{\alert{retreat loss} during step} $\ell$}$$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{conservation reporting: the limitation}
+
+\begin{itemize}
+\item \alert{the retreat loss $R^\ell$ is not balanced by the climate}
+  \begin{itemize}
+  \item[$\circ$] retreat $R^\ell$ is \emph{caused} by the climate, but we don't know a computable integral of $a^\ell$ to balance it
+  \end{itemize}
+\item we must track \alert{three} time series:
+  \begin{itemize}
+  \item[$\circ$] mass at time $t^\ell$: \qquad $M^\ell = \int_\Omega h^\ell(x,y)\,dx\,dy$
+
+  \smallskip
+  \item[$\circ$] climate over current fluid-covered region:
+     $$C^\ell = \Delta t\, \int_{\Omega^\ell} a^\ell \,dx\,dy \qquad \approx \int_{t^{\ell-1}}^{t^\ell} \int_{I_t} a(t,x,y) \,dx\,dy\,dt$$
+  \item[$\circ$] retreat loss during time step: \qquad $R^\ell = \int_{\Omega^\ell_r} h^{\ell-1} \,dx\,dy$
+  \end{itemize}
+\item and they balance:
+     $$M^\ell = M^{\ell-1} + C^\ell - R^\ell$$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{conservation reporting: $R^\ell\to 0$ as $\Delta t \to 0$}
+
+\begin{center}
+\vspace{-3.3mm}
+
+\animategraphics[autoplay,loop,height=2.9cm]{15}{../anim/tdep/u-}{1}{250}
+
+\vspace{-1.1mm}
+\includegraphics[width=0.64\textwidth,keepaspectratio=true]{masstimeseries} \, \phantom{!}
+\end{center}
+\end{frame}
+
+
+\section{conclusion}
+
 \begin{frame}{summary}
 
   \begin{itemize}
@@ -1292,7 +1294,7 @@ poorer Newton convergence
   \item \emph{goals}:
     \begin{itemize}
     \item[$\circ$]  long (implicit) time steps
-    \item[$\circ$]  meaningful conservation reporting
+    \item[$\circ$]  rigorous conservation reporting
     \end{itemize}
   \item \emph{approach}:
     \begin{itemize}
