@@ -138,19 +138,11 @@
 \begin{column}{0.45\textwidth}
 \begin{itemize}
 \small
-\item about 66 m (= 215 ft) of sea level rise equivalent
-  \begin{itemize}
-  \scriptsize
-  \item[$\circ$] Antarctic ice sheet $=$ 60
-  \item[$\circ$] Greenland ice sheet $=$ 6
-  \item[$\circ$] Alaska's glaciers $<$ 0.5
-  \end{itemize}
-\small
 \item they move (flow and slide) under their own weight
   \begin{itemize}
   \scriptsize
   \item[$\circ$] speed $1$ cm/yr -- $10$ km/yr
-  \item[$\circ$] shape controlled in part by flow
+  \item[$\circ$] geometry determined in part by flow
   \end{itemize}
 \small
 \item they accumulate snow, or melt, as sensitive function of global climate
@@ -160,6 +152,14 @@
   \end{itemize}
 \small
 \item ice sheet = big glacier
+\small
+\item about 66 m (= 215 ft) of sea level rise equivalent
+  \begin{itemize}
+  \scriptsize
+  \item[$\circ$] Antarctic ice sheet $=$ 60 m
+  \item[$\circ$] Greenland ice sheet $=$ 6m
+  \item[$\circ$] Alaska's glaciers $<$ 0.5 m
+  \end{itemize}
 \end{itemize}
 \end{column}
 \begin{column}{0.55\textwidth}
@@ -171,38 +171,20 @@
 \end{frame}
 
 
-\begin{frame}{practical mathematical/numerical modeling}
-
-\begin{itemize}
-\small
-\item some limitations in our big ice sheet model PISM:\footnote{$^*$Parallel Ice Sheet Model, \texttt{pism-docs.org}}
-  \begin{itemize}
-  \item[$\circ$] explicit time-stepping
-  \item[$\circ$] free boundary by truncation
-  \end{itemize}
-\item issue?: flowing ice (e.g.~Greenland) is nearly-fractal
-\end{itemize}
-
-\begin{center}
-\includegraphics[height=5.2cm,keepaspectratio=true]{Greenland_thinning} \quad \includegraphics[height=5.2cm,keepaspectratio=true]{ice-mask-900m}
-\end{center}
-\end{frame}
-
-
 \begin{frame}{glacier model paradigms}
 
 \begin{itemize}
-\item<1> glacier problem \alert<1>{(to most numerical modelers)}:
+\item<1-2> glacier problem \alert<1-2>{(to most numerical modelers)}:
    \begin{quote}
    given geometry of glacier, and stress boundary conditions, determine velocity of ice
    \end{quote}
 \vspace{-4mm}
   \begin{itemize}
-  \item[$\circ$] a slow flow ($\operatorname{Re} \ll 1$) allows you to think this way
+  \item<2>[$\circ$] a slow flow ($\operatorname{Re} \ll 1$) allows you to think this way
   \end{itemize}
 
 \bigskip
-\item<2> glacier problem \alert<2>{(to most actual glaciologists)}:
+\item<3> glacier problem \alert<3>{(to most actual glaciologists)}:
    \begin{quote}
    given climate and topography, determine glaciated area and thicknesses of glaciers
    \end{quote}
@@ -341,11 +323,29 @@ h_t + \Div\bq &= a \qquad \text{in } I_t = \{h>0\} \subset \RR^2 \\
 \item \emph{my goal}: better numerical glacier models
   \begin{itemize}
   \item[$\circ$] effective for long runs ($\sim 100$ka) at high res ($\sim 1$ km) \only<2>{\hfill\alert{\large\frownie{}}}
-  \item[$\circ$] without time-splitting \only<2>{\hfill\alert{\large\frownie{}}}
+  \item[$\circ$] without first-order time-splitting errors \only<2>{\hfill\alert{\large\frownie{}}}
   \item[$\circ$] without explicit time-step restrictions \only<2>{\hfill\alert{\large\frownie{}}}
   \end{itemize}
-\visible<2>{\item \alert{vs PISM}}
+\visible<2>{\item \alert{vs PISM = Parallel Ice Sheet Model, \texttt{pism-docs.org}}}
 \end{itemize}
+\end{frame}
+
+
+\begin{frame}{practical numerical modeling}
+
+\begin{itemize}
+\small
+\item some limitations in our big ice sheet model PISM:
+  \begin{itemize}
+  \item[$\circ$] explicit time-stepping
+  \item[$\circ$] free boundary by truncation
+  \end{itemize}
+\item challenge: flowing ice (e.g.~Greenland) is nearly-fractal
+\end{itemize}
+
+\begin{center}
+\includegraphics[height=5.2cm,keepaspectratio=true]{Greenland_thinning} \quad \includegraphics[height=5.2cm,keepaspectratio=true]{ice-mask-900m}
+\end{center}
 \end{frame}
 
 
@@ -402,7 +402,7 @@ $$h_t + \Div\bq = a \qquad \text{in } I_t$$
   \begin{itemize}
   \item<1-> $h=0$ \emph{and what else} at \alert<1>{free boundary}?
      \begin{itemize}
-     \item<1->[$\circ$] fluid shape at free boundary depends on both $\bq$ and $a$
+     \item<1->[$\circ$] geometry at free boundary depends on both $\bq$ and $a$
      \end{itemize}
   \item<2-> $a<0$ not ``detected'' by model where $h=0$
      \begin{itemize}
@@ -443,13 +443,13 @@ $$h_t + \Div\bq = a \qquad \text{in } I_t$$
 \end{frame}
 
 
-\begin{frame}{time scales for major changes}
+\begin{frame}{time scales for major geometry changes}
 
 \begin{tabular}{rcc}
-\emph{fluid} & \emph{lateral transport} & \emph{accumulation/ablation} \\ \hline
+ & \emph{lateral transport} & \emph{accumulation/ablation} \\ \hline
 \alert<2>{glacier/ice sheet} & \alert<2>{100 years} & \alert<2>{100 years} \\
-\alert<2>{sea ice} & \alert<2>{1 week} & \alert<2>{1 month} \\ \hline
-\alert<2>{tidewater marsh} & \alert<2>{1 hour} & \alert<2>{1 day} \\
+\alert<2>{sea ice} & \alert<2>{1 week?} & \alert<2>{1 month?} \\ \hline
+\alert<2>{tidewater marsh} & \alert<2>{1 hour} & \alert<2>{1 day?} \\
 \only<1>{tsunami & 10 seconds & 1 year \\}
 \only<2>{\sout{tsunami} & \sout{10 seconds} & \sout{1 year} \\}
 \only<1>{Aral Sea & ? & 1 year \\}
@@ -488,14 +488,17 @@ $$h_t + \Div\bq = a \qquad \text{in } I_t$$
 \end{frame}
 
 
-\begin{frame}{has anyone solved these problems before?}
+\begin{frame}{anyone numerically modeled this stuff before?}
 
 \vspace{-2mm}
 
-  \begin{itemize}
-  \item yes, of course!
-  \item generic result: \emph{ad hoc} schemes near the free boundary
-  \end{itemize}
+\begin{itemize}
+\item yes, of course!  generic results:
+    \begin{itemize}
+    \item[$\circ$] \emph{ad hoc} schemes near the free boundary
+    \item[$\circ$] only numerics; almost no continuum modeling
+    \end{itemize}
+\end{itemize}
 
 \medskip
 \begin{columns}
@@ -555,7 +558,7 @@ $$h_t + \Div\bq = a \qquad \text{in } I_t$$
 \begin{itemize}
 \item top row: 1964, 1989, 1995?
 \item bottom row: 1999, 2002?, 2014
-\item climate $a$ dominates \dots flux $\bq$ irrelevant
+\item climate $a$, and bdry fluxes, dominate \dots flux $\bq$ irrelevant
 \end{itemize}
 \end{frame}
 
