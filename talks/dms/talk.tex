@@ -565,7 +565,6 @@ $$h_t + \Div\bq = a \qquad \text{in } I_t$$
 \begin{frame}{nonlinear complementarity problems (NCP)}
 
 \begin{itemize}
-\item in finite dimensions $\RR^n$
 \item given differentiable $\bF:\RR^n \to \RR^n$, the NCP seeks $\bz\in\RR^n$ s.t.
 \begin{equation*}
 \bz \ge 0, \quad \bF(\bz) \ge 0, \quad \bz^\top \bF(\bz) = 0
@@ -658,7 +657,7 @@ and
 \end{frame}
 
 
-\begin{frame}{algorithms}
+\begin{frame}{constrained-Newton algorithms}
 
 two Newton line search NCP methods:
 \begin{itemize}
@@ -678,33 +677,60 @@ two Newton line search NCP methods:
     $$L^k \bs^k = - \phi(\bz^k,\bF^k(\bz^k))$$
     where $L^k$ is element of $\partial_B \phi(\bz^k,\bF^k(\bz^k))$; then do line search
     \end{itemize}
-\item both implemented in PETSc
 \end{itemize}
 \end{frame}
 
 
 \newcommand{\singletsmc}{\frac{h^\ell - h^{\ell-1}}{\Delta t} + \Div \bq^\ell = a^\ell}
 
+
 \begin{frame}{semi-discretize in time}
 
 \begin{itemize}
-\item semi-discretize coupled model (e.g.~$h^\ell(x,y) \approx h(t^\ell,x,y)$)
+\item back to our fluid layer equation \dots
+\item semi-discretize coupled model:
 $$\begin{matrix}
  h_t + \Div\bq = a \\
  \phantom{foo} \\
  \mathcal{M}(\bU,h,b) = 0
 \end{matrix} \qquad \to \qquad \begin{matrix}
- \only<1>{\singletsmc} \only<2>{\alert{\singletsmc}} \\
+ \singletsmc \\
  \phantom{foo} \\
  \mathcal{M}(\bU^\ell,h^\ell,b) = 0
 \end{matrix}$$
-\item coupling also through $\bq=\bq(\bU,h)$
-\item details of flux $\bq^\ell$ and source $a^\ell$ come from time-stepping scheme
+        \begin{itemize}
+        \item[$\circ$] $h^\ell(x,y) \approx h(t^\ell,x,y)$
+        \item[$\circ$] coupling also through $\bq=\bq(\bU,h)$
+        \end{itemize}
+\item details of flux $\bq^\ell$ and source $a^\ell$ come from scheme
         \begin{itemize}
         \item[$\circ$] backward-Euler shown
         \item[$\circ$] could use other $\theta$-methods or BDFs
         \end{itemize}
-\item<2> \alert{need to weakly-pose single time-step mass conservation equation incorporating $h^\ell\ge 0$ constraint \dots it generates the free boundary}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{mass conservation: strong form \dots is inadequate}
+
+\begin{itemize}
+\item single time-step mass conservation equation
+\begin{equation}
+\singletsmc \tag{MC} \label{mcstrong}
+\end{equation}
+    \begin{itemize}
+    \item[$\circ$] \emph{strong form} of (MC)
+    \end{itemize}
+\item from now on: assume $\bq=0$ on any open set where $h=0$
+    \begin{itemize}
+    \item[$\circ$] because it is a flowing \emph{layer}
+    \end{itemize}
+
+\bigskip
+\item \alert{need to weakly-pose (MC), incorporating $h^\ell\ge 0$ constraint}
+    \begin{itemize}
+    \item[$\circ$] seek $h^\ell(x,y)$ and the free boundary simultaneously
+    \end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -712,23 +738,18 @@ $$\begin{matrix}
 \begin{frame}{mass conservation: VI form}
 
 \begin{itemize}
-\item single time-step mass conservation equation
-\begin{equation}
-\frac{h^\ell - h^{\ell-1}}{\Delta t} + \Div \bq^\ell = a^\ell \tag{MC} \label{mcstrong}
-\end{equation}
-\item from now on: assume $\bq=0$ on any open set where $h=0$
+\item first weak formulations of \eqref{mcstrong} for glaciers were VIs
     \begin{itemize}
-    \item[$\circ$] because it is a flowing \emph{layer}
-    \end{itemize}
-\item first weak formulations of \ref{mcstrong} for glaciers were VIs
-    \begin{itemize}
-    \item[$\circ$] Calvo et al (2002): SIA 1d flat bed
-    \item[$\circ$] Jouvet \& Bueler (2012): SIA 2d general bed steady
+    \item[$\circ$] Calvo et al (2002): 1d glacier on flat bed
+    \item[$\circ$] Jouvet \& Bueler (2012): 2d glacier on general bed
     \end{itemize}
 \item define $\mathcal{K} = \left\{v \in W^{1,p}(\Omega) \,\Big|\, v\ge 0\right\}$
-\item VI form of MC: find $h^\ell\in\mathcal{K}$
+\item VI form of \eqref{mcstrong}: \quad find $h^\ell\in\mathcal{K}$ s.t.
     $$\int_\Omega h^\ell (v - h^\ell) - \Delta t\, \bq^\ell \cdot \grad(v - h^\ell) \ge \int_\Omega \left(h^{\ell-1} + \Delta t\, a^\ell\right) (v - h^\ell)$$
 for all $v \in \mathcal{K}$
+    \begin{itemize}
+    \item[$\circ$] derive from strong form \eqref{mcstrong} by integration-by-parts plus thoughts about $h^\ell=0$ areas
+    \end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -736,16 +757,14 @@ for all $v \in \mathcal{K}$
 \begin{frame}{mass conservation: NCP form}
 
 \begin{itemize}
-\item recall general NCP is
-  $$\bz \ge 0, \quad \bF(\bz) \ge 0, \quad \bz^\top \bF(\bz) = 0$$
 \item define
-    $$F(h) = h^\ell - h^{\ell-1} + \Delta t\, \Div \bq^\ell - \Delta t\, a^\ell$$
-\item NCP form of MC:
+    $$F(h) = h - h^{\ell-1} + \Delta t\, \Div \bq - \Delta t\, a$$
+\item NCP form of \eqref{mcstrong}: \quad find $h^\ell$ s.t.
    $$h^\ell \ge 0, \quad F(h^\ell) \ge 0, \quad h^\ell F(h^\ell) = 0$$
 \item setwise statements from the NCP:
     \begin{itemize}
     \item[$\circ$] where $h^\ell > 0$,
-        $$F(h^\ell) = 0 \qquad \iff \qquad \text{strong form MC}$$
+        $$F(h^\ell) = 0 \qquad \iff \qquad \text{strong form \eqref{mcstrong}}$$
         \vspace{-4mm}
         \begin{itemize}
         \item interior condition
@@ -757,37 +776,24 @@ for all $v \in \mathcal{K}$
         \item says ``surface mass balance is negative enough during time step to remove old thickness''
         \end{itemize}
     \end{itemize}
-  \item assume $\bQ_n=0$ when $H_n=0$
-    \begin{itemize}
-    \item[$\circ$] this means $\bQ_n$ describes a \emph{layer}
-    \end{itemize}
-  \item if $H_n \in \mathcal{K}$ solves weak single time-step problem (VI) then
-      \medskip
-	  \begin{itemize}
-	  \item[$\circ$] PDE applies on the set where $H_n>0$ (interior condition):
-	    $$\frac{H_n - H_{n-1}}{\Delta t} + \Div \bQ_n = F_n$$
-	  \item[$\circ$] plus inequality on the set where $H_n = 0$:
-	    $$H_{n-1} + \Delta t\, F_n \le 0$$
-	  \end{itemize}
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}{numerical solution of the weak problem}
 
-the weak single time-step problem:
+for weak formulation (NCP or VI) of \eqref{mcstrong}:
 \begin{itemize}
-\item is nonlinear because of constraint (even for $\bQ_n$ linear in $H_n$)
-\item can be solved by a Newton method modified for constraint
-\item scalable implementations are in PETSc$^*$ 3.5+
+\item nonlinear problem because of constraint
   \begin{itemize}
-  \item[$\circ$]  see ``SNESVI'' object
-  \item[$\circ$]  for NCP there are two implementations (Benson \& Munson, 2006):
-    \begin{itemize}
-    \item  reduced-set (active-set) method
-    \item  semismooth method
-    \end{itemize}
+  \item[$\circ$]  even for $\bq$ linear in $h$
   \end{itemize}
+\item can be solved by a Newton method modified for constraint
+\item scalable \& parallel implementations in C are in PETSc$^*$
+  \begin{itemize}
+  \item[$\circ$]  RS and SS methods for NCP (earlier slide)
+  \end{itemize}
+\item we need a momentum conservation model, a specific $\bq$, and a spatial discretization approach to proceed
 \end{itemize}
 
 \vspace{15mm}
@@ -795,21 +801,83 @@ the weak single time-step problem:
 \end{frame}
 
 
+\begin{frame}{1D time-stepping movies (and $\bq$ flexibility)}
+
+\begin{columns}
+\begin{column}{0.35\textwidth}
+\alert{same:}
+
+\begin{itemize}
+\scriptsize
+\item equation \eqref{mcstrong}
+\item BEuler time-step
+\item climate $a$
+\item bed shape $b$
+\item constraint-respecting
+
+Newton scheme
+\end{itemize}
+
+\vspace{2mm}
+
+\alert{top:}
+
+\scriptsize
+
+\medskip
+$\bq = v_0 h$
+
+hyperbolic advection with
+
+constant velocity
+
+\vspace{5mm}
+
+\normalsize 
+
+\alert{bottom:}
+
+\scriptsize
+
+\medskip
+$\bq = - \Gamma |h|^{n+2}$
+
+$\phantom{\bq = }\, \cdot |\grad s|^2 \grad s$
+
+nonlinear degenerate
+
+diffusion
+\end{column}
+\begin{column}{0.5\textwidth}
+\hspace{-15mm}
+\animategraphics[autoplay,loop,height=3.0cm]{6}{../anim/adv/u-}{1}{50}
+
+\bigskip
+\hspace{-15mm}
+\animategraphics[autoplay,loop,height=3.0cm]{6}{../anim/sia/u-}{1}{50}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
 \begin{frame}{finite volume element (FVE) discretization}
 
 \begin{itemize}
 \item from now on in this talk: steady case ($\Delta t = \infty$)
-\item for FVE, see Cai (1990) and Ewing, Lin, \& Lin (2002)
+    \begin{itemize}
+    \item[$\circ$] extreme case of long time steps
+    \end{itemize}
 \item thickness $h(x,y)$ lives in $Q^1$ FEM space $\subset W^{1,\nu+1}(\Omega)$
     \begin{itemize}
-    \item[$\circ$] structured grid for now; $h$ bilinear on elements $\square_{j,k}$
+    \item[$\circ$] structured grid for now; $h$ is bilinear on elements $\square_{j,k}$
     \end{itemize}
-\item mass conservation $\iff$ control-volume integral on $V=V_{j,k}$:
+\item mass conservation $\iff$ integral on $V=V_{j,k}$:
     $$\Div \bq = a \qquad \iff \qquad \int_{\partial V} \bq \cdot \bn \,ds \stackrel{\ast}{=} \int_V a \,dx\,dy$$ 
-\item \emph{thus}: a finite element method where $\ast$ is the weak form
+\item FVE is an FEM where $\ast$ is the weak form
     \begin{itemize}
-    \item[$\circ$] \emph{or}: Petrov-Galerkin FEM with $\chi_V$ as test function
-    \item[$\circ$] no symmetry in weak form \dots no loss
+    \item[$\circ$] \emph{equiv}: Petrov-Galerkin FEM with $1_V$ as test function
+    \item[$\circ$] no symmetry in weak form (\dots no loss for known cases)
     \end{itemize}
 \end{itemize}
 
@@ -930,30 +998,27 @@ the weak single time-step problem:
 \end{frame}
 
 
-\begin{frame}{restrict to SIA}
+\begin{frame}{restrict to shallow ice approximation (SIA) for glaciers}
 
 \begin{itemize}
-\item from now on: restrict to nonsliding SIA
-\item steady SIA mass conservation equation (SIA MC)
-    $$\Div \bq = a, \qquad \bq = - \Gamma h^{\nu+2} |\grad s|^{\nu-1} \grad s$$
+\item from now on, restrict to nonsliding SIA:
+    $$\bq = - \Gamma h^{\nu+2} |\grad s|^{\nu-1} \grad s$$
 
-\vspace{-2mm}
     \begin{itemize}
-    \item[$\circ$] recall $s=h+b$
+    \item[$\circ$] where $s=h+b$
+    \item[$\circ$] justified by small-aspect-ratio argument
     \end{itemize}
-\item main idea: \alert{subject to constraint $h\ge 0$, thus an NCP or VI}
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{quadrature and upwinding}
+\begin{frame}{glacier numerics: quadrature and upwinding}
 
 \begin{itemize}
-\item FD schemes fit into above FVE framework
+\item FD scheme for SIA fits into above FVE framework
   \begin{itemize}
-  \item[$\circ$] old FD scheme by Mahaffy (1976) fits \dots has weird quadrature
-  \item[$\circ$] improved convergence comes from using quadrature points below:
-  \end{itemize}
+  \item[$\circ$] i.e.~Mahaffy (1976) \dots but it has weird quadrature
+  \item[$\circ$] improved convergence from quadrature points below:
 \begin{center}
 \begin{tikzpicture}[scale=0.5]
   % strong grid around elements
@@ -989,6 +1054,8 @@ the weak single time-step problem:
   \draw (5.35,3.6) node {\scriptsize $\square_{j,k}$};
 \end{tikzpicture}
 \end{center}
+  \item[$\circ$] these points good for any $\bq$, not just SIA
+  \end{itemize}
 \item a bit of upwinding improves convergence on non-flat beds
   \begin{itemize}
   \item[$\circ$] \dots even though this is a fully-implicit approach
@@ -999,7 +1066,7 @@ the weak single time-step problem:
 \end{frame}
 
 
-\begin{frame}{Newton's method}
+\begin{frame}{Newton's method, regularized}
 
 \begin{itemize}
 \item for $0 \le \eps \le 1$, regularize $\bq^{(\eps)}$
@@ -1012,83 +1079,17 @@ the weak single time-step problem:
   \end{itemize}
 \item at each level, use Newton's method
   \begin{itemize}
-  \item[$\circ$] quadratic convergence
+  \item[$\circ$] quadratic convergence for a dome test case:
   \end{itemize}
 \end{itemize}
 
 \begin{center}
-\includegraphics[width=0.4\textwidth,keepaspectratio=true]{newtonconv}
+\includegraphics[width=0.5\textwidth,keepaspectratio=true]{newtonconv}
 \end{center}
 \end{frame}
 
 
 \section{conservation: failures and fixes}
-
-\begin{frame}{1D time-stepping movies}
-
-\begin{columns}
-\begin{column}{0.35\textwidth}
-\alert{same:}
-
-\begin{itemize}
-\scriptsize
-\item equation
-
-\tiny
-\hspace{-10mm} $\frac{H_n-H_{n-1}}{\Delta t} + \Div\bQ_n = f$
-\scriptsize
-
-\item BEuler time-step
-\item climate $f$
-\item bed shape
-\item constraint-respecting
-
-Newton scheme
-\end{itemize}
-
-\vspace{2mm}
-
-\alert{top:}
-
-\scriptsize
-
-\medskip
-$\bQ_n = v_0 H_n$
-
-hyperbolic advection with
-
-constant velocity
-
-\vspace{5mm}
-
-\normalsize 
-
-\alert{bottom:}
-
-\scriptsize
-
-\medskip
-$\bQ_n = - \Gamma |H_n|^{n+2}$
-
-$\phantom{bQ_n = }\, \cdot |\grad s_n|^{n-1} \grad s_n$
-
-nonlinear degenerate
-
-diffusion
-\end{column}
-\begin{column}{0.4\textwidth}
-\hspace{-15mm}
-%\animategraphics[autoplay,loop,height=2.5cm]{6}{../anim/adv/u-}{1}{50}
-FIXME
-
-\medskip
-\hspace{-15mm}
-%\animategraphics[autoplay,loop,height=2.5cm]{6}{../anim/sia/u-}{1}{50}
-FIXME
-
-\end{column}
-\end{columns}
-\end{frame}
 
 
 \begin{frame}{on my use of ``climate''}
