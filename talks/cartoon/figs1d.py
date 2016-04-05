@@ -97,7 +97,7 @@ for useH in [True]:
           lw=1.5,head_width=0.1,color='k',length_includes_head=True)
     font = font_manager.FontProperties(family='sans serif', style='italic', size=24)
     if useH:
-        labelstr = r'$H_{n-1}$'
+        labelstr = r'$h^{\ell-1}$'
     else:
         labelstr = r'$u_{n-1}$'
     t1 = text(x[200]-0.7,b[200] + h[200]+0.6,labelstr)
@@ -105,7 +105,7 @@ for useH in [True]:
     arrow(x[750]+0.4,s[750]+0.4,-0.39,-0.38,
           lw=1.5,head_width=0.1,color='k',length_includes_head=True)
     if useH:
-        labelstr = r'$H_n$'
+        labelstr = r'$h^\ell$'
     else:
         labelstr = r'$u_n$'
     t2 = text(x[750]+0.4,s[750]+0.5,labelstr)
@@ -113,10 +113,10 @@ for useH in [True]:
     if useH:
         # under bars for sets
         plot([x[80],x[195]],[-0.7,-0.7],'k',lw=4.0)
-        t3 = text(x[120],-1.5,r'$\Omega_n^r$')
+        t3 = text(x[120],-1.5,r'$\Omega^\ell_r$')
         t3.set_font_properties(font)
         plot([x[215],x[795]],[-0.7,-0.7],'k',lw=4.0)
-        t4 = text(x[500],-1.5,r'$\Omega_n$')
+        t4 = text(x[500],-1.5,r'$\Omega^\ell$')
         t4.set_font_properties(font)
     axis([0.0,10.0,-1.0,4.5])
     hold(False)

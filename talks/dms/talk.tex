@@ -864,7 +864,7 @@ diffusion
 \begin{frame}{finite volume element (FVE) discretization}
 
 \begin{itemize}
-\item from now on in this talk: steady case ($\Delta t = \infty$)
+\item this section of talk: steady case ($\Delta t = \infty$)
     \begin{itemize}
     \item[$\circ$] extreme case of long time steps
     \end{itemize}
@@ -1092,30 +1092,32 @@ diffusion
 \section{conservation: failures and fixes}
 
 
-\begin{frame}{on my use of ``climate''}
+\begin{frame}{my use of the word ``climate''}
 
 \begin{itemize}
-\item I am hijacking the word ``climate'' and defining it to mean what I want
+\item I have hijacked the word ``climate'' so as to define it to mean whatever I want
      \begin{itemize}
-     \item[$\circ$] \dots \emph{typical mathematician behavior} \dots
+     \item[$\circ$] \emph{typical mathematician behavior} \dots
+     \visible<2>{\item[$\circ$] want a selfie?}
      \end{itemize}
 
 \bigskip
-\item \emph{Definition}: for a fluid layer model, with thickness $h$ and governing weak formulation as above (NCP/VI), the \emph{\alert{climate}} is the function $a(t,x,y,z)$ defined on the whole domain $\Omega$
+\item<2> my \emph{Definition}: for a fluid layer model, with governing weak formulation as above (and NCP/VI), the \emph{\alert{climate}} is the function $a(t,x,y,z)$ defined on the whole domain $\Omega$
 
 \bigskip
-\item the climate is \emph{only} a source term in the PDE ``$h_t + \Div \bq = a$'' in those locations where $h>0$
+\item<2> the climate is \emph{only} a source term in the PDE ``$h_t + \Div \bq = a$'' in those locations where $h>0$
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{Conservation reporting: subsets}
+\begin{frame}{conservation reporting: subsets}
 \begin{itemize}
-\item suppose $H_n$ solves the single time-step problem
+\item back to finite time-steps $\Delta t>0$
+\item suppose $h^\ell$ solves the weak form \eqref{mcstrong}
 \item define
 	\begin{align*}
-	\Omega_n &= \left\{H_n(x) > 0\right\} \\
-	\Omega_n^r &= \left\{H_n(x)= 0 \text{ and } H_{n-1}(x) > 0\right\} \quad \text{\alert{$\leftarrow$ retreat set}}
+	\Omega^\ell &= \left\{h^\ell(x,y) > 0\right\} \\
+	\Omega^\ell_r &= \left\{h^\ell(x,y) = 0 \text{ and } h^{\ell-1}(x,y) > 0\right\} \quad \text{\alert{$\leftarrow$ retreat set}}
 	\end{align*}
 \end{itemize}
 
@@ -1126,57 +1128,63 @@ diffusion
 \end{frame}
 
 
-\begin{frame}{Conservation reporting: time-series}
+\begin{frame}{conservation reporting: time-series}
 
 \begin{itemize}
 \item define:
-   $$M_n = \int_\Omega H_n(x)\,dx \qquad \text{\emph{mass at time} $t_n$}$$
-\item then \vspace{-5mm}
+   $$M^\ell = \int_\Omega h^\ell(x,y)\,dx\,dy, \qquad \text{\emph{the \alert{mass} (volume) at time} $t^\ell$}$$
+\item then
+
+\vspace{-8mm}
 	\begin{align*}
-	M_n - M_{n-1} &= \int_{\Omega_n} \mathLabelBox[
+	M^\ell - M^{\ell-1} &= \int_{\Omega^\ell} \mathLabelBox[
     labelstyle={xshift=1cm,yshift=2mm},
     linestyle={out=270,in=90, -latex}
-    ]{H_n - H_{n-1}}{$\boxed{\Delta t\, (-\Div\bQ_n + F_n)}$} \,dx + \int_{\Omega_n^r} 0 - H_{n-1} \,dx \\
-	   &= \Delta t\, \left(0 + \int_{\Omega_n} F_n \,dx\right) - \int_{\Omega_n^r} H_{n-1} \,dx
+    ]{h^\ell-h^{\ell-1}}{$\boxed{\Delta t\, (-\Div\bq^\ell + a^\ell)}$} \,dx\,dy + \int_{\Omega^\ell_r} 0 - h^{\ell-1} \,dx\,dy \\
+	   &= \Delta t\, \left(0 + \int_{\Omega^\ell} a^\ell \,dx\,dy\right) - \int_{\Omega^\ell_r} h^{\ell-1} \,dx\,dy
 	\end{align*}
+
+	\begin{itemize}
+\vspace{-1mm}
+	\item[$\circ$] this assumes $\bq\to 0$ as $(x,y) \to \partial \Omega^\ell$
+	\end{itemize}
 \item new term:
-     $$R_n = \int_{\Omega_n^r} H_{n-1} \,dx \qquad \text{\emph{\alert{retreat loss} during step} $n$}$$
+     $$R^\ell = \int_{\Omega^\ell_r} h^{\ell-1} \,dx\,dy \qquad \text{the \emph{\alert{retreat loss} during step} $\ell$}$$
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{Conservation reporting: the limitation}
+\begin{frame}{conservation reporting: the limitation}
 
 \begin{itemize}
-\item \alert{the retreat loss $R_n$ is not balanced by the climate}
+\item \alert{the retreat loss $R^\ell$ is not balanced by the climate}
   \begin{itemize}
-  \item[$\circ$] $R_n$ is \emph{caused} by the climate, but we don't know a computable integral of climate $F_n$ to balance it
+  \item[$\circ$] retreat $R^\ell$ is \emph{caused} by the climate, but we don't know computable integral of $a^\ell$ to balance it
   \end{itemize}
 \item we must track \alert{three} time series:
   \begin{itemize}
-  \item[$\circ$] mass at time $t_n$: \qquad $M_n = \int_\Omega H_n(x)\,dx$
+  \item[$\circ$] mass at time $t^\ell$: \qquad $M^\ell = \int_\Omega h^\ell(x,y)\,dx\,dy$
 
   \smallskip
-  \item[$\circ$] climate (e.g.~surface mass bal.) over current fluid-covered region:
-     $$C_n = \Delta t\, \int_{\Omega_n} F_n \,dx \qquad \approx \int_{t_{n-1}}^{t_n} \int_{\Omega_n} f(t,x) \,dx\,dt$$
-  \item[$\circ$] retreat loss during time step: \qquad $R_n = \int_{\Omega_n^r} H_{n-1} \,dx$
+  \item[$\circ$] climate over current fluid-covered region:
+     $$C^\ell = \Delta t\, \int_{\Omega^\ell} a^\ell \,dx\,dy \qquad \approx \int_{t^{\ell-1}}^{t^\ell} \int_{I_t} a(t,x,y) \,dx\,dy\,dt$$
+  \item[$\circ$] retreat loss during time step: \qquad $R^\ell = \int_{\Omega^\ell_r} h^{\ell-1} \,dx\,dy$
   \end{itemize}
 \item now it balances:
-     $$M_n = M_{n-1} + C_n - R_n$$
+     $$M^\ell = M^{\ell-1} + C^\ell - R^\ell$$
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{Conservation reporting: illustration \& $\Delta t\to 0$}
+\begin{frame}{conservation reporting: illustration}
 
 \begin{center}
 \vspace{-3.3mm}
 
-%\animategraphics[autoplay,loop,height=2.9cm]{15}{../anim/tdep/u-}{1}{250}
-FIXME
+\animategraphics[autoplay,loop,height=2.9cm]{15}{../anim/tdep/u-}{1}{250}
 
 \vspace{-1.1mm}
-\includegraphics[width=0.59\textwidth,keepaspectratio=true]{masstimeseries} \, \phantom{!}
+\includegraphics[width=0.64\textwidth,keepaspectratio=true]{masstimeseries} \, \phantom{!}
 \end{center}
 \end{frame}
 
@@ -1188,16 +1196,19 @@ FIXME
 \begin{columns}
 \begin{column}{0.6\textwidth}
 \begin{itemize}
-\item \emph{goal}: given steady surface mass balance $a(x,y)$ and bedrock elevation $b(x,y)$, predict the steady geometry $h(x,y)$ of the Greenland ice sheet
+\item \emph{goal}: given steady surface mass balance $a(x,y)$, and bedrock elevation $b(x,y)$, predict the thickness $h(x,y)$ of the Greenland ice sheet
 
-\bigskip
-\item \emph{method}: solve steady SIA MC NCP
+\medskip
+\item \emph{method} for steady SIA:
   \begin{itemize}
-  \item[$\circ$] reduced-space Newton method
+  \item[$\circ$] NCP form of \eqref{mcstrong}
+  \item[$\circ$] RS constrained-Newton
   \item[$\circ$] 900 m structured grid
   \item[$\circ$] $Q^1$ FEs in space
   \item[$\circ$] $N=7\times 10^6$ d.o.f.
   \end{itemize}
+
+\medskip
 \item \emph{result}: at right
   \begin{itemize}
   \item[$\circ$] see Bueler (2016), J.~Glaciol.
@@ -1243,11 +1254,11 @@ FIXME
 \begin{frame}{convergence consequences}
 
 \begin{itemize}
-\item improved bed observations $\implies$ worse NCP solver convergence
+\item improved observations $\implies$ worse solver convergence
   \begin{itemize}
   \item[$\circ$] old bed: Bamber (2001) on 5 km grid
   \item[$\circ$] new bed: Morlighem (2014) on 150 m grid
-  \item[$\circ$] results shown for RS; SS is similar
+  \item[$\circ$] results shown for RS on NCP \eqref{mcstrong}; SS is similar
   \end{itemize}
 \end{itemize}
 
@@ -1258,9 +1269,9 @@ FIXME
 rougher bed \hfill $\implies$ \phantom{sddf}
 \end{column}
 \begin{column}{0.6\textwidth}
-\includegraphics[height=0.5\textheight,keepaspectratio=true]{rseps}
+\includegraphics[height=0.55\textheight,keepaspectratio=true]{rseps}
 
-poorer Newton-solver convergence
+poorer Newton convergence
 \end{column}
 \end{columns}
 \end{frame}
@@ -1269,30 +1280,30 @@ poorer Newton-solver convergence
 \begin{frame}{summary}
 
   \begin{itemize}
-  \item \emph{problem}: fluid layer conservation model \, $h_t + \Div\bq = a$
+  \item \emph{problem}: fluid layer conservation model \, ``$h_t + \Div\bq = a$''
     \begin{itemize}
-    \item[$\circ$]  subject to signed climate $a$
-    \item[$\circ$]  thickness $h$ is nonnegative
-    \item[$\circ$]  coupled to momentum solver, for $\bU$ in $\bq=\bq(\bU,h)$
+    \item[$\circ$]  layer thickness $h$
+    \item[$\circ$]  signed climate $a$
+    \item[$\circ$]  coupled to momentum solver: $\bq=\bq(\bU,h)$
     \end{itemize}
   \item \emph{goals}:
     \begin{itemize}
-    \item[$\circ$]  long time steps, no first-order splitting errors
+    \item[$\circ$]  long (implicit) time steps
+    \item[$\circ$]  meaningful conservation reporting
     \end{itemize}
   \item \emph{approach}:
     \begin{itemize}
-    \item[$\circ$]  take discrete-time, continuous-space seriously
-    \item[$\circ$]  pose single time-step weakly as NCP or VI
+    \item[$\circ$]  pose single time-step problem weakly as NCP or VI
       \begin{itemize}
       \item  incorporates constraint $h\ge 0$
-      \item  approach is largely flux-agnostic
+      \item  approach is flux-agnostic
       \end{itemize}
     \item[$\circ$]  solve by scalable constrained-Newton method (e.g.~PETSc)
     \end{itemize}
   \item \emph{challenges}:
     \begin{itemize}
     \item[$\circ$]  bed roughness makes convergence hard
-    \item[$\circ$]  \alert{every time step generates a near-fractal icy domain (e.g.~continental ice sheet), via free-boundary problem, on which momentum solve must be accurate especially near the boundary}
+    \item[$\circ$]  can this lead to global glaciation modeling?
     \end{itemize}
   \end{itemize}
 \end{frame}

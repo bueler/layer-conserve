@@ -39,8 +39,8 @@ for name in args.files:
 hold(False)
 axis([0.0,t.max(),1.0e-10,1.0])
 legend(loc='lower right',fontsize=14.0)
-text(4.0,0.2,r'$M_n$',fontsize=18.0)
-text(4.9,1.0e-5,r'$R_n$',fontsize=18.0)
+text(4.0,0.2,r'$M^\ell$',fontsize=18.0)
+text(4.9,1.0e-5,r'$R^\ell$',fontsize=18.0)
 xlabel('t',fontsize=12.0)
 ylabel('volume',fontsize=12.0)
 
