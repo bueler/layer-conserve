@@ -316,13 +316,13 @@ v_z
 h_t + \Div\bq &= a \qquad \text{in } I_t = \{h>0\} \subset \RR^2 \\
 \mathcal{M}(\bU,h,b) &= 0 \qquad \text{in } E_t \subset \RR^3 \\
 \bU &= \left<u,v,w\right> \\
-\bq &= \int_b^h \left<u,v\right>\,dz
+\bq &= \int_b^{h+b} \left<u,v\right>\,dz
 \end{align*}
 
 \medskip
 \item \emph{my goal}: better numerical glacier models
   \begin{itemize}
-  \item[$\circ$] effective for long runs ($\sim 100$ka) at high res ($\sim 1$ km) \only<2>{\hfill\alert{\large\frownie{}}}
+  \item[$\circ$] effective for long runs ($\sim 100$ ka) at high res ($\sim 1$ km) \only<2>{\hfill\alert{\large\frownie{}}}
   \item[$\circ$] without first-order time-splitting errors \only<2>{\hfill\alert{\large\frownie{}}}
   \item[$\circ$] without explicit time-step restrictions \only<2>{\hfill\alert{\large\frownie{}}}
   \end{itemize}
@@ -466,7 +466,7 @@ $$h_t + \Div\bq = a$$
    \end{itemize}
 
 \medskip
-\item<2> this talk: cases where these time-scales are comparable
+\item<2> \alert<2>{this talk}: cases where these time-scales are comparable
 \end{itemize}
 \end{frame}
 
@@ -668,6 +668,10 @@ and
 
 \begin{itemize}
 \item back to our fluid layer coupled model \dots
+\item from now on: assume $\bq=0$ on any open set where $h=0$
+    \begin{itemize}
+    \item[$\circ$] because it is a flowing \emph{layer}
+    \end{itemize}
 \item semi-discretize:
 $$\begin{matrix}
  h_t + \Div\bq = a \\
@@ -680,8 +684,9 @@ $$\begin{matrix}
 \end{matrix}$$
         \begin{itemize}
         \item[$\circ$] $h^\ell(x,y) \approx h(t^\ell,x,y)$
-        \item[$\circ$] coupling also through $\bq=\bq(\bU,h)$
+        \item[$\circ$] coupling through $\bq=\bq(\bU,h)$
         \end{itemize}
+\item this is still a continuum problem (in space)
 \item details of flux $\bq^\ell$ and source $a^\ell$ come from scheme
         \begin{itemize}
         \item[$\circ$] backward-Euler shown
@@ -701,15 +706,11 @@ $$\begin{matrix}
     \begin{itemize}
     \item[$\circ$] \emph{strong form} of (MC)
     \end{itemize}
-\item from now on: assume $\bq=0$ on any open set where $h=0$
-    \begin{itemize}
-    \item[$\circ$] because it is a flowing \emph{layer}
-    \end{itemize}
 
 \bigskip
 \item \alert{need to weakly-pose (MC), incorporating $h^\ell\ge 0$ constraint}
     \begin{itemize}
-    \item[$\circ$] seek $h^\ell(x,y)$ and the free boundary simultaneously
+    \item[$\circ$] seek $h^\ell(x,y)$ and location of the free boundary simultaneously
     \end{itemize}
 \end{itemize}
 \end{frame}
@@ -753,8 +754,7 @@ for all $v \in \mathcal{K}$
         $$h^{\ell-1} + \Delta t\, a^\ell \le 0$$
         \vspace{-4mm}
         \begin{itemize}
-        \item says ``climate is sufficiently negative to remove old thickness''
-        \item i.e.~during time step
+        \item says ``climate is sufficiently negative to remove old thickness'' (during the time step)
         \end{itemize}
     \end{itemize}
 \end{itemize}
@@ -765,10 +765,6 @@ for all $v \in \mathcal{K}$
 
 for weak formulation (NCP or VI) of \eqref{mc}:
 \begin{itemize}
-\item a nonlinear problem because of constraint
-  \begin{itemize}
-  \item[$\circ$]  even for $\bq$ linear in $h$
-  \end{itemize}
 \item can be solved by a Newton method modified for constraint
 \item scalable \& parallel implementations in C are in PETSc$^*$
   \begin{itemize}
@@ -868,17 +864,20 @@ diffusion
 \begin{frame}{finite volume element (FVE) discretization}
 
 \begin{itemize}
-\item this slide: steady case ($\Delta t = \infty$)
+\item thickness $h(x,y)$ lives in $Q^1$ FEM space $\subset W^{1,p}(\Omega)$
     \begin{itemize}
-    \item[$\circ$] hard case for numerics
+    \item[$\circ$] $h$ is bilinear on elements $\square_{j,k}$
     \end{itemize}
-\item thickness $h(x,y)$ lives in $Q^1$ FEM space $\subset W^{1,\nu+1}(\Omega)$
+\item (MC) discretized to control-volume integral on $V=V_{j,k}$
+\item in steady case ($\Delta t = \infty$) it looks like
+    $$\Div \bq = a \qquad \to \qquad \int_{\partial V} \bq \cdot \bn \,ds \stackrel{\ast}{=} \int_V a \,dx\,dy$$ 
     \begin{itemize}
-    \item[$\circ$] structured grid for now; $h$ is bilinear on elements $\square_{j,k}$
+    \vspace{-2mm}
+    \item[$\circ$] $\Delta t=\infty$ is the hard case for numerics
     \end{itemize}
-\item mass conservation $\iff$ integral on $V=V_{j,k}$:
-    $$\Div \bq = a \qquad \iff \qquad \int_{\partial V} \bq \cdot \bn \,ds \stackrel{\ast}{=} \int_V a \,dx\,dy$$ 
-\item FVE is an FEM where $\ast$ is the weak form
+
+\smallskip
+\item an FVE method is an FEM where $\ast$ is the weak form
     \begin{itemize}
     \item[$\circ$] \emph{equiv}: Petrov-Galerkin FEM with $1_V$ as test function
     \item[$\circ$] no symmetry in weak form (\dots no loss for known cases)
@@ -1188,7 +1187,7 @@ poorer Newton convergence
 \item I have hijacked the word ``climate'' so as to define it to mean whatever I want
      \begin{itemize}
      \item[$\circ$] \emph{typical mathematician behavior} \dots
-     \visible<2>{\item[$\circ$] want a selfie?}
+     \visible<2>{\item[$\circ$] you want a selfie? I'm not that kind of hijacker \dots}
      \end{itemize}
 
 \bigskip
@@ -1285,7 +1284,7 @@ poorer Newton convergence
 \begin{frame}{summary}
 
   \begin{itemize}
-  \item \emph{problem}: fluid layer conservation model \, ``$h_t + \Div\bq = a$''
+  \item \emph{problem}: fluid layer MC model \, ``$h_t + \Div\bq = a$''
     \begin{itemize}
     \item[$\circ$]  layer thickness $h$
     \item[$\circ$]  signed climate $a$
@@ -1301,7 +1300,7 @@ poorer Newton convergence
     \item[$\circ$]  pose single time-step problem weakly as NCP or VI
       \begin{itemize}
       \item  incorporates constraint $h\ge 0$
-      \item  approach is flux-agnostic
+      \item  approach is $\bq$-agnostic
       \end{itemize}
     \item[$\circ$]  solve by scalable constrained-Newton method (e.g.~PETSc)
     \end{itemize}
