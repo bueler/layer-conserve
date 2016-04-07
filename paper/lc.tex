@@ -139,7 +139,9 @@ We can, however, bound and report the conservation error in a practical manner. 
 
 The results in sections \ref{sec:timeseries}) and \ref{sec:spacediscretized} are apparently new.  In fact, theoretical guidance as to achievable discrete conservation is generally absent in the literature of free-boundary fluid problems.  For instance, within the context of glacier \cite{JaroschSchoofAnslow2013} and ice shelf \cite{Albrechtetal2011} modeling, schemes for improved discrete mass conservation at free boundaries are proposed, but this small literature provides only \emph{ad hoc} solutions.  By contrast, discrete conservation within the fluid, i.e.~away from any free boundaries, is a common goal and property of numerical schemes (e.g.~\cite{LeVeque2002} and references therein).  Indeed, when we consider fully-discretized models (section \ref{sec:spacediscretized}) we will assume such local discrete conservation.  The discrete conservation limitations we identify in this paper are entirely at the free boundary.  These conservation errors occur when the fluid layer advances into areas where it was absent a time-step earlier, or it retreats from areas where it was present a time-step earlier, and where the source term $f$ is negative in a neighborhood of the free boundary.
 
-In the geophysical literature, free-boundary problems of the type considered here appear for ice sheet flow \cite{Bueler2016,Bueleretal2005,CalvoDuranyVazquez2000,Calvoetal2002,EgholmNielsen2010,JouvetBueler2012}, ice shelves \cite{Albrechtetal2011}, sea ice \cite[and references therein]{LipscombHunke2004}, shallow liquid water flowing over marshes \cite{AlonsoSantillanaDawson2008}, shallow water equation models for coupled surface/subsurface hydrological modelling \cite{Maxwelletal2014}, and sub-/supra-glacial hydrology \cite{Aschwandenetal2012,BuelervanPelt2015,Schoofetal2012}, among other applications.
+In the geophysical literature, free-boundary problems of the type considered here appear for ice sheet flow \cite{Bueler2016,Bueleretal2005,CalvoDuranyVazquez2000,Calvoetal2002,EgholmNielsen2010,JouvetBueler2012}, ice shelf flow \cite{Albrechtetal2011}, shallow liquid water flowing over marshes \cite{AlonsoSantillanaDawson2008}, shallow water equation models for coupled surface/subsurface hydrological modelling \cite{Maxwelletal2014}, and sub-/supra-glacial hydrology \cite{Aschwandenetal2012,BuelervanPelt2015,Schoofetal2012}, among other applications.
+
+Sea-ice modeling is a prominent instance in which the mass and ice-covered-extent evolves by explicit time-stepping \cite{LipscombHunke2004} in those models known to the author.  The considerations and techniques of the current paper apply to such models, subject, however, to re-interpretation because of the special way mass conservation is described in sea-ice models.  This is done through tracking a non-negative thickness-distribution function $g(h) = g(x,t,h)$ where $\int_0^\infty g(h)\,dh = 1$ at all locations $x$ and times $t$ \cite{Thorndikeetal1975}.  This thickness dimension is discretized into ``categories'' (e.g.~$H_{n-1} < h \le H_n$ with $H_0$ being the ice-free category \cite{LipscombHunke2004}).  Readers familiar with such models should note that, in the presence of melting, which is a negative source term in the evolution equation for the thinnest positive thickness category, the updating $g_1(t) \approx \int_{H_0}^{H_1} g(t,h)\,dh$ will require truncation (projection) to maintain nonnegativity ($g_1(t) \ge 0$).  The current paper applies to the continuous-space system of equations which arise from discretizing $t$, \emph{and} $h$, but not $x$.  Consideration of the undiscretized, or only time-discretized, systems is beyond our scope.
 
 The modeling goals of the tsunumi run-up \cite{LeVequeetal2011} and debris flow \cite{GeorgeIverson2014} literature provides a useful contrast to our concerns.  These problems are of free-boundary type for a hyperbolic system of mass and momentum conservation equations.  The thickness $u$ of the flow must be nonnegative, and the cited discrete models allow wet ($u>0$) and dry ($u=0$) cells.  However, the time-scales are sufficiently short (seconds to minutes) so that addition/removal sources like evaporation or absorption into the ground are apparently always dropped from the conservation of mass equation.  Thus $f=0$ in \eqref{eq:massconserve} in these problems.  The discrete-time sequence of free-boundary problems, if the model were to be formulated that way, would therefore call for constancy of the total mass, despite the moving boundary between wet and dry areas.  This can be preserved by maximum-principle properties of the fully-discrete scheme.  (Even so, avoidance of spurious waves can cause the abandonment of mass conservation as a goal \cite[section 9.2]{LeVequeetal2011}.)
 
@@ -515,15 +517,13 @@ This proves the following theorem:
 
 Note that condition \eqref{eq:plapadvectdtcond} is independent of $\eps>0$, suggesting that the pure advection problem ($\eps = 0$) is also well-behaved if \eqref{eq:plapadvectdtcond} is satisfied.
 
-\subsection{Non-local dependence through an integral kernel} \label{subsec:nonlocal}   The examples so far in section \ref{sec:wellposed} compute the flux $\bQ_n$ at $x\in\Omega$ using only the values $u(x)$ and $\grad u(x)$.  The flux in realistic models is, however, often comes from solving another differential equation, for instance an energy or momentum conservation equation which is coupled to the mass-conservation equation \eqref{eq:massconserve}.  Therefore we consider fluxes that are non-local functions of the thickness $u$ and its spatial derivatives.  For simplicity we restrict to the linear case.
+\subsection{Non-local dependence through an integral kernel} \label{subsec:nonlocal}   The examples so far compute the flux $\bQ_n$ at $x\in\Omega$ using only the values $u(x)$ and $\grad u(x)$.  The flux in realistic models, however, often comes from solving another differential equation, generally a momentum conservation equation which is coupled to the mass-conservation equation \eqref{eq:massconserve}.  Therefore we consider fluxes that are non-local functions of the thickness $u$ and its spatial derivatives.  For simplicity we restrict to the case where $\bQ_n$ is linear in $u$.
 
 Let $\mathcal{X} = W_0^{1,2}(\Omega)$, a Hilbert space, and let $\mathcal{K}=\{u\in\mathcal{X}|u\ge 0\}$.  Suppose $G_1(x,y), \dots, G_d(x,y)$ and $K(x,y)$ are scalar, real-valued functions in $L^2(\Omega\times \Omega)$; these will be integral kernels.  Define
 \begin{equation}
 \bQ_n[\grad u,u](x) = \int_\Omega \bG(x,y) u(y)\,dy - \int_\Omega K(x,y) \grad u(y)\,dy, \label{eq:nonlocaldefQn}
 \end{equation}
-where $\bG(x,y) = (G_1(x,y), \dots, G_d(x,y))$ is an $\RR^d$-valued function; note we use notation ``$\bQ_n[\cdot]$'' to emphasize general, not point-wise, dependence on $u$.
-
-With flux \eqref{eq:nonlocaldefQn}, equation \eqref{eq:semimassconserve} is no longer a PDE, but rather a linear integro-differential equation.  Indeed, \eqref{eq:semimassconserve} is not a PDE in \emph{two} senses, first that it includes an integral operator and second that it is subject to the constraint $u_n\ge 0$.
+where $\bG(x,y) = (G_1(x,y), \dots, G_d(x,y))$ is an $\RR^d$-valued function; notation ``$\bQ_n[\cdot]$'' emphasizes general, not point-wise, dependence on $u$.  With flux \eqref{eq:nonlocaldefQn}, equation \eqref{eq:semimassconserve} is no longer a PDE, but rather a linear integro-differential equation.
 
 Let $A_n:\mathcal{K} \to \mathcal{X}'=\mathcal{X}$ be defined by \eqref{eq:defineAn}, with $\bQ_n$ in \eqref{eq:nonlocaldefQn} as the flux, so that
 \begin{align}
@@ -535,13 +535,9 @@ We now assume $K$ is positive and bounded below \cite{PorterStirling1990} in the
 \begin{equation}
    \int_\Omega \int_\Omega K(x,y) \phi(x) \phi(y)\,dx\,dy \ge \delta \|\phi\|_{L^2(\Omega)}^2.  \label{eq:nonlocalKpos}
 \end{equation}
-Though this requires $K\ne 0$, in fact $K$ may have negative point values.  Also we require no symmetry for $K$.  Assumption \eqref{eq:nonlocalKpos} will allow us to show $A_n$ is coercive.
+(Note $K$ may have negative point values, but, in an integral sense, $K(x,x)>0$ on the diagonal.)
 
-We do two preliminary calculations.  First, if $\phi\in\mathcal{X}$ then
-\begin{equation}
-  \int_\Omega \int_\Omega K(x,y) \grad \phi(x) \cdot \grad \phi(y)\,dx\,dy \ge \delta \|\grad\phi\|_{L^2(\Omega;\RR^d)}^2,  \label{eq:nonlocalKposRd}
-\end{equation}
-by $d$ applications of \eqref{eq:nonlocalKpos}.  Second, by two applications of Cauchy-Schwarz we get
+Observe that by two applications of Cauchy-Schwarz we get
 \begin{equation}
 \left|\int_\Omega \int_\Omega \bG(x,y) \cdot \grad \phi(x)\,\phi(y) \,dx\,dy\right|
   \le \|\bG\|_{L^2(\Omega\times\Omega;\RR^d)} \|\phi\|^2,   \label{eq:nonlocalGbound}
@@ -562,24 +558,28 @@ where $C(\Omega,p)$ is the Poincar\'e constant in \eqref{eq:poincare}, then $A_n
     &\ge \|\phi\|_{L^2(\Omega)}^2 - \Delta t_n\,\|\bG\|_{L^2(\Omega\times\Omega;\RR^d)} \|\phi\|^2 + \delta \|\grad\phi\|_{L^2(\Omega;\RR^d)}^2 \\
     &\ge \|\phi\|_{L^2(\Omega)}^2 + \left(\frac{\delta}{C(\Omega,p)} - \Delta t_n\,\|\bG\|_{L^2(\Omega\times\Omega;\RR^d)}\right) \|\phi\|^2.
 \end{align*}
-The result follows from the definitions of coercivity and strict monotonicity, and condition \eqref{eq:nonlocaldtcond}.
+The result follows from condition \eqref{eq:nonlocaldtcond}.
 \end{proof}
 
-The observant reader will see a difference in the approaches in theorems \ref{thm:plapadvectwellposed} and \ref{thm:nonlocalwellposed}.  In the former the velocity $\bX$ in the hyperbolic flux $\bQ_n(u) = \bX(x) u$ was assumed to be differentiable.  Thereby an integration-by-parts gave a criterion for coercivity in terms of the norm of the divergence of $\bX$.  By constrast, in theorem \ref{thm:nonlocalwellposed} we assume only that $\bG$ is integrable, and thus no integration-by-parts is attempted.  As a result, condition \eqref{eq:nonlocaldtcond} on $\Delta t$ is in some senses more severe than condition \eqref{eq:plapadvectdtcond}; for instance, \eqref{eq:nonlocaldtcond} involves both at kernel-positivity constant $\delta$ and the Poincar\'e constant.
+Theorems \ref{thm:plapadvectwellposed} and \ref{thm:nonlocalwellposed} take different approaches.  In the former the velocity $\bX$ in the advective flux $\bQ_n(u) = \bX(x) u$ was assumed to be differentiable.  Thereby an integration-by-parts gave a criterion for coercivity in terms of the norm of the divergence of $\bX$.  By contrast, in theorem \ref{thm:nonlocalwellposed} we assume only that $\bG$ is integrable, and no integration-by-parts is attempted, but $\Delta t$ is bounded by the inverse of the norm of $\bG$.
 
-\subsection{Explicit time-steps} \label{subsec:explicit}  Recall the $\theta=0$ explicit case of equation \eqref{eq:thetamethod}.  In weak form the problem is variational inequality \eqref{eq:theVI}, but with
-    $$\bQ_n=0 \quad \text{ and } \quad F_n = - \Div \bq(\grad u_{n-1},u_{n-1},x) + f(u_{n-1},x).$$
+\subsection{Explicit time-steps} \label{subsec:explicit}  Recall the explicit case of equation \eqref{eq:thetamethod}, with $\theta=0$.  In weak form the problem is variational inequality \eqref{eq:theVI}, but with $\bQ_n=0$ and
+\begin{equation}
+F_n = - \Div \bq(\grad u_{n-1},u_{n-1},x) + f(u_{n-1},x).  \label{eq:Fnformexplicit}
+\end{equation}
 The weak problem seeks $u\in\mathcal{K} \subset \mathcal{X}$ so that
 \begin{equation}
 \ip{A_n(u)}{\phi} = \int_\Omega (u - \Delta t_n\,F_n - u_{n-1})\phi \ge 0 \quad \text{ for all } \phi \in \mathcal{K}.  \label{eq:explicitweakstep}
 \end{equation}
-But the previous state $u_{n-1}$ must be regular enough so that $F_n$ is well defined, that is, so that $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}'$ and thus $F_n\in\mathcal{X}'$.
+The previous state $u_{n-1}$ must therefore be regular enough so that $F_n$ in \eqref{eq:Fnformexplicit} is well defined, that is, so that $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}'$ and thus $F_n\in\mathcal{X}'$.
 
 Even if $F_n$ is in the dual space, variational inequality \eqref{eq:explicitweakstep} is not coercive on $\mathcal{X}=W^{1,p}(\Omega)$.  However, if $\mathcal{X}=L^2(\Omega)$ then the single time step \eqref{eq:explicitweakstep} is a well-posed problem.  It is a truncation problem with solution
 \begin{equation}
 u_n = \max\{0,u_{n-1} + \Delta t_n\,F_n\} \in L^2(\Omega)  \label{eq:explicittruncation}
 \end{equation}
-\cite[page 27]{KinderlehrerStampacchia1980}.  This is not very helpful because $u_n \in L^2(\Omega)$ is not regular enough so that $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}' \in L^2(\Omega)$, even in the case where $\bq$ is zeroth-order in $u$.  In summary, for explicit steps the solution to a single weakly-posed time step is truncation \eqref{eq:explicittruncation}, but that solution cannot be expected to be regular enough to yield a well-posed problem at the next step.
+\cite[page 27]{KinderlehrerStampacchia1980}.  Though this addresses one time step, it is not very helpful because $u_n \in L^2(\Omega)$ is not regular enough so that the next timestep has a well-defined weak form; $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}'$ is not in $L^2(\Omega)$.
+
+In summary, for explicit time steps the solution to a single weakly-posed time step is truncation \eqref{eq:explicittruncation}, but that solution cannot be expected to be regular enough to yield a well-posed problem at the next step.  Nonetheless many ice sheet \cite{Bueleretal2005} and sea ice \cite{Thorndikeetal1975} models proceed by explicit time steps for the spatially-discretized problem.  We return to such cases in subsection \ref{subsec:spaceexplicit}.
 
 
 \section{\emph{A posteriori} analysis of mass conservation on the free boundary}  \label{sec:timeseries}
