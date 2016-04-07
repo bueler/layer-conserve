@@ -337,42 +337,40 @@ Thus a weak solution \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} whe
 
 \section{Well-posedness for the single time-step problem} \label{sec:wellposed}
 
-We show in this section that for a variety of different fluxes $\bQ_n$, variational inequality \eqref{eq:theVI} is a well-posed problem.  The \emph{a posteriori} analysis of conservation errors in section \ref{sec:timeseries} (below) assumes that these problems are well-posed.
+We show in this section that for a variety of different fluxes $\bQ_n$, variational inequality \eqref{eq:theVI} is a well-posed problem.  The \emph{a posteriori} analysis of conservation errors in sections \ref{sec:timeseries} and \ref{sec:spacediscretized} below assumes that these problems are well-posed.
 
 Techniques for proving well-posedness of variational inequalities in Banach spaces are relatively well-established for certain linear and some nonlinear elliptic problems, especially monotone variational inequalities \cite{KinderlehrerStampacchia1980}.  We recall these tools in subsection \ref{subsec:mono}, as they apply in the case where the source term $F_n$ is solution-independent.  Then in the next four subsections we prove existence and uniqueness of problem \eqref{eq:theVI} for the following flux cases:
 \begin{itemize}
 \item[\ref{subsec:plap}] $p$-Laplacian-type parabolic (diffusion) fluxes for $1<p<\infty$,
-\item[\ref{subsec:advect}] linear advection fluxes with differentiable velocity fields, with the addition of small parabolic leading-order terms,
+\item[\ref{subsec:advect}] advective fluxes, with the addition of a small parabolic leading-order diffusion term,
 \item[\ref{subsec:powertransform}] doubly-nonlinear parabolic fluxes including the porous medium case, and
-\item[\ref{subsec:nonlocal}] linear non-local fluxes computed by integrals over $\Omega$.
+\item[\ref{subsec:nonlocal}] non-local fluxes computed by integrals over $\Omega$.
 \end{itemize}
-In subsections \ref{subsec:plap}--\ref{subsec:nonlocal} we only consider the backward Euler time-stepping scheme.
+Subsections \ref{subsec:plap}--\ref{subsec:nonlocal} only address the backward Euler time-stepping discretization, for which $\bQ_n(\bX,v,x) = \bq(\bX,v,x,t_n)$.
 
-In subsection \ref{subsec:explicit} we see how regularity issues stop us from having the well-posed, \emph{continuous-space} single time-step free boundary problems if time-stepping is explicit or semi-explicit.  In the fully-discrete framework set up in section \ref{sec:spacediscretized} we will be able to say more about well-posedness and time-step restrictions for explicit and semi-explicit schemes (subsection \ref{subsec:spaceexplicit}).
+In subsection \ref{subsec:explicit} we see how regularity issues block us from having well-posed, continuous-space single time-step free boundary problems if time-stepping is explicit or semi-explicit.
 
-\subsection{Monotonicity and sufficient conditions on flux for well-posedness} \label{subsec:mono}  Recall that $\mathcal{X}$ denotes a Banach space and $\mathcal{K}$ is a closed, convex subset of $\mathcal{X}$.  A mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{monotone} \cite{KinderlehrerStampacchia1980} if
+\subsection{Monotone variational inequalities} \label{subsec:mono}  Let $\mathcal{X}$ denote a Banach space and $\mathcal{K}$ is a closed, convex subset of $\mathcal{X}$.  A mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{monotone} \cite{KinderlehrerStampacchia1980} if
 \begin{equation}
    \ip{A(u) - A(v)}{u-v} \ge 0  \label{eq:monodef}
 \end{equation}
-for all $u,v\in\mathcal{K}$.  A monotone mapping $A$ is \emph{strictly monotone} if equality in \eqref{eq:monodef} implies $u=v$.  A mapping $A$ is \emph{coercive} \cite{KinderlehrerStampacchia1980} if there is $\phi\in \mathcal{K}$ so that
+for all $u,v\in\mathcal{K}$.  Mapping $A$ is \emph{strictly monotone} if equality in \eqref{eq:monodef} implies $u=v$, and $A$ is \emph{coercive} \cite{KinderlehrerStampacchia1980} if there is $\phi\in \mathcal{K}$ so that
 \begin{equation}
    \lim_{\|u\|\to\infty} \frac{\ip{A(u) - A(\phi)}{u-\phi}}{\|u-\phi\|} = +\infty, \label{eq:coercivedef}
 \end{equation}
-where the limit is taken over $u\in\mathcal{K}$.  A mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{continuous on finite-dimensional subspaces} if for each finite-dimensional subspace $\mathcal{M} \subset \mathcal{X}$, the restriction $A : \mathcal{K}\cap \mathcal{M} \to \mathcal{X}'$ is weakly-continuous \cite{KinderlehrerStampacchia1980}.
-
-The theory of monotone variational inequalities in Banach spaces \cite[chapter III]{KinderlehrerStampacchia1980} says that variational inequality \eqref{eq:theVI}, i.e.
+where the limit is taken over $u\in\mathcal{K}$.  Mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{continuous on finite-dimensional subspaces} if for each finite-dimensional subspace $\mathcal{M} \subset \mathcal{X}$, the restriction $A : \mathcal{K}\cap \mathcal{M} \to \mathcal{X}'$ is weakly-continuous \cite{KinderlehrerStampacchia1980}.  The theory of monotone variational inequalities in Banach spaces \cite[chapter III]{KinderlehrerStampacchia1980} says that the variational inequality
 \begin{equation}
     \ip{A(u)}{v-u} \ge 0 \quad \text{for all $v\in\mathcal{K}$}, \label{eq:VIabstract}
 \end{equation}
-has a unique solution if $A$ is strictly monotone, coercive, and continuous on finite-dimensional subspaces.  Note that strict monotonicity by itself implies uniqueness.
+has a unique solution if $A$ is strictly monotone, coercive, and continuous on finite-dimensional subspaces.  (Strict monotonicity alone implies uniqueness.)
 
-Consider variational inequality \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.
+Now consider variational inequality \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.
 
 \medskip
 \begin{lemma}  \label{lem:continuous}  Assume \eqref{eq:Qiscontinuous} for $\bQ_n$ and \eqref{eq:Fislip} for $F_n$.  The map $A_n$ is continuous on finite-dimensional subspaces.
 \end{lemma}
 
-\begin{proof} Choose $\{v_i\}_{i=1}^m \subset \mathcal{K}$ and let $\mathcal{M}=\operatorname{span}\left<v_i\right>$, as a subspace of $\mathcal{X}$.  Fix $\phi\in\mathcal{X}$.  The map $g:\RR^m \to \RR$ defined by
+\begin{proof} Choose $\{v_i\}_{i=1}^m \subset \mathcal{K}$ and let $\mathcal{M}=\operatorname{span}\left<v_i\right>$, a subspace of $\mathcal{X}$.  Fix $\phi\in\mathcal{X}$.  The map $g:\RR^m \to \RR$ defined by
 \begin{equation}
   g(c_1,\dots,c_m) = \ip{A_n\left(\sum_{i=1}^m c_i v_i\right)}{\phi}
 \end{equation}
@@ -380,7 +378,7 @@ is continuous because of the linearity of the integral, \eqref{eq:Qiscontinuous}
 \end{proof}
 
 \medskip
-We want to relate the properties of the flux $\bQ_n$ to monotonicity and coerciveness properties of $A_n$.  An easy calculation applies in the case that $F_n=F_n(x)$, i.e.~when the source function $F_n(v,x)$ is independent of the thickness $v$:
+We want to relate the properties of the flux $\bQ_n$ to the monotonicity and coerciveness of $A_n$.  An easy calculation applies in the case that $F_n=F_n(x)$, i.e.~when the source function $F_n(v,x)$ is independent of the thickness $v$:
 \begin{align}
    &\ip{A_n(u) - A_n(v)}{u-v}  \label{eq:AtoQcalculation} \\
    &\qquad = \int_\Omega (u-v)^2 - \Delta t\, \left[\bQ_n(\grad u,u,x) - \bQ_n(\grad v,v,x)\right] \cdot \grad(u-v).  \notag
@@ -402,9 +400,7 @@ for all $u,v \in \mathcal{K}$.
 for all $u,v \in \mathcal{K}$.
 \end{lemma}
 
-Note that the right side of \eqref{eq:Qncoercive} is non-positive, and that it uses the norm in $W^{1,p}(\Omega)$.  Observe that \eqref{eq:Qncoercive} implies \eqref{eq:Qnmonotone} with $C=0$, so \eqref{eq:Qncoercive} implies strict monotonicity for $A_n$, independent of $\Delta t_n$.  Also, \eqref{eq:Qnmonotone} is necessary and sufficient for monotonicity of $A_n$, while \eqref{eq:Qncoercive} is merely sufficient for coercivity.  For example, if the right side of \eqref{eq:Qncoercive} were ``$- c \|u-v\| \log \|u-v\|$'' then $A_n$ would be coercive.
-
-In considering lemma \ref{lem:monotonecoercive}, note that in cases where $\bQ_n(\grad u,u,x)$ is proportional to $\grad u$ we expect, for physical reasons, that the flux $\bQ_n$ points in the direction of the negative of $\grad u$.  By contrast, if $\bQ_n = \alpha \grad u$ for $\alpha>0$ then PDE \eqref{eq:massconserve} would be the ill-posed backward heat equation.
+Note that the right side of \eqref{eq:Qncoercive}, using the norm in $W^{1,p}(\Omega)$, is non-positive.  Inequality \eqref{eq:Qncoercive} implies \eqref{eq:Qnmonotone} with $C=0$, so \eqref{eq:Qncoercive} implies strict monotonicity for $A_n$, independent of $\Delta t_n$.  Also, \eqref{eq:Qnmonotone} is necessary and sufficient for monotonicity of $A_n$, while \eqref{eq:Qncoercive} is merely sufficient for coercivity.  (For example, if the right side of \eqref{eq:Qncoercive} were instead $- c \|u-v\| \log \|u-v\|$ then $A_n$ would be coercive.)  In fact, in considering lemma \ref{lem:monotonecoercive}, the reader should observe that in cases where $\bQ_n(\grad u,u,x)$ is proportional to $\grad u$ we expect, for physical reasons, that the flux $\bQ_n$ points in the direction of the negative of $\grad u$, as otherwise PDE \eqref{eq:massconserve} would be the ill-posed backward heat equation.
 
 Corollary III.1.8 of \cite{KinderlehrerStampacchia1980} now gives the following theorem.
 
@@ -412,11 +408,11 @@ Corollary III.1.8 of \cite{KinderlehrerStampacchia1980} now gives the following 
 \begin{theorem}  \label{thm:monowellposed}  Suppose $\frac{1}{2} \ge \frac{1}{p} - \frac{1}{d}$ and $F_n=F_n(x)\in L^q(\Omega)$.  Suppose that $\bQ_n$ satisfies the standard flux assumptions and that condition \eqref{eq:Fislip} applies to $F_n$.  If \eqref{eq:Qncoercive} holds for $\bQ_n$ then the single time-step weak problem \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
 
-\subsection{$p$-Laplacian fluxes} \label{subsec:plap}  We can immediately apply lemma \ref{lem:monotonecoercive} and theorem \ref{thm:monowellposed} to show well-posedness for some linear and non-linear parabolic cases, i.e.~some of those where $\bq$ has the direction of $-\grad u$.  Consider the $p$-Laplacian \cite{Evans1998} flux
+\subsection{$p$-Laplacian fluxes} \label{subsec:plap}  We can apply lemma \ref{lem:monotonecoercive} and theorem \ref{thm:monowellposed} to show well-posedness for some linear and non-linear parabolic cases, i.e.~where $\bq$ has the direction of $-\grad u$.  Consider the $p$-Laplacian \cite{Evans1998} flux
 \begin{equation}
   \bQ_n(\grad u) = - k |\grad u|^{p-2} \grad u \label{eq:plapflux}
 \end{equation}
-with $k>0$ and $1<p<\infty$, so $\bQ_n$ clearly satisfies the standard flux assumptions.  Formula \eqref{eq:plapflux} includes the ordinary Fourier flux as the $p=2$ case.  For the proofs in this subsection we assume $F_n=F_n(x)$ is independent of $u$, and we need inequalities from Appendix \ref{app:pinequalities}.
+with $k>0$ and $1<p<\infty$, so that $\bQ_n$ satisfies the standard flux assumptions.  Formula \eqref{eq:plapflux} includes the ordinary Fourier flux as the $p=2$ case.  For the proofs in this subsection we assume $F_n=F_n(x)$ is independent of $u$, and we use inequalities from Appendix \ref{app:pinequalities}.
 
 If $p\ge 2$ then by \eqref{eq:pinequality} and \eqref{eq:poincare}
 \begin{align}
@@ -424,9 +420,9 @@ If $p\ge 2$ then by \eqref{eq:pinequality} and \eqref{eq:poincare}
   &\le - \frac{k}{2^{p-2}} \int_\Omega |\grad u - \grad v|^p \notag \\
   &\le - \frac{k}{2^{p-2}\,C(\Omega,p)} \|u-v\|^p \label{eq:plapQnmono}
 \end{align}
-and thus \eqref{eq:Qncoercive} with $r=p$.
+and thus \eqref{eq:Qncoercive} holds with $r=p$.
 
-If $1<p<2$ then we have to work harder, and we cannot use condition \eqref{eq:Qncoercive} directly.  Returning to the nonlinear operator $A_n$ and using \eqref{eq:pinequality}, \eqref{eq:smallpbound}, and \eqref{eq:poincare} gives
+If $1<p<2$ then we have to work harder.  Showing coercivity is possible, though not via condition \eqref{eq:Qncoercive}.  Using \eqref{eq:pinequality}, \eqref{eq:smallpbound}, and \eqref{eq:poincare} gives
 \begin{align*}
   &\ip{A_n(u) - A_n(v)}{u-v} \\
   &\qquad = \|u-v\|_{L^2(\Omega)}^2 + \Delta t_n\,k \int_\Omega \left(|\grad u|^{p-2} \grad u - |\grad v|^{p-2} \grad v\right)\cdot (\grad u - \grad v) \\
