@@ -108,7 +108,7 @@
 \end{center}
   \begin{itemize}
   \item[$\circ$] ``people'' = scientists/modelers who study cryosphere
-  \item[$\circ$] special concern: choice of mathematical formulation
+  \item[$\circ$] concern: choice of mathematical formulation
   \end{itemize}
 \visible<2>{
 
@@ -240,7 +240,10 @@ h_t + \Div\bq = a
         \item changes in time
         \item climate $a$ and bed $b$ defined on $\Omega\subset \RR^2$ s.t.~$I_t\subset\Omega$
         \end{itemize}
-    \item[$\circ$] $\bq$ is vertically-integrated ice flux
+    \item[$\circ$] $\bq=\bq[\bU,h]$ is ice flux
+        \begin{itemize}
+        \item vertically-integrated
+        \end{itemize} 
     \end{itemize}
 \item \emph{momentum conservation}
 \begin{equation*}
@@ -311,7 +314,7 @@ v_z
 \begin{frame}{toward better models}
 
 \begin{itemize}
-\item abstracted, mathematical model of glaciers:
+\item abstracted model of glaciers:
 \begin{align*}
 h_t + \Div\bq &= a \qquad \text{in } I_t = \{h>0\} \subset \RR^2 \\
 \mathcal{M}(\bU,h,b) &= 0 \qquad \text{in } E_t \subset \RR^3 \\
@@ -322,11 +325,14 @@ h_t + \Div\bq &= a \qquad \text{in } I_t = \{h>0\} \subset \RR^2 \\
 \medskip
 \item \emph{my goal}: better numerical glacier models
   \begin{itemize}
-  \item[$\circ$] effective for long runs ($\sim 100$ ka) at high res ($\sim 1$ km) \only<2>{\hfill\alert{\large\frownie{}}}
-  \item[$\circ$] without first-order time-splitting errors \only<2>{\hfill\alert{\large\frownie{}}}
-  \item[$\circ$] without explicit time-step restrictions \only<2>{\hfill\alert{\large\frownie{}}}
+  \item[$\circ$] effective for long runs ($\sim 100$ ka) at high res ($\sim 1$ km) \only<2-3>{\hfill\alert{\large\frownie{}}}
+  \item[$\circ$] without first-order time-splitting errors \only<2-3>{\hfill\alert{\large\frownie{}}}
+  \item[$\circ$] without explicit time-step restrictions \only<2-3>{\hfill\alert{\large\frownie{}}}
   \end{itemize}
-\visible<2>{\item \alert{vs PISM = Parallel Ice Sheet Model, \texttt{pism-docs.org}}}
+\visible<2-3>{\item \alert{vs PISM = Parallel Ice Sheet Model, \texttt{pism-docs.org}}}
+
+\medskip
+\visible<3>{\item mathematical model at top is not good enough}
 \end{itemize}
 \end{frame}
 
