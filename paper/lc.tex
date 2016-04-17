@@ -365,14 +365,14 @@ has a unique solution if $A$ is strictly monotone, coercive, and continuous on f
 
 Now consider variational inequality \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.
 
-\begin{lemma}  \label{lem:continuous}  Assume \eqref{eq:Qiscontinuous} for $\bQ_n$ and \eqref{eq:Fislip} for $F_n$.  The map $A_n$ is continuous on finite-dimensional subspaces.
+\begin{lemma}  \label{lem:continuous}  Assume \eqref{eq:Qiscontinuous} for $\bQ_n$ and that $F_n(v,x)\in L^q$ is continuous in $v$.  The map $A_n$ is continuous on finite-dimensional subspaces.
 \end{lemma}
 
 \begin{proof} Choose $\{v_i\}_{i=1}^m \subset \mathcal{K}$ and let $\mathcal{M}=\operatorname{span}\left<v_i\right>$, a subspace of $\mathcal{X}$.  Fix $\phi\in\mathcal{X}$.  The map $g:\RR^m \to \RR$ defined by
 \begin{equation}
   g(c_1,\dots,c_m) = \ip{A_n\left(\sum_{i=1}^m c_i v_i\right)}{\phi}
 \end{equation}
-is continuous because of the linearity of the integral, \eqref{eq:Qiscontinuous}, and \eqref{eq:Fislip}.
+is continuous because of the linearity of the integral, \eqref{eq:Qiscontinuous}, and the continuity of $F_n$.
 \end{proof}
 
 We want to relate the properties of the flux $\bQ_n$ to the monotonicity and coerciveness of $A_n$.  An easy calculation applies in the case that $F_n=F_n(x)$, i.e.~when the source function $F_n(v,x)$ is independent of the thickness $v$:
@@ -401,7 +401,7 @@ Note that the right side of \eqref{eq:Qncoercive}, using the norm in $W^{1,p}(\O
 
 Corollary III.1.8 of \cite{KinderlehrerStampacchia1980} now gives the following theorem.
 
-\begin{theorem}  \label{thm:monowellposed}  Suppose $\frac{1}{2} \ge \frac{1}{p} - \frac{1}{d}$ and $F_n=F_n(x)\in L^q(\Omega)$.  Suppose that $\bQ_n$ satisfies the standard flux assumptions and that condition \eqref{eq:Fislip} applies to $F_n$.  If \eqref{eq:Qncoercive} holds for $\bQ_n$ then the single time-step weak problem \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
+\begin{theorem}  \label{thm:monowellposed}  Suppose $\frac{1}{2} \ge \frac{1}{p} - \frac{1}{d}$ and $F_n=F_n(x)\in L^q(\Omega)$.  Suppose that $\bQ_n$ satisfies the standard flux assumptions.  If \eqref{eq:Qncoercive} holds for $\bQ_n$ then the single time-step weak problem \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
 
 \subsection{$p$-Laplacian fluxes} \label{subsec:plap}  We can apply lemma \ref{lem:monotonecoercive} and theorem \ref{thm:monowellposed} to show well-posedness for some linear and non-linear parabolic cases, i.e.~where $\bq$ has the direction of $-\grad u$.  Consider the $p$-Laplacian \cite{Evans1998} flux
@@ -410,7 +410,7 @@ Corollary III.1.8 of \cite{KinderlehrerStampacchia1980} now gives the following 
 \end{equation}
 with $k>0$ and $1<p<\infty$, so that $\bQ_n$ satisfies the standard flux assumptions.  Formula \eqref{eq:plapflux} includes the ordinary Fourier flux as the $p=2$ case.  For the proofs in this subsection we assume $F_n=F_n(x)$ is independent of $u$, and we use inequalities from Appendix \ref{app:pinequalities}.
 
-If $p\ge 2$ then by \eqref{eq:pinequality} and \eqref{eq:poincare}
+If $p\ge 2$ then by \eqref{eq:pbiginequality} and \eqref{eq:poincare}
 \begin{align}
 \int_\Omega \left(\bQ_n(\grad u) - \bQ_n(\grad v)\right)\cdot (\grad u - \grad v) &= -k  \int_\Omega \left(|\grad u|^{p-2} \grad u - |\grad v|^{p-2} \grad v\right)\cdot (\grad u - \grad v) \notag \\
   &\le - \frac{k}{2^{p-2}} \int_\Omega |\grad u - \grad v|^p \notag \\
@@ -418,7 +418,7 @@ If $p\ge 2$ then by \eqref{eq:pinequality} and \eqref{eq:poincare}
 \end{align}
 and thus \eqref{eq:Qncoercive} holds with $r=p$.
 
-If $1<p<2$ then we have to work harder.  Showing coercivity is possible, though not via condition \eqref{eq:Qncoercive}.  Using \eqref{eq:pinequality}, \eqref{eq:smallpbound}, and \eqref{eq:poincare} gives
+If $1<p<2$ then we have to work harder.  Showing coercivity is possible, though not via condition \eqref{eq:Qncoercive}.  Using \eqref{eq:psmallinequality}, \eqref{eq:smallpbound}, and \eqref{eq:poincare} gives
 \begin{align*}
   &\ip{A_n(u) - A_n(v)}{u-v} \\
   &\qquad = \|u-v\|_{L^2(\Omega)}^2 + \Delta t_n\,k \int_\Omega \left(|\grad u|^{p-2} \grad u - |\grad v|^{p-2} \grad v\right)\cdot (\grad u - \grad v) \\
@@ -472,7 +472,7 @@ Let $1<p<\infty$ and $r\ge 0$.  Define $m$ by \eqref{eq:doubletransform}.  Suppo
 \end{theorem}
 
 \begin{proof}
-Suppose $p\ge 2$.  If $w,v\in\mathcal{X}$ then by \eqref{eq:pinequality} and Poincare inequality \eqref{eq:poincare},
+Suppose $p\ge 2$.  If $w,v\in\mathcal{X}$ then by \eqref{eq:pbiginequality} and Poincare inequality \eqref{eq:poincare},
 \begin{align*}
 \ip{A_n(w)-A_n(v)}{w-v} &= \int_\Omega \Delta t_n\, K \left(|\grad w|^{p-2} \grad w - |\grad v|^{p-2} \grad v\right) \cdot \grad (w-v) \\
   &\qquad\qquad + \left(G(w,x) - G(v,x)\right) (w-v) \\
@@ -551,7 +551,7 @@ where, by definition, $\|\bG\|_{L^2(\Omega\times\Omega;\RR^d)} = \left(\sum_{i=1
 where $C(\Omega,p)$ is the Poincar\'e constant in \eqref{eq:poincare}, then $A_n$ defined by \eqref{eq:nonlocaldefnAn} is coercive and strictly monotone, so variational inequality \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
 
-\begin{proof}  Let $\phi=u-v$ for $u,v\in\mathcal{K}$.  By \eqref{eq:nonlocalKposRd}, \eqref{eq:nonlocalGbound}, and \eqref{eq:poincare},
+\begin{proof}  Let $\phi=u-v$ for $u,v\in\mathcal{K}$.  By \eqref{eq:nonlocalKpos}, \eqref{eq:nonlocalGbound}, and \eqref{eq:poincare},
 \begin{align*}
 \ip{A_n(u)-A_n(v)}{\phi} &\ge \|\phi\|_{L^2(\Omega)}^2 - \Delta t_n\,\int_\Omega \int_\Omega \bG(x,y) \cdot \grad \phi(x) \phi(y)\,dx\,dy \\
     &\qquad + \Delta t_n\,\int_\Omega \int_\Omega K(x,y) \grad \phi(x) \cdot \grad \phi(y)\,dx\,dy \\
@@ -737,11 +737,11 @@ FIXME Condition (ii) could be summarized ``if $u_n^j>0$ then $G_j(u_n^J)=0$,'' u
 
 \section{Conclusion} \label{sec:conclusion}
 
-Climate-scale fluid models generally claim exact discrete conservation as a goal \cite{Thuburn2008}, but apparently always in a context without free boundary.  Such climate models are ``multiphysics'' models which generally attempt to conserve masses of the phases of water (in particular) separately, as these phases have different physical properties relevant to earth system dynamics.  For example, snow and ice have higher albedo and lower density than the liquid ocean.
+Climate-scale fluid models generally claim exact discrete conservation as a goal \cite{Thuburn2008}, but apparently these claims are made in a context without free boundary.  Such climate models are ``multiphysics'' models which generally attempt to conserve masses of the phases of water (in particular) separately, as these phases have different physical properties relevant to earth system dynamics.  For example, snow and ice have higher albedo and lower density than the liquid ocean.
 
 In many such models, one or more fluids or phases form a layer with a moving free boundary.  We believe that auditable mass conservation does not generally occur in these models, except perhaps through \emph{ad hoc} redistribution of mass, or \emph{ad hoc} discrete schemes to locally balance the books at the free boundary.  Discrete conservation is presumably recovered only in the temporal and spatial refinement limit in such models.
 
-In this paper we identify the per time-step ``retreat area'' $\Omega_n^r$ and mass ``retreat loss'' $R_n$ for such models as key tools to improve the situation.  By definition $\Omega_n^r$ is the region where the fluid layer thickness is positive at the beginning of the time step, and, through flow and boundary-source terms, the thickness is zero at the end of the time step.  That is, fluid was completely lost at each location in the retreat area at some time during the time-step.  Even for well-behaved source terms (e.g.~smooth in time and space) and short time steps, the retreat area $|\Omega_n^r|$ can be of essentially arbitrary size.  For example, in a varying climate a large area of thin ice sheet or sea ice can melt, or a large area of a layer of surface water on ground can evaporate, and so on, during one time step.
+In this paper we identify the per time-step ``retreat area'' $\Omega_n^r$ (subsection \ref{subsec:setdecompose}) and ``retreat loss'' $R_n$ (subsection \ref{subsec:aposteriori}) for such models as important.  By definition $\Omega_n^r$ is the region where the fluid layer thickness is positive at the beginning of the time step, and, through flow and source terms, the thickness is zero at the end of the time step.  That is, fluid was completely lost at each location in the retreat area at some time during the time-step.  Even for well-behaved source terms (e.g.~smooth in time and space) and short time steps, the retreat area $|\Omega_n^r|$ can be of essentially arbitrary size.  For example, in a varying climate a large area of thin ice sheet or sea ice can melt, or a large area of a layer of surface water on ground can evaporate, and so on, during one time step.
 
 In these terms we can answer question (ii) in the introduction more precisely:
 \begin{quote}
@@ -764,23 +764,19 @@ We believe that avoidance of, or at least clearer understanding of, \emph{ad hoc
 
 \appendix
 
-\section{Inequalities for $p$-norms}   \label{app:pinequalities}  Versions of the inequality in the following Lemma appear in the literature, at least as early as \cite{GlowinskiMarroco1975}, but here the result applies in $\RR^d$---contrast \cite{BarrettLiu1993,GlowinskiMarroco1975} for the $\RR^2$ case---and it has a complete proof and explicit constants.  The proof follows and corrects \cite[Appendix A]{Peral1997}.
+\section{Inequalities for $p$-norms}   \label{app:pinequalities}  Versions of the inequalities in the next two Lemmas appear in the literature, at least as early as \cite{GlowinskiMarroco1975}, but here the results apply in $\RR^d$---contrast \cite{BarrettLiu1993,GlowinskiMarroco1975} for the $\RR^2$ case---and have complete proofs and explicit constants.  The proof follows and corrects \cite[Appendix A]{Peral1997}.
 
-\begin{lemma}  \label{lem:pinequality}  If $1<p<\infty$ and $x,y\in\RR^n$ then
+\begin{lemma}  \label{lem:pbiginequality}  If $p\ge 2$ and $x,y\in\RR^d$ then
 \begin{equation}
-\left(|x|^{p-2} x - |y|^{p-2} y\right)\cdot(x-y) \ge
-   \begin{cases}
-       2^{2-p} |x-y|^p, & p\ge 2, \\
-       (p-1)\, |x-y|^2 \, \left(|x|+|y|\right)^{p-2}, & 1 < p \le 2.
-   \end{cases} \label{eq:pinequality}
+\left(|x|^{p-2} x - |y|^{p-2} y\right)\cdot(x-y) \ge 2^{2-p} |x-y|^p. \label{eq:pbiginequality}
 \end{equation}
 \end{lemma}
 
-\begin{proof}  \underline{Case $p \ge 2$:}  The case where $x=0$ or $y=0$ is trivial, so assume, by swapping $x$ and $y$ as necessary, that $0 < |y| \le |x|$.  Define $t=|y|/|x|$ and $s = (x\cdot y)/(|x||y|)$ so that $0\le t \le 1$ and $|s|\le 1$.  Expand \eqref{eq:pinequality} and divide it by $|x|^p$, to get the equivalent statement
+\begin{proof}  The case where $x=0$ or $y=0$ is trivial, so assume, by swapping $x$ and $y$ as necessary, that $0 < |y| \le |x|$.  Define $t=|y|/|x|$ and $s = (x\cdot y)/(|x||y|)$ so that $0\le t \le 1$ and $|s|\le 1$.  Expand \eqref{eq:pbiginequality} and divide it by $|x|^p$, to get the equivalent statement
     $$1 - (t^{p-1}+t) s + t^p \ge 2^{2-p} \left(1 - 2 s t + t^2\right)^{p/2}.$$
 Thus we need to prove that $2^{2-p}$ is a lower bound for
 	$$f(t,s) = \frac{1 - (t^{p-1}+t) s + t^p}{\left(1 - 2 s t + t^2\right)^{p/2}}.$$
-Note $s=1$ if and only if $x=y$, and in that case \eqref{eq:pinequality} is true.  We find a lower bound of $f$ on $(t,s) \in R=[0,1]\times[-1,1)$.  Note $1-2st+t^2 > 0$ on $ R$, so $f(t,s)$ is well-defined and differentiable on $R$.
+Note $s=1$ if and only if $x=y$, and in that case \eqref{eq:pbiginequality} is true.  We find a lower bound of $f$ on $(t,s) \in R=[0,1]\times[-1,1)$.  Note $1-2st+t^2 > 0$ on $ R$, so $f(t,s)$ is well-defined and differentiable on $R$.
 
 Now, $f(t,-1) = \left(1 + t^{p-1}\right) / \left(1 + t\right)^{p-1}$ on $t\in[0,1]$.  Because $h(t)=t^{p-1}$ is convex for $p \ge 2$,
     $$\frac{1}{2^{p-1}} (1+t)^{p-1} = h(\tfrac{1}{2} 1 + \tfrac{1}{2} t) \le \tfrac{1}{2} h(1) + \tfrac{1}{2} h(t) = \tfrac{1}{2} (1 + t^{p-1}),$$
@@ -800,10 +796,15 @@ G(t) &\ge 0 &\iff && (2-p) t (t^{p-2} + 1) + (p-1) (t^p+1) - t^{p-2} - t^2 \ge 0
 \end{align*}
 Note $(p-1) (1 - t^{p-1}) \ge 0$.  If $p\ge 3$ then $t^{p-2} - t \le 0$ so $G(t)\ge 0$ in that case.  On the other hand, if $2\le p < 3$ then
 	$$\frac{t^{p-2} - t}{1 - t^{p-1}} = t^{p-2} \frac{1 - t^{3-p}}{1 - t^{p-1}} \le t^{p-2} \le 1 \le p-1$$
-on $t\in[0,1)$, because $t^{p-1}\le t^{3-p}$ and thus $1 - t^{p-1} \ge 1 - t^{3-p}$.  But also $G(1)=0$, so $G(t)\ge 0$ on $[0,1]$.
+on $t\in[0,1)$, because $t^{p-1}\le t^{3-p}$ and thus $1 - t^{p-1} \ge 1 - t^{3-p}$.  But also $G(1)=0$, so $G(t)\ge 0$ on $[0,1]$. \end{proof}
 
-\medskip
-\noindent \underline{Case $1 < p \le 2$:}  Assuming $x,y$ are not both zero, by symmetry (swapping $x$ and $y$) and homogeneity (replacing $x,y$ with $\lambda x,\lambda y$) we can assume $|x| = 1 \ge |y|$.  Furthermore, by choosing a basis of $\RR^n$ we can have $x=(1,0,\dots,0)$ and $y=(y_1,y_2,0,\dots,0)$ where $y_1^2+y_2^2 \le 1$.  In these terms, the inequality we seek to prove is
+\begin{lemma}  \label{lem:psmallinequality}  If $1<p\le 2$ and $x,y\in\RR^n$ then
+\begin{equation}
+\left(|x|^{p-2} x - |y|^{p-2} y\right)\cdot(x-y) \ge (p-1)\, |x-y|^2 \, \left(|x|+|y|\right)^{p-2}. \label{eq:psmallinequality}
+\end{equation}
+\end{lemma}
+
+\begin{proof}  Assuming $x,y$ are not both zero, by symmetry (swapping $x$ and $y$) and homogeneity (replacing $x,y$ with $\lambda x,\lambda y$) we can assume $|x| = 1 \ge |y|$.  Furthermore, by choosing a basis of $\RR^d$ we can have $x=(1,0,\dots,0)$ and $y=(y_1,y_2,0,\dots,0)$ where $y_1^2+y_2^2 \le 1$.  In these terms, the inequality we seek to prove is
 \begin{align*}
 &\left(1 - (y_1^2+y_2^2)^{\frac{p-2}{2}} y_1\right) (1-y_1) + (y_1^2+y_2^2)^{\frac{p-2}{2}} y_2^2 \\
 &\qquad\qquad \ge (p-1)\, \left((1-y_1)^2+y_2^2\right) \left(1 + \sqrt{y_1^2+y_2^2} \right)^{p-2}.
@@ -823,10 +824,9 @@ on $t\in[0,1)$, because $t^{p-1}\le t^{3-p}$ and thus $1 - t^{p-1} \ge 1 - t^{3-
       {(1-y_1)^2+y_2^2} \,  \left(1 + \sqrt{y_1^2+y_2^2} \right)^{2-p} \\
 &\qquad \ge \frac{(p-1) (1-y_1)^2 + (p-1) y_2^2}{(1-y_1)^2+y_2^2} = p-1.
 \end{align*}
-This proves \eqref{eq:pinequality} in the case $1<p\le 2$.
-\end{proof}
+This proves \eqref{eq:psmallinequality}. \end{proof}
 
-We will also need the result of combining the $1<p\le 2$ case of Lemma \ref{lem:pinequality}, a point-wise result, with integration over a set $\Omega$.
+We will also need the result of combining Lemma \ref{lem:psmallinequality}, a point-wise result, with integration over a set $\Omega$.
 
 \begin{lemma} \label{lem:smallpbound}  Suppose $1<p\le 2$.  If $\Omega \subset \RR^d$ is measurable and if $\bu,\bv\in L^p(\Omega; \RR^m)$ for $m\ge 1$, then
 \begin{equation}
@@ -852,7 +852,7 @@ where $C(\Omega,p)=1+(|\Omega|/\omega_d)^{p/d}$ and $\omega_d=(2 \pi^{d/2})/(d\,
 \end{lemma}
 
 
-\section{Second-order Runge-Kutta time-discretization}   \label{app:rk2}  In Section \ref{sec:strongform} we describe the time semi-discretization of the continuum strong form \eqref{eq:massconserve}--\eqref{eq:constraint} using the $\theta$ method, thus including the Euler, backward Euler, and trapezoidal rules.  These one-stage time-discretizations generate particular forms for functions $\bQ_n(\bX,v,z)$ and $F_n(v,z)$ in equations \eqref{eq:semimassconserve}--\eqref{eq:semiconstraint}, and these functions define the single-time-step variational inequality problem \eqref{eq:theVI}.  In this Appendix we illustrate how these functions can be generated for certain Runge-Kutta (RK) schemes, although in some cases at the cost of having to solve multiple problems of type \eqref{eq:theVI} at each time step.  Higher-order RK schemes can be handled without any additional ideas, but we limit our presentation to two-stage schemes for simplicity.
+\section{Second-order Runge-Kutta time-discretization}   \label{app:rk2}  In Section \ref{sec:strongform} we describe the time semi-discretization of the continuum strong form \eqref{eq:massconserve}--\eqref{eq:constraint} using the $\theta$ method, thus including the Euler, backward Euler, and trapezoidal rules.  These one-stage time-discretizations generate particular forms for functions $\bQ_n(\bX,v,z)$ and $F_n(v,z)$ in equations \eqref{eq:semimassconserve}--\eqref{eq:semiconstraint}, and these functions define the single-time-step variational inequality problem \eqref{eq:theVI}.  In this Appendix we illustrate how these functions can be generated for certain Runge-Kutta (RK) schemes, although in some cases at the cost of having to solve multiple problems of type \eqref{eq:theVI} at each time step.
 
 For the $m$-dimensional ODE system
 \begin{equation}
@@ -879,14 +879,15 @@ with $i=1,2$ in the first equation.  \emph{Explicit} methods have $a_{ij}=0$ for
   & 1-\theta & \theta  \\
 \end{array}
 \end{equation*}
-when written as a two-stage scheme.  Note that $\theta>0$ methods are semi-implicit but not diagonally-implicit.
+when written as a two-stage scheme, and are explicit for $\theta=0$ and semi-implicit for all $\theta$.
 
-So-called (singly) \emph{diagonally-implicit} RK (``DIRK'') methods are semi-implicit methods for which the diagonal entries $a_{ii}$ are independent of $i$, i.e.~$a_{11}=a_{22}$.  The accuracy of $s$-stage DIRK methods is limited to $p=s+1$ \cite{AscherPetzold1998}.  There exist strongly S-stable and stiffly-accurate \cite{AscherPetzold1998} DIRKs with $s$ stages and order of accuracy $p=s$ for $s=1,2,3$ \cite{Alexander1977}.  Note that ``strongly S-stable'' is also called ``stiff decay'' \cite{AscherPetzold1998}.
+So-called (singly) \emph{diagonally-implicit} RK (``DIRK'') methods are semi-implicit methods for which the diagonal entries $a_{ii}$ are independent of $i$, i.e.~$a_{11}=a_{22}$.  Note that $\theta$ methods are not diagonally-implicit.  The accuracy of $s$-stage DIRK methods is limited to $p=s+1$ \cite{AscherPetzold1998}.  There exist strongly S-stable and stiffly-accurate \cite{AscherPetzold1998} DIRKs with $s$ stages and order of accuracy $p=s$ for $s=1,2,3$ \cite{Alexander1977}.  ``Strongly S-stable'' is also called ``stiff decay'' \cite{AscherPetzold1998}.
 
-The strong stability properties of these DIRK methods are exactly what is needed for many of the applications addressed in the current paper, namely diffusive cases where $\bq \sim - \grad u$.  In these diffusive cases the $m$-dimensional method-of-lines ODE system generated by spatially-semi-discretizing \eqref{eq:massconserve} would become arbitrarily stiff under spatial refinement.  Furthermore, semi-implicit methods have the computational advantage, especially in our large $m$ case arising from discretization of a PDE, that each stage represents a separate linear system of only $m$ equations to solve.  (General $s$-stage implicit RK schemes require solving size $sm$ linear systems, but for semi-implicit RK schemes the matrix has block lower-triangular form.)  DIRK methods have the further advantage that the $m\times m$ matrix $A$ for each stage $i$, or the Jacobian matrix arising from the linearization of the stage, can be re-used at each stage during a step. In fact the matrix has $i$-independent form $A = I - h a_{ii} J$, at least if the Jacobian $J$ is evaluated at only at the start of the time step in the nonlinear case: $J = \frac{\partial \bbf}{\partial y}(t_{n-1},\by_{n-1})$.
+The strong stability properties of these DIRK methods are helpful for many of the applications addressed in the paper, namely cases where $\bq$ has a leading-order diffusion term.  In these cases the $m$-dimensional method-of-lines ODE system generated by spatially-semi-discretizing \eqref{eq:massconserve} becomes arbitrarily stiff under spatial refinement.  Semi-implicit methods have the computational advantage, especially in our large $m$ case arising from discretization of a PDE, that each stage generates an $m$-equation linear system, whereas general implicit RK schemes generate larger systems.  DIRK methods have the further advantage that the $m\times m$ matrix $A$ for each stage $i$, or the Jacobian matrix arising from the linearization of the stage, can be re-used at each stage during a step.  In fact the matrix has stage-independent form $A = I - h a_{ii} J$ if the Jacobian $J$ is evaluated at only at the start of the time step in the nonlinear case: $J = \frac{\partial \bbf}{\partial y}(t_{n-1},\by_{n-1})$.
 
-Functions $\bQ_n$ and $F_n$ in \eqref{eq:functionalforms} are needed to state the weak problem \eqref{eq:theVI}.  We compute these functions for two particular DIRK schemes, the $(s,p)=(1,2)$ A-stable scheme known as the implicit midpoint rule, and the unique strongly S-stable $(s,p)=(2,2)$ scheme for which $0\le \tau_i\le 1$.  The significance of the latter condition on $\tau_i$ for our context is that the source term $f$ in \eqref{eq:massconserve} is only evaluated at $t$ in the interval $[t_{n-1},t_n]$ when computing $u_n$; the other strongly S-stable $(s,p)=(2,2)$ method, oddly enough, has $\tau_1>1$.
+Functions $\bQ_n$ and $F_n$ in \eqref{eq:functionalforms} appear in the weak form \eqref{eq:theVI}.  We compute these functions for two particular DIRK schemes, the $(s,p)=(1,2)$ A-stable scheme known as the implicit midpoint rule, and the unique strongly S-stable $(s,p)=(2,2)$ scheme for which $0\le \tau_i\le 1$.  The significance of the latter condition on $\tau_i$ for our context is that the source term $f$ in \eqref{eq:massconserve} is only evaluated at $t$ in the interval $[t_{n-1},t_n]$ when computing $u_n$; the other strongly S-stable $(s,p)=(2,2)$ method has $\tau_1>1$.
 
+\medskip
 \begin{itemize}
 \item We write the implicit midpoint rule as a two-stage scheme with tableau
 \begin{equation*}
@@ -902,13 +903,12 @@ This scheme has two equations: the first stage is a backward Euler step of $\fra
 \by_n &= \by_{n-1} + h \bbf(t_{n-1}+\tfrac{1}{2}h,\tilde\by). \label{eq:impmidb}
 \end{align}
 
-Let $t_{n-1/2} = t_{n-1} + \tfrac{1}{2} \Delta t$ using the notation of the main paper.  Then the functions \eqref{eq:functionalforms} for the first stage \eqref{eq:impmida} are
+Let $t_{n-1/2} = t_{n-1} + \tfrac{1}{2} \Delta t$ using the notation of the main paper.  The functions \eqref{eq:functionalforms} for the first stage \eqref{eq:impmida} are
   $$\tilde\bQ(\bX,v,x) = \tfrac{1}{2} \bq(\bX,v,x,t_{n-1/2}) \quad \text{and} \quad \tilde F(v,x) = \tfrac{1}{2} f(v,x,t_{n-1/2}).$$
-The functions for the second stage \eqref{eq:impmidb} are
-  $$\bQ_n(\bX,v,x) = 0$$
-and
+The functions for the second stage \eqref{eq:impmidb} are $\bQ_n(\bX,v,x) = 0$ and
   $$\quad F_n(v,x) = f(\tilde u,x,t_{n-1/2}) - \Div \bq(\grad\tilde u,\tilde u,x,t_{n-1/2})$$
-where $\tilde u$ denotes the weak solution to the first stage.  Neither of these second-stage functions actually depend on the unknown $v$ because stage \eqref{eq:impmidb} is explicit once \eqref{eq:impmida} is computed.
+where $\tilde u$ denotes the weak solution to the first stage.  Neither of these second-stage functions depend on the unknown $v$ because stage \eqref{eq:impmidb} is explicit.
+
 \item The strongly S-stable $(2,2)$ scheme has tableau
 \begin{equation*}
 \begin{array}{c|cc}
@@ -917,18 +917,16 @@ where $\tilde u$ denotes the weak solution to the first stage.  Neither of these
        & 1-\alpha & \alpha \\
 \end{array}
 \end{equation*}
-where $\alpha = (2-\sqrt{2})/2 \approx 0.293$.  Noting the stiffly-accurate condition, namely $a_{2j}=b_j$ for $j=1,2$, this scheme also has only two equations, both implicit.  Now using notation $\tilde\by = \by_{n,1}$, the stages are
+where $\alpha = (2-\sqrt{2})/2 \approx 0.293$.  Using notation $\tilde\by = \by_{n,1}$, the stages are
 \begin{align}
 \tilde\by &= \by_{n-1} + \alpha h \bbf(t_{n-1}+\alpha h,\tilde\by), \label{eq:sstabledirka} \\
 \by_n &= \by_{n-1} + (1-\alpha) h \bbf(t_{n-1}+\alpha h,\tilde\by) + \alpha h \bbf(t_n,\by_n). \label{eq:sstabledirkb}
 \end{align}
 
-Let $t_{n;\alpha} = t_{n-1} + \alpha \Delta t$.  The functions \eqref{eq:functionalforms} for the first stage \eqref{eq:sstabledirka} are
-  $$\tilde\bQ(\bX,v,x) = \alpha \bq(\bX,v,x,t_{n;\alpha}) \quad \text{and} \quad \tilde F(v,x) = \alpha f(v,x,t_{n;\alpha}).$$
-The functions for the second stage \eqref{eq:sstabledirkb} are
-   $$\bQ_n(\bX,v,x) = \alpha \bq(\bX,v,x,t_n)$$
-and
-   $$F_n(v,x) = (1-\alpha) f(\tilde u,x,t_{n;\alpha}) + \alpha f(v,x,t_n) - (1-\alpha) \Div \bq(\grad\tilde u,\tilde u,x,t_{n;\alpha})$$
+Let $\tilde t = t_{n-1} + \alpha \Delta t$.  The functions \eqref{eq:functionalforms} for the first stage \eqref{eq:sstabledirka} are
+  $$\tilde\bQ(\bX,v,x) = \alpha \bq(\bX,v,x,\tilde t) \quad \text{and} \quad \tilde F(v,x) = \alpha f(v,x,\tilde t),$$
+and for the second stage \eqref{eq:sstabledirkb} are $\bQ_n(\bX,v,x) = \alpha \bq(\bX,v,x,t_n)$ and
+   $$F_n(v,x) = (1-\alpha) f(\tilde u,x,\tilde t) + \alpha f(v,x,t_n) - (1-\alpha) \Div \bq(\grad\tilde u,\tilde u,x,\tilde t)$$
 where $\tilde u$ denotes the weak solution to the first stage.
 \end{itemize}
 
