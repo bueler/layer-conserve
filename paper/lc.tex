@@ -7,6 +7,7 @@
 \usepackage{times}
 
 \usepackage{tikz}
+\usepackage{pgfplots}
 
 \newtheorem{example}{Example}
 
@@ -81,11 +82,8 @@ We consider those models of such fluid layers in which the fluid geometry is ful
 Problems of this type appear within climate and forecasting models, especially for the ice sheet, sea ice, and ocean components of the earth system (Figure \ref{fig:climatepictures}).  Though these geoscientific applications drive the author's interest in the problem, the situation is also as familiar as the build-up and drying of rain on a car windshield, the making of pancakes, and so on.
 
 \begin{figure}[ht]
-\begin{center}
-FIGURE (FIXME)
-%\includegraphics[width=2.0in,keepaspectratio=true]{}
-\end{center}
-\caption{Free-boundary fluid layer mass conservation problems occur for several components of the earth-system and climate models, including ice sheet (a), sea ice (b), and ocean (c) components.}
+\input{tikz/cartoon.tex}
+\caption{Free-boundary fluid layer problems for several components of the earth-system models, including \emph{(a)} ice sheet, \emph{(b)} sea ice, and \emph{(c)} ocean components.  And \emph{(d)} drops of water on a car windshield.}
 \label{fig:climatepictures}
 \end{figure}
 

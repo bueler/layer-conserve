@@ -1,0 +1,51 @@
+\tikzset{align at top/.style={baseline=(current bounding box.north)}}
+
+\begin{tabular}{cc}
+\begin{tabular}{l}
+(a) \\
+\begin{tikzpicture}[scale=0.8]
+\begin{axis}[hide axis]
+\addplot[mark=none,samples=250,domain=0:5]
+  {exp(2*x)};
+\end{axis}
+\end{tikzpicture}
+\end{tabular}
+
+&
+
+\begin{tabular}{l}
+(b) \\
+\begin{tikzpicture}[scale=0.8]
+\begin{axis}[hide axis]
+\addplot[mark=none,samples=250,domain=0:5]
+  {exp(-2*x)};
+\end{axis}
+\end{tikzpicture}
+\end{tabular}
+
+\\
+
+\begin{tabular}{l}
+(c) \\
+\begin{tikzpicture}[scale=0.8]
+\begin{axis}[hide axis]
+\addplot[mark=none,samples=250,domain=0:5]
+  {-exp(5*x)};
+\end{axis}
+\end{tikzpicture}
+\end{tabular}
+
+&
+
+\begin{tabular}{l}
+(d) \\
+\begin{tikzpicture}[scale=0.8]
+\begin{axis}[hide axis]
+\addplot[mark=none,samples=250,domain=0:5]
+  {-exp(-5*x)};
+\end{axis}
+\end{tikzpicture}
+\end{tabular}
+
+\end{tabular}
+
