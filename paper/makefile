@@ -1,17 +1,16 @@
 all: lc.pdf
 
 figures = domains-fig.pdf
-tikzfigs = fvmesh-shellerror.tikz
 
 domains-fig.pdf: domainsfigure.py
 	python domainsfigure.py
 	pdfcrop domains-fig.pdf domains-fig.pdf
 
-lc.pdf: lc.aux lc.bbl lc.tex $(figures) $(tikzfigs)
+lc.pdf: lc.aux lc.bbl lc.tex $(figures)
 	pdflatex lc
 	pdflatex lc
 
-lc.aux: lc.tex $(figures) $(tikzfigs)
+lc.aux: lc.tex $(figures)
 	pdflatex lc
 	bibtex lc
 
