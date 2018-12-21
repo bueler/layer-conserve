@@ -102,10 +102,12 @@ int main(int argc,char **argv) {
   user.midtime = user.dt / 2.0;  // initialize as middle of the first time step
 
   ierr = DMDACreate1d(PETSC_COMM_WORLD, DM_BOUNDARY_PERIODIC,
-                      -50,         // override with -da_grid_x or -da_refine
+                      50,          // override with -da_grid_x or -da_refine
                       1, 2, NULL,  // dof = 1 and stencil width = 2
                       &user.da); CHKERRQ(ierr);
   ierr = DMSetApplicationContext(user.da, &user);CHKERRQ(ierr);
+  ierr = DMSetFromOptions(user.da);CHKERRQ(ierr);
+  ierr = DMSetUp(user.da);CHKERRQ(ierr);
 
   ierr = DMDAGetLocalInfo(user.da,&info); CHKERRQ(ierr);
   user.dx = user.L / (PetscReal)(info.mx);
