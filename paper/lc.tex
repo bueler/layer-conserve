@@ -70,33 +70,37 @@ FIXME
 
 \pagestyle{myheadings}
 \thispagestyle{plain}
-\markboth{ED BUELER}{CONSERVATION PROBLEMS FOR FLUID LAYERS WITH FREE-BOUNDARIES}
+\markboth{ED BUELER}{CONSERVATION PROBLEMS FOR FLUID LAYERS WITH FREE BOUNDARIES}
 
 
 \section{Introduction}  \label{sec:intro}
 
-Consider a fluid which moves in a thin layer on a fixed substrate.  Fluid mass can be added or removed from the layer by external agents.  Through flow and these addition (accumulation, precipitation, \dots) and removal (ablation, evaporation, \dots) processes, the thickness of the layer can change in time.  The balance between flow and these processes determines the extent of the fluid-covered area.
+Consider a fluid which moves in a thin layer on a fixed substrate.  Fluid mass can be added (accumulation, precipitation) or removed (ablation, evaporation) from the layer by external agents.  Through flow and these addition/removal processes, the spatially-varying thickness of the layer will change in time.  We consider models of such fluid layers in which the fluid geometry is described by a nonnegative thickness function.  In such models the addition/removal processes are combined into a signed source term in a two-spatial-dimension conservation equation.  This equation applies in those areas where the thickness is positive, though the addition/removal processes are defined on a larger (supposed fixed) region.  The region of positive thickness, i.e.~the fluid-covered domain, changes in time, and the problem of determining the fluid motion is thus of free-boundary type.  The mass conservation equation, plus further momentum-conservation equations which relate layer geometry and flow, plus models determining the addition/removal processes (i.e.~the ``climate'' of the fluid layer), altogether determine the location of the free/moving boundary at which the thickness goes to zero.  This paper analyzes the mathematical well-posedness of such climate-influenced fluid layer models.  We also consider certain tradeoffs inherent in numerical solutions of these models.
 
-We consider models of such fluid layers in which the fluid geometry is described by a nonnegative thickness function.  In such models the addition/removal processes are combined into a signed source term in a two-spatial-dimension conservation equation which applies to those areas where the thickness is positive, though the addition/removal processes are defined on a larger (fixed) region.  The region of positive thickness, i.e.~the fluid-covered domain, changes in time, and the problem is of free-boundary type.  The conservation equation, plus further momentum-conservation equations for how the layer geometry and flow are related, combine with the models determining the addition/removal processes (``climate'' of the fluid layer) to determine the location of the free/moving boundary at which the thickness goes to zero.  This paper mathematically analyzes the well-posedness of, and tradeoffs inherent in, such fluid layer models as they are influenced by a modeled climate.
+%\begin{figure}[ht]
+%\input{tikz/cartoon.tex}
+%\caption{Free-boundary fluid layer problems for several components of the earth-system models, including \emph{(a)} ice sheet, \emph{(b)} sea ice, and \emph{(c)} ocean components.  And \emph{(d)} drops of water on a car windshield.}
+%\label{fig:climatepictures}
+%\end{figure}
 
-\begin{figure}[ht]
-\input{tikz/cartoon.tex}
-\caption{Free-boundary fluid layer problems for several components of the earth-system models, including \emph{(a)} ice sheet, \emph{(b)} sea ice, and \emph{(c)} ocean components.  And \emph{(d)} drops of water on a car windshield.}
-\label{fig:climatepictures}
-\end{figure}
+Problems of this free-boundary type appear in models of glaciers and ice sheets \cite{Bueler2016,CalvoDuranyVazquez2000,Calvoetal2002,EgholmNielsen2010,JouvetBueler2012},  surface/subsurface hydrology \cite{Maxwelletal2014}, shallow (liquid) water flowing diffusively over marshes \cite{AlonsoSantillanaDawson2008}, and sea ice \cite{LipscombHunke2004,Thorndikeetal1975}.  Furthermore, within scientifically-useful multiphysics models there may be additional thin-layer, free-boundary sub-models.  For example, in models of glaciers and ice sheets there may be submodels describing ice shelves \cite{Albrechtetal2011}, sub-/supra-glacial hydrology of liquid water \cite{Aschwandenetal2012,BuelervanPelt2015,Schoofetal2012}, and sediment transport \cite{Brinkerhoffetal2017}.  Though these geoscientific applications drive the author's interest, on the other hand the situation is as familiar as the dynamics of rain on a car windshield \cite{Kondic2003}, where precipitation, evaporation, and gravity and/or wind-driven flow all combine to determine the evolution of fluid geometry.
 
-Problems of this free-boundary type appear within earth-system models (Figure \ref{fig:climatepictures}) for ice sheets \cite{Bueler2016,Bueleretal2005,CalvoDuranyVazquez2000,Calvoetal2002,EgholmNielsen2010,JouvetBueler2012}, ice shelves \cite{Albrechtetal2011}, glaciers coupled to sediment transport \cite{Brinkerhoffetal2017}, shallow (liquid) water flowing diffusively over marshes \cite{AlonsoSantillanaDawson2008}, models for coupled surface/subsurface hydrology \cite{Maxwelletal2014}, and sub-/supra-glacial hydrology \cite{Aschwandenetal2012,BuelervanPelt2015,Schoofetal2012}, among other applications.  Though these geoscientific applications drive the author's interest, the situation is as familiar as the dynamics of rain on a car windshield.
+In geophysical and climate-modeling contexts, determining the fluid-covered area is a leading-order modeling goal.  For example, snow and ice are much more reflective than the substrate they cover (i.e.~land or ocean), so deciding whether grid cells are ice-covered or ice-free is a significant part of the state of climate models.  On the other hand, conservation of mass, including precise accounting of mass transfers to and from the modeled fluid to other model components, is a goal of equal importance.
 
-In the climate modeling context, determining the fluid-covered area is a leading-order modeling goal.  In the icy cases above, for example, snow and ice are much more reflective of sunlight than the substrate they cover (i.e.~land and ocean, respectively, for ice sheets and sea ice).  In other words, deciding whether areas are ice-covered or ice-free is a significant part of the state of a coupled earth-system model.  However, conservation of mass, including precise accounting of mass transfers to and from the modeled fluid to other earth system components, is a modeling goal.
+If the fluid is modeled as having constant density then the nonnegative thickness is the conserved quantity, equivalent to mass per unit area.  In models for variable density fluids the vertical integral of density is the conserved quantity in the two-dimensional form of the problem, but again it must be nonnegative.  As mass conservation of constant-density fluids is the primary example, for simplicity we call the conserved quantity ``mass'' and the corresponding nonnegative variable ``thickness''.
 
-If the fluid is modeled as having constant density then the nonnegative thickness is the conserved quantity, equivalent to mass per unit area of the substrate.  In models for variable density fluids the vertical integral of density is the conserved quantity in the two-dimensional form of the problem, but again it must be nonnegative.  As mass conservation of constant-density fluids is the primary example, for simplicity we call the conserved quantity ``mass'' and the corresponding nonnegative variable ``thickness''.
-
-Suppose $\Omega \subset \RR^d$, $d\ge 1$, is a bounded open region with regular (Lipshitz) boundary.  Let $T>0$.  The layer thickness function $u(x,t)$ is defined for all $x\in \bar\Omega$ and $t \in [0,T]$.  Where there is no fluid we have $u(x,t)=0$.  The time-dependent models we consider are usually stated in \emph{strong form}, in which case they include both a mass conservation equation and an obvious, though sometimes-unstated, inequality constraint:
+Suppose $\Omega \subset \RR^d$, $d\ge 1$, is a bounded open region with regular (Lipshitz) boundary.  (In most cases of interest $d=2$.)  Let $T>0$.  The layer thickness function $u(x,t)$ is defined for all $x\in \bar\Omega$ and $t \in [0,T]$.  Where there is no fluid we have $u(x,t)=0$.  The rate of flow is described by a vector flux $\bq$ and the addition/removal processes by a source term $f$; we discuss parameterizations of these below.  The time-dependent models we consider are usually stated in \emph{strong form}, in which case they include both a mass conservation equation and an obvious, though sometimes-unstated, inequality constraint:
 \begin{align}
-u_t + \Div \bq &= f(u,x,t) &&\text{in } \Omega \times (0,T), \text{ where } u > 0 \label{eq:massconserve} \\
+u_t + \Div \bq &= f &&\text{in } \Omega \times (0,T), \text{ where } u > 0 \label{eq:massconserve} \\
 u &\ge 0 &&\text{in } \bar\Omega \times [0,T]. \label{eq:constraint}
 \end{align}
-Conservation equation \eqref{eq:massconserve} only applies where the layer \emph{exists} ($u>0$) and not where it is \emph{absent} ($u=0$).  Constraint \eqref{eq:constraint} simply comes from the meaning of $u$ as a thickness.
+Conservation equation \eqref{eq:massconserve} only applies where the layer \emph{exists} ($u>0$) and not where it is \emph{absent} ($u=0$).  Constraint \eqref{eq:constraint} simply comes from the meaning of $u$ as a thickness.  The situation is pictured in Figure \ref{fig:cartoon}, where positive source values ($f>0$) are pictured as downward arrows (precipitation).
+
+\begin{figure}[ht]
+\centerline{\includegraphics[width=0.8\textwidth]{cartoon}}
+\caption{Schematic of a fluid layer with a thickness $u\ge 0$.}
+\label{fig:cartoon}
+\end{figure}
 
 Well-posedness of any model including \eqref{eq:massconserve} and \eqref{eq:constraint} requires additional information about $\bq$ and $f$.  It also requires precise specification of admissible functions and a weak formulation, which we address in Sections \ref{sec:weakform} and \ref{sec:wellposed}.  The primary form of the flux $\bq$ considered here is local but reasonably general,
 \begin{equation}
