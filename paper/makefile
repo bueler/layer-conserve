@@ -1,14 +1,15 @@
 all: lc.pdf
 
-figures = cartoon.pdf domains-fig.pdf
+figures = cartoon.pdf cartoon-dt.pdf domains-fig.pdf
 
 domains-fig.pdf: domainsfigure.py
 	python domainsfigure.py
 	pdfcrop domains-fig.pdf domains-fig.pdf
 
-cartoon.pdf: cartoon.py
+cartoon.pdf cartoon-dt.pdf: cartoon.py
 	python cartoon.py
 	pdfcrop cartoon.pdf cartoon.pdf
+	pdfcrop cartoon-dt.pdf cartoon-dt.pdf
 
 lc.pdf: lc.aux lc.bbl lc.tex $(figures)
 	pdflatex lc
@@ -24,4 +25,5 @@ lc.bbl: lc.aux lc.bib
 .PHONY: clean
 
 clean:
-	@rm -f *.pyc *.out *.aux *.log *.bbl *.blg *.synctex.gz *~ domains-fig.pdf cartoon.pdf
+	@rm -f *.pyc *.out *.aux *.log *.bbl *.blg *.synctex.gz *~ $(figures)
+
