@@ -289,8 +289,10 @@ While this derivation of inequality \eqref{eq:morallytheVI} requires too many hy
 
 For the following definitions, fix $p>1$ and denote $\mathcal{X} = W_0^{1,p}(\Omega)$.  Denote its dual space by $\mathcal{X}'$ and $\ip{\cdot}{\cdot}: \mathcal{X}' \times \mathcal{X} \to \RR$ for the pairing.  Note that the admissible set $\mathcal{K}$ below is a closed and convex subset of $\mathcal{X}$, and that variational inequality \eqref{eq:theVI} is the same as \eqref{eq:morallytheVI}.
 
-\begin{definition}  \label{def:spaces}
-    $$\mathcal{K} = \left\{v \in \mathcal{X} \,\big|\, v(x) \ge 0\, \text{ a.e.~} x \in \Omega\right\}.$$
+\begin{definition}
+\begin{equation}
+\mathcal{K} = \left\{v \in \mathcal{X} \,\big|\, v(x) \ge 0\, \text{ a.e.~} x \in \Omega\right\}.  \label{eq:defineK}
+\end{equation}
 \end{definition}
 
 \begin{definition}  Suppose $u_{n-1}\in\mathcal{K}$ and $\Delta t_n>0$.  Assume that $\bQ_n$ satisfies the standard flux assumptions and that $F_n$ satisfies \eqref{eq:FisLq}.  Define $A_n:\mathcal{K} \to \mathcal{X}'$ by
@@ -327,72 +329,73 @@ Thus a solution of \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} where
 
 \section{Well-posedness for the single time-step problem} \label{sec:wellposed}
 
-We show in this section that for a variety of different fluxes $\bQ_n$, variational inequality \eqref{eq:theVI} is a well-posed problem.  The \emph{a posteriori} analysis of conservation errors in sections \ref{sec:timeseries} and \ref{sec:spacediscretized} below assumes that these problems are well-posed.
+We show in this Section that a variety of different fluxes $\bQ_n$ yield well-posed variational inequality problems \eqref{eq:theVI}.  The \emph{a posteriori} analysis of conservation errors in Sections \ref{sec:timeseries} and \ref{sec:spacediscretized} below assumes that these problems are well-posed.
 
-Techniques for proving well-posedness of variational inequalities in Banach spaces are relatively well-established for certain linear and some nonlinear elliptic problems, especially monotone variational inequalities \cite{KinderlehrerStampacchia1980}.  We recall these tools in subsection \ref{subsec:mono}, as they apply in the case where the source term $F_n$ is solution-independent.  Then in the next four subsections we prove existence and uniqueness of problem \eqref{eq:theVI} for the following flux cases:
+Techniques for proving well-posedness of variational inequalities in Banach spaces are relatively well-established for linear and some nonlinear elliptic problems, especially for monotone operators \cite{KinderlehrerStampacchia1980}.  We recall these tools in subsection \ref{subsec:mono} assuming the source term $F_n$ is solution-independent.  Then in the next four subsections we prove existence and uniqueness of the solution to problem \eqref{eq:theVI} for the following flux cases:
 \begin{itemize}
-\item[\ref{subsec:plap}] $p$-Laplacian-type parabolic (diffusion) fluxes for $1<p<\infty$,
-\item[\ref{subsec:powertransform}] doubly-nonlinear parabolic cases including the porous medium flux, and
-\item[\ref{subsec:advect}] advective fluxes, with the addition of a small parabolic leading-order diffusion term,
-\item[\ref{subsec:nonlocal}] non-local fluxes computed by integrals over $\Omega$.
+\item[\ref{subsec:plap}] $p$-Laplacian-type parabolic (diffusion) for $1<p<\infty$,
+\item[\ref{subsec:powertransform}] doubly-nonlinear parabolic, including porous media,
+\item[\ref{subsec:advect}] linear advective, with a small parabolic diffusion term, and
+\item[\ref{subsec:nonlocal}] linear and non-local (computed by integrals over $\Omega$).
 \end{itemize}
-Subsections \ref{subsec:plap}--\ref{subsec:nonlocal} only address the backward Euler time-stepping discretization, for which $\bQ_n(\bX,v,x) = \bq(\bX,v,x,t_n)$.
+These subsections only use the backward Euler time-stepping discretization.  At the end, subsection \ref{subsec:explicit} shows that if time-stepping is explicit or semi-explicit then regularity issues generally block the continuous-space single time-step problems from being well-posed.
 
-In subsection \ref{subsec:explicit} we see how regularity issues block us from having well-posed, continuous-space single time-step free boundary problems if time-stepping is explicit or semi-explicit.
-
-\subsection{Monotone variational inequalities} \label{subsec:mono}  Let $\mathcal{X}$ denote a Banach space and $\mathcal{K}$ is a closed, convex subset of $\mathcal{X}$.  A mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{monotone} \cite{KinderlehrerStampacchia1980} if
+\subsection{Monotone variational inequalities} \label{subsec:mono}  Recall $\mathcal{K}$ is defined in \eqref{eq:defineK}.  The following definitions can be found in \cite{KinderlehrerStampacchia1980}.  A mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{monotone} if
 \begin{equation}
    \ip{A(u) - A(v)}{u-v} \ge 0  \label{eq:monodef}
 \end{equation}
-for all $u,v\in\mathcal{K}$.  Mapping $A$ is \emph{strictly monotone} if equality in \eqref{eq:monodef} implies $u=v$, and $A$ is \emph{coercive} \cite{KinderlehrerStampacchia1980} if there is $\phi\in \mathcal{K}$ so that
+for all $u,v\in\mathcal{K}$, and \emph{strictly monotone} if equality in \eqref{eq:monodef} additionally implies $u=v$.  Mapping $A$ is \emph{coercive} if there is $\phi\in \mathcal{K}$ so that
 \begin{equation}
    \lim_{\|u\|\to\infty} \frac{\ip{A(u) - A(\phi)}{u-\phi}}{\|u-\phi\|} = +\infty, \label{eq:coercivedef}
 \end{equation}
-where the limit is taken over $u\in\mathcal{K}$.  Mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{continuous on finite-dimensional subspaces} if for each finite-dimensional subspace $\mathcal{M} \subset \mathcal{X}$, the restriction $A : \mathcal{K}\cap \mathcal{M} \to \mathcal{X}'$ is weakly-continuous \cite{KinderlehrerStampacchia1980}.  The theory of monotone variational inequalities in Banach spaces \cite[chapter III]{KinderlehrerStampacchia1980} says that the variational inequality
+where the limit is taken over $u\in\mathcal{K}$.  Mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{continuous on finite-dimensional subspaces} if for each finite-dimensional subspace $\mathcal{M} \subset \mathcal{X}$, the restriction $A : \mathcal{K}\cap \mathcal{M} \to \mathcal{X}'$ is weakly-continuous.
+
+The theory of monotone variational inequalities in Banach spaces \cite[chapter III]{KinderlehrerStampacchia1980} says that a solution to the variational inequality
 \begin{equation}
     \ip{A(u)}{v-u} \ge 0 \quad \text{for all $v\in\mathcal{K}$}, \label{eq:VIabstract}
 \end{equation}
-has a unique solution if $A$ is strictly monotone, coercive, and continuous on finite-dimensional subspaces.  (Strict monotonicity alone implies uniqueness.)
+exists and is unique if $A$ is strictly monotone, coercive, and continuous on finite-dimensional subspaces.  (Note strict monotonicity alone suffices for uniqueness.)
 
-Now consider variational inequality \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.
+Now consider variational inequality \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.  It is easy to show the following lemma.
 
 \begin{lemma}  \label{lem:continuous}  Assume \eqref{eq:Qiscontinuous} for $\bQ_n$ and that $F_n(v,x)\in L^q$ is continuous in $v$.  The map $A_n$ is continuous on finite-dimensional subspaces.
 \end{lemma}
 
-\begin{proof} Choose $\{v_i\}_{i=1}^m \subset \mathcal{K}$ and let $\mathcal{M}=\operatorname{span}\left<v_i\right>$, a subspace of $\mathcal{X}$.  Fix $\phi\in\mathcal{X}$.  The map $g:\RR^m \to \RR$ defined by
-\begin{equation}
-  g(c_1,\dots,c_m) = \ip{A_n\left(\sum_{i=1}^m c_i v_i\right)}{\phi}
-\end{equation}
-is continuous because of the linearity of the integral, \eqref{eq:Qiscontinuous}, and the continuity of $F_n$.
-\end{proof}
+%\begin{proof} Choose $\{v_i\}_{i=1}^m \subset \mathcal{K}$ and let $\mathcal{M}=\operatorname{span}\left<v_i\right>$, a subspace of $\mathcal{X}$.  Fix $\phi\in\mathcal{X}$.  The map $g:\RR^m \to \RR$ defined by
+%\begin{equation}
+%  g(c_1,\dots,c_m) = \ip{A_n\left(\sum_{i=1}^m c_i v_i\right)}{\phi}
+%\end{equation}
+%is continuous because of \eqref{eq:Qiscontinuous} and the continuity of $F_n$.
+%\end{proof}
 
-We want to relate the properties of the flux $\bQ_n$ to the monotonicity and coerciveness of $A_n$.  An easy calculation applies in the case that $F_n=F_n(x)$, i.e.~when the source function $F_n(v,x)$ is independent of the thickness $v$:
+Now we want to relate the properties of the flux $\bQ_n$ to the monotonicity and coercivity of $A_n$.  The following calculation applies when $F_n=F_n(x)$, i.e.~when the source function $F_n(v,x)$ is independent of the thickness $v$:
 \begin{align}
    &\ip{A_n(u) - A_n(v)}{u-v}  \label{eq:AtoQcalculation} \\
    &\qquad = \int_\Omega (u-v)^2 - \Delta t\, \left[\bQ_n(\grad u,u,x) - \bQ_n(\grad v,v,x)\right] \cdot \grad(u-v).  \notag
 \end{align}
-The following lemma uses the fact that $W^{1,p}(\Omega) \subset L^2(\Omega)$ if either $p>d$ or $d\le 2$; see Sobolev's lemma, theorems 5.6.2 and 5.6.5, in \cite{Evans2010}.
+The proof of the following lemma is therefore easy and omitted.  Note that $W^{1,p}(\Omega) \subset L^2(\Omega)$ if either $p>d$ or $d\le 2$ \cite[theorems 5.6.2 and 5.6.5]{Evans2010}.  % FIXME: check for 2nd edition.
+In considering this lemma the reader should observe that in cases where $\bQ_n(\grad u,u,x)$ is proportional to $\grad u$ we expect, for physical reasons, that the flux $\bQ_n$ points generally in the direction of the negative of $\grad u$, as otherwise PDE \eqref{eq:massconserve} would behave like the ill-posed backward heat equation.
 
-\begin{lemma}  \label{lem:monotonecoercive}  Suppose $\frac{1}{2} \ge \frac{1}{p} - \frac{1}{d}$.  Suppose \eqref{eq:QisLq} and that $F_n=F_n(x) \in L^q(\Omega)$.  Then
-
-(i)  $A_n$ is (strictly) monotone if there is ($C<1$) $C\le 1$ so that
+\begin{lemma}  \label{lem:monotonecoercive}  Suppose $W^{1,p}(\Omega) \subset L^2(\Omega)$.  Suppose \eqref{eq:QisLq} and that $F_n=F_n(x) \in L^q(\Omega)$.  Then
+\renewcommand{\labelenumi}{(\roman{enumi})}
+\begin{enumerate}
+\item  $A_n$ is monotone if there is $C\le 1$ so that
 \begin{equation}
 \int_\Omega \left[\bQ_n(\grad u,u,x) - \bQ_n(\grad v,v,x)\right] \cdot \grad(u-v) \le \frac{C}{\Delta t_n} \|u-v\|_{L^2}^2 \label{eq:Qnmonotone}
 \end{equation}
 for all $u,v \in \mathcal{K}$.
-
-(ii)  $A_n$ is coercive and strictly-monotone if there is $c>0$ and $r>1$ so that
+\item  $A_n$ is strictly-monotone if \eqref{eq:Qnmonotone} holds with $C<1$,
+\item  $A_n$ is coercive and strictly-monotone if there is $c>0$ and $r>1$ so that
 \begin{equation}
 \int_\Omega \left[\bQ_n(\grad u,u,x) - \bQ_n(\grad v,v,x)\right] \cdot \grad(u-v) \le - c \|u-v\|^r \label{eq:Qncoercive}
 \end{equation}
 for all $u,v \in \mathcal{K}$.
+\end{enumerate}
 \end{lemma}
 
-Note that the right side of \eqref{eq:Qncoercive}, using the norm in $W^{1,p}(\Omega)$, is non-positive.  Inequality \eqref{eq:Qncoercive} implies \eqref{eq:Qnmonotone} with $C=0$, so \eqref{eq:Qncoercive} implies strict monotonicity for $A_n$, independent of $\Delta t_n$.  Also, \eqref{eq:Qnmonotone} is necessary and sufficient for monotonicity of $A_n$, while \eqref{eq:Qncoercive} is merely sufficient for coercivity.  (For example, if the right side of \eqref{eq:Qncoercive} were instead $- c \|u-v\| \log \|u-v\|$ then $A_n$ would be coercive.)  In fact, in considering lemma \ref{lem:monotonecoercive}, the reader should observe that in cases where $\bQ_n(\grad u,u,x)$ is proportional to $\grad u$ we expect, for physical reasons, that the flux $\bQ_n$ points in the direction of the negative of $\grad u$, as otherwise PDE \eqref{eq:massconserve} would be the ill-posed backward heat equation.
+Note that the right side of \eqref{eq:Qncoercive} uses the norm in $W^{1,p}(\Omega)$.  Inequality \eqref{eq:Qncoercive} implies \eqref{eq:Qnmonotone} with $C=0$, so \eqref{eq:Qncoercive} implies strict-monotonicity for $A_n$ independent of $\Delta t_n$.  Observe that \eqref{eq:Qnmonotone} is necessary and sufficient for monotonicity of $A_n$, while \eqref{eq:Qncoercive} is only sufficient for coercivity.  (For example, if the right side of \eqref{eq:Qncoercive} were instead $- c \|u-v\| \log \|u-v\|$ then $A_n$ would be coercive.)  Corollary III.1.8 of \cite{KinderlehrerStampacchia1980} now gives the following theorem.
 
-Corollary III.1.8 of \cite{KinderlehrerStampacchia1980} now gives the following theorem.
-
-\begin{theorem}  \label{thm:monowellposed}  Suppose $\frac{1}{2} \ge \frac{1}{p} - \frac{1}{d}$ and $F_n=F_n(x)\in L^q(\Omega)$.  Suppose that $\bQ_n$ satisfies the standard flux assumptions.  If \eqref{eq:Qncoercive} holds for $\bQ_n$ then the single time-step weak problem \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
+\begin{theorem}  \label{thm:monowellposed}  Suppose $W^{1,p}(\Omega) \subset L^2(\Omega)$.  Suppose $\bQ_n$ satisfies the standard flux assumptions and that $F_n=F_n(x)\in L^q(\Omega)$.  If \eqref{eq:Qncoercive} holds for $\bQ_n$ then the single time-step weak problem \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
 
 \subsection{$p$-Laplacian fluxes} \label{subsec:plap}  We can apply lemma \ref{lem:monotonecoercive} and theorem \ref{thm:monowellposed} to show well-posedness for some linear and non-linear parabolic cases, i.e.~where $\bq$ has the direction of $-\grad u$.  Consider the $p$-Laplacian \cite{Evans2010} flux
