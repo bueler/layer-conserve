@@ -461,24 +461,23 @@ Suppose $p\ge 2$.  If $w,v\in\mathcal{X}$ then by \eqref{eq:pbiginequality} and 
 The case $1<p<2$ follows by a trivial modification of the argument in Theorem \ref{thm:plapwellposed}.
 \end{proof}
 
-\subsection{Advective fluxes (differentiable velocity field)} \label{subsec:advect}  Consider advective (hyperbolic) problems for layers which are transported by a differentiable velocity fields,
+\subsection{Advective fluxes (differentiable velocity field)} \label{subsec:advect}  Now consider an advective (hyperbolic) problem for a layer transported by a differentiable velocity field $\bX \in W^{1,\infty}(\Omega;\RR^d)$,
 \begin{equation}
-  \bQ_n(u,x) = \bX(x) u, \label{eq:advectflux}
+  \bQ_n(u,x) = \bX(x) u. \label{eq:advectflux}
 \end{equation}
-where $\bX \in W^{1,\infty}(\Omega;\RR^d)$.  It is easy to check that for any $1<p<\infty$, $\bQ_n$ satisfies the standard flux assumptions on $W^{1,p}(\Omega)$.
-
-Let $u,v\in\mathcal{K}$ and compute
+It is easy to check that if $1<p<\infty$ then $\bQ_n$ satisfies the standard flux assumptions on $W^{1,p}(\Omega)$.  Next we let $u,v\in\mathcal{K}$ and use integration-by-parts with $u=v=0$ on $\partial \Omega$ to show
 \begin{align}
    &\int_\Omega \left[\bQ_n(u,x) - \bQ_n(v,x)\right] \cdot \grad (u - v) = \int_\Omega \bX (u-v) \cdot \grad (u - v)   \label{eq:advectQnmono} \\
-   &\qquad\qquad = \frac{1}{2}\,\int_\Omega \bX \cdot \grad (u - v)^2 = - \frac{1}{2}\,\int_\Omega \left(\Div\bX\right) (u - v)^2, \notag
+   &\qquad\qquad = \frac{1}{2}\,\int_\Omega \bX \cdot \grad\left[ (u - v)^2 \right] = - \frac{1}{2}\,\int_\Omega \left(\Div\bX\right) (u - v)^2. \notag
 \end{align}
-after integrating by parts, because $u=v=0$ on $\partial \Omega$.  This result can be exploited in a couple of ways.  If the vector field is divergent, i.e.~if $\Div\bX\ge 0$, then \eqref{eq:Qnmonotone} applies with $C=0$, and so $A_n$ is strictly monotone.  Otherwise, \eqref{eq:Qnmonotone} applies with $C = C_\bX = \frac{1}{2}\Delta t_n\,\|\Div\bX\|_{L^\infty(\Omega)}$, so it follows that $A_n$ is monotone if $C_\bX \le 1$, and strictly monotone if $C_\bX < 1$.  Such a bound on the product of $\Delta t_n$ and a norm of the velocity $\bX$ might be regarded as a CFL-type condition \cite{LeVeque2002}, but here the bound involves the amount by which $\bX$ is not volume-preserving.
 
-There is no reason to suppose that the operator $A_n$ corresponding to \eqref{eq:advectflux}, defined by \eqref{eq:defineAn} as an operator from the convex subset $\mathcal{K} \subset \mathcal{X} = W_0^{1,p}(\Omega)$ to the dual $\mathcal{X}'$, is coercive.  However, if we add just a little bit of diffusion, here in the form of a $p$-Laplacian leading-order term with coefficient $\eps>0$ and $p\ge 2$,
+Equation \eqref{eq:advectQnmono} can be exploited in a couple of ways.  If the vector field is divergent $\Div\bX\ge 0$ then \eqref{eq:Qnmonotone} applies with $C=0$ and so $A_n$ is strictly monotone.  Otherwise, \eqref{eq:Qnmonotone} applies with $C = \frac{1}{2}\Delta t_n\,\|(\Div\bX)_{-}\|_{L^\infty(\Omega)}$, so it follows that $A_n$ is monotone if $C \le 1$, and strictly monotone if $C < 1$.  Observe that such a bound on the product of $\Delta t_n$ and a norm of $\bX$ may be regarded as a CFL-type condition \cite{LeVeque2002}, but here the bound measures the convergence of the velocity field.
+
+Consider the operator $A_n$ corresponding to \eqref{eq:advectflux}, i.e.~defined by \eqref{eq:defineAn} as an operator from the convex subset $\mathcal{K} \subset \mathcal{X} = W_0^{1,p}(\Omega)$ to the dual $\mathcal{X}'$.  There is no reason to suppose this operator is coercive.  However, if we add just a little bit of diffusion in the form of a $p$-Laplacian leading-order term with coefficient $\eps>0$ and $p\ge 2$,
 \begin{equation}
   \bQ_n(\grad u,u,x) = -\eps |\grad u|^p \grad u + \bX(x) u,   \label{eq:plapadvectflux}
 \end{equation}
-then the corresponding operator $A_n$ on $W_0^{1,p}(\Omega)$ is coercive.  In fact, combining calculations \eqref{eq:plapQnmono} and \eqref{eq:advectQnmono} gives
+then the corresponding operator $A_n$ on $W_0^{1,p}(\Omega)$ is coercive.  [FIXME: USE $(\Div \bX)_{-}$]  In fact, combining calculations \eqref{eq:plapQnmono} and \eqref{eq:advectQnmono} gives
 \begin{equation}
 \int_\Omega \left[\bQ_n(u,x) - \bQ_n(v,x)\right] \cdot \grad (u - v) \le - \eps c_0 \|u-v\|^p - \frac{1}{2} \int_\Omega (\Div\bX) (u-v)^2
 \end{equation}
@@ -495,7 +494,7 @@ This proves the following theorem:
 \end{equation}
 \end{theorem}
 
-Note that condition \eqref{eq:plapadvectdtcond} is independent of $\eps>0$, suggesting that the pure advection problem ($\eps = 0$) is also well-behaved if \eqref{eq:plapadvectdtcond} is satisfied.
+Note that condition \eqref{eq:plapadvectdtcond} is independent of $\eps>0$, suggesting that the pure advection problem ($\eps = 0$) may also be well-behaved if the other hypotheses of the Theorem are satisfied.
 
 \subsection{Non-local dependence through an integral kernel} \label{subsec:nonlocal}   The examples so far compute the flux $\bQ_n$ at $x\in\Omega$ using only the values $u(x)$ and $\grad u(x)$.  The flux in realistic models, however, often comes from solving another differential equation, generally a momentum conservation equation which is coupled to the mass-conservation equation \eqref{eq:massconserve}.  Therefore we consider fluxes that are non-local functions of the thickness $u$ and its spatial derivatives.  For simplicity we restrict to the case where $\bQ_n$ is linear in $u$.
 
