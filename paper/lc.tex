@@ -561,45 +561,42 @@ In summary, for explicit time steps the solution to a single weakly-posed time s
 
 \section{Mass conservation on the free boundary}  \label{sec:timeseries}
 
-From now on we assume that the weak problem for a single time-step, i.e.~\eqref{eq:theVI}, is well-posed for the chosen time steps $\Delta t_n$.  Thus, given an initial state $u_0\in\mathcal{K}$, there is a unique sequence $\{u_n\}_1^N \subset \mathcal{K}$ which solves the $n=1,\dots,N$ problems \eqref{eq:theVI}.
+From now on we assume that the weak problem for a single time-step, i.e.~\eqref{eq:theVI}, is well-posed for the chosen time steps $\Delta t_n$, and that the solution is sufficiently regular so that strong form statements \eqref{eq:semimassconserve} and \eqref{eq:strongconditionwherezero} also hold.  Thus, given an initial state $u_0\in\mathcal{K}$, there is a unique sequence of functions $\{u_n\} \subset \mathcal{K}$ which solves the variational inequalities \eqref{eq:theVI}.
 
 Define
 \begin{equation}
-M_n = \int_\Omega u_n(x)\,dx = \int_{\Omega_n} u_n(x)\,dx \ge 0, \label{eq:totalmassseries}
+M_n = \int_\Omega u_n(x)\,dx \ge 0, \label{eq:totalmassseries}
 \end{equation}
-the \emph{(total) mass} at time $t_n$, and
+the \emph{(total fluid) mass} at time $t_n$.  Recalling set decomposition \eqref{eq:omegadecomposition}, define
 \begin{equation}
-C_n = \Delta t_n\, \int_{\Omega_n} F_n(u_n,x)\,dx, \label{eq:climateseries}
+C_n = \Delta t_n\, \int_{\Omega_n} F_n(u_n,x) \label{eq:climateseries}
 \end{equation}
-the \emph{climate input} during the $n$th time step.  Note that the climate input $C_n$ into the fluid layer is only over locations where the fluid exists ($\Omega_n$).  Practical models compute approximations to time-series $M_n$ and $C_n$ as model outputs, to provide mass transfers to and from the fluid layer.
+as the \emph{climate input} at time step $n$.  Note that $C_n$ is the sum of $F_n(u_n,x)$ only over locations where the fluid is present at $t=t_n$.
 
-A well-implemented numerical model of a \emph{fixed}-boundary fluid layer problem would achieve exact discrete mass conservation in the sense that
+Practical models would compute approximations to time-series $M_n$ and $C_n$ as model outputs in order to audit mass transfers to and from the fluid layer.  In fact, a numerical model of a \emph{fixed}-boundary fluid layer problem, where $\Omega_n=\Omega$, normally would achieve exact discrete mass conservation in the sense that
 \begin{equation}
 M_n = M_{n-1} + C_n \label{eq:oldbalance}
 \end{equation}
-at each time $t_n$, to within rounding error.  That is, one can easily show \eqref{eq:oldbalance} under a Neumann condition $\bQ_n=0$ on $\partial \Omega$ in strong problem \eqref{eq:semimassconserve}, if $\Omega_n=\Omega$.  However, balance \eqref{eq:oldbalance} does not follow from definitions \eqref{eq:totalmassseries} and \eqref{eq:climateseries} when there is a free boundary, that is, when $\Omega_n \subsetneq \Omega$.
+at each time $t_n$.  (In practice \eqref{eq:oldbalance} might only hold to within rounding error.)  For example, one can easily show \eqref{eq:oldbalance} holds under a Neumann condition $\bQ_n=0$ on $\partial \Omega$ in strong problem \eqref{eq:semimassconserve} if $\Omega_n=\Omega$.  However, balance \eqref{eq:oldbalance} does not follow from definitions \eqref{eq:totalmassseries} and \eqref{eq:climateseries} when there is a free boundary, that is, when $\Omega_n$ has smaller measure than $\Omega$.
 
-\subsection{\emph{A posteriori} analysis} \label{subsec:aposteriori}  To quantify the situation for the free-boundary case, recall $\Omega_n^r$ is the retreat set (subsection \ref{subsec:setdecompose}).  Define
+However, recall $\Omega_n^r=\{u_n = 0 \,\&\,u_{n-1}>0\}$ which is the retreat set.  Define
 \begin{equation}
-R_n = \int_{\Omega_n^r} u_{n-1}\,dx \ge 0, \label{eq:retreatlossseries}
+R_n = \int_{\Omega_n^r} u_{n-1}, \label{eq:retreatlossseries}
 \end{equation}
-which we call the \emph{retreat loss} during the $n$th time step.  By \eqref{eq:semimassconserve} on $\Omega_n$, and assuming $\partial \Omega_n$ is (e.g.) Lipshitz, we have
+the \emph{retreat (mass) loss} during the $n$th time step.  By \eqref{eq:semimassconserve} on $\Omega_n$, and assuming $\partial \Omega_n$ is (e.g.) Lipshitz,
 \begin{align}
-M_n - M_{n-1} &= \int_{\Omega_n} (u_n - u_{n-1})\,dx + \int_{\Omega_n^r} (0 - u_{n-1})\,dx \label{eq:newbalance} \\
-   &= \Delta t \int_{\Omega_n} (- \Div \bQ_n + F_n) \,dx \, - R_n \notag \\
-   &= C_n - R_n \notag
+M_n - M_{n-1} &= \int_{\Omega_n} (u_n - u_{n-1}) + \int_{\Omega_n^r} (0 - u_{n-1}) \label{eq:newbalance} \\
+   &= \Delta t \int_{\Omega_n} (- \Div \bQ_n + F_n) \, - R_n = C_n - R_n \notag
 \end{align}
-because $\bQ_n=0$ along $\partial \Omega_n$ by \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.
+Note $\bQ_n=0$ along $\partial \Omega_n$ by \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.
 
-The distinction between \eqref{eq:oldbalance} and \eqref{eq:newbalance} is a major point of our paper.  That is, the achievable space-integrated mass conservation statement for free-boundary problems at each time-step is the \emph{a posteriori} statement \eqref{eq:newbalance}.  Computing $R_n$, or an equivalent quantity, is an essential step in understanding moving-boundary models of fluid motion.
-
-As an operational statement:
+The distinction between \eqref{eq:oldbalance} and \eqref{eq:newbalance} is significant.  \emph{A posteriori} statement \eqref{eq:newbalance} suggests what is achievable as a space-integrated mass conservation statement for free-boundary problems at each time-step.  Computing $R_n$, or an equivalent quantity, is essential to quantifying the behavior of time-stepping moving-boundary models of thin-layer fluid motion.  As an operational statement we claim that
 \begin{quote}
-\emph{A time-discretized model for a moving-boundary fluid layer should store time series $R_n$ and $C_n$, in order to provide auditable mass conservation.}
+\emph{A time-discretized numerical model for a fluid layer should store approximate time series $R_n$ and $C_n$ to provide auditable mass conservation.}
 \end{quote}
-In stating this assertion, we note that the retreat loss $R_n$ should vanish in the $\Delta t_n\to 0$ limit.  This is a consistency statement about the time-discretized model.
+Note that the retreat loss $R_n$ should vanish in the $\Delta t_n\to 0$ limit; this is a consistency statement about the time-discretized model.
 
-\subsection{\emph{A priori} analysis} \label{subsec:apriori}   The retreat loss $R_n$ can be bounded \emph{a priori} if we have additional information about the solution of variational inequality \eqref{eq:theVI}.  The resulting \emph{a priori} bound allows approximation to mass conservation relation \eqref{eq:oldbalance} to within some desired tolerance.
+\subsection{\emph{A priori} estimation} \label{subsec:apriori}   The retreat loss $R_n$ can be bounded \emph{a priori} if we have additional information about the solution of variational inequality \eqref{eq:theVI}.  The resulting \emph{a priori} bound allows approximation to mass conservation relation \eqref{eq:oldbalance} to within some desired tolerance.
 
 Consider the solution of \eqref{eq:theVI}.  Note $u_n=0$ and $F_n=F_n(0,x)\le 0$ on $\Omega_n^r$.  By theorem \ref{thm:weakimpliesstrong}(ii) we have
 \begin{equation}
@@ -682,7 +679,7 @@ M_n^h - M_{n-1}^h &= \sum_{u_n^j>0} (u_n^j - u_{n-1}^j) |\omega_j| - \sum_{u_n^j
    &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + C_n^h - R_n^h.  \label{eq:fvnewbalance}
 \end{align}
 
-In the continuous-space version \eqref{eq:newbalance} we could eliminate the flux integral, but the discrete flux sum in \eqref{eq:fvnewbalance} is not zero.  However, local conservation \eqref{eq:fvlocalconservation} does reduce it to a sum over edges which have a positive-thickness cell on one side and a zero-thickness cell on the other.  We call this free-boundary discrete-flux residual sum the \emph{shell error}:
+In the continuous-space version \eqref{eq:newbalance} we could eliminate the flux integral, but the discrete flux sum in \eqref{eq:fvnewbalance} is not zero.  However, local conservation \eqref{eq:fvlocalconservation} does reduce it to a sum over edges which have a positive-thickness cell on one side and a zero-thickness cell on the other.  We call this residual sum the \emph{shell error}:
 \begin{equation}
 S_n^h = \sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = \sum_{u_j^n > 0 \,\&\, (j,k)\in\mathcal{E}_j \,\&\, u_k^n = 0} Q_n^{(j,k)} \ell_{(j,k)} \label{eq:fvderiveshellerror}
 \end{equation}
@@ -717,7 +714,7 @@ Climate-scale fluid models generally claim exact discrete conservation as a goal
 
 In many such models, one or more fluids or phases form a layer with a moving free boundary.  We believe that auditable mass conservation does not generally occur in these models, except perhaps through \emph{ad hoc} redistribution of mass, or \emph{ad hoc} discrete schemes to locally balance the books at the free boundary.  Discrete conservation is presumably recovered only in the temporal and spatial refinement limit in such models.
 
-In this paper we identify the per time-step ``retreat area'' $\Omega_n^r$ (subsection \ref{subsec:setdecompose}) and ``retreat loss'' $R_n$ (subsection \ref{subsec:aposteriori}) for such models as important.  By definition $\Omega_n^r$ is the region where the fluid layer thickness is positive at the beginning of the time step, and, through flow and source terms, the thickness is zero at the end of the time step.  That is, fluid was completely lost at each location in the retreat area at some time during the time-step.  Even for well-behaved source terms (e.g.~smooth in time and space) and short time steps, the retreat area $|\Omega_n^r|$ can be of essentially arbitrary size.  For example, in a varying climate a large area of thin ice sheet or sea ice can melt, or a large area of a layer of surface water on ground can evaporate, and so on, during one time step.
+We identify the per time-step ``retreat area'' $\Omega_n^r$ and ``retreat loss'' $R_n$ for such models as important.  By definition $\Omega_n^r$ is the region where the fluid layer thickness is positive at the beginning of the time step, and, through flow and source terms, the thickness is zero at the end of the time step.  That is, fluid was completely lost at each location in the retreat area at some time during the time-step.  Even for well-behaved source terms (e.g.~smooth in time and space) and short time steps, the retreat area $|\Omega_n^r|$ can be of essentially arbitrary size.  For example, in a varying climate a large area of thin ice sheet or sea ice can melt, or a large area of a layer of surface water on ground can evaporate, and so on, during one time step.
 
 In these terms we can answer question (ii) in the introduction more precisely:
 \begin{quote}
