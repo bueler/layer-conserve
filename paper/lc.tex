@@ -619,25 +619,13 @@ for a constant $\Gamma_n=\left|\int_{\Omega} F_n(u_{n-1},x)\,dx\right|$ which is
 
 \section{Fully-discrete models}  \label{sec:spacediscretized}
 
-So far we have treated free-boundary mass conservation models in time-discretized form, as a sequence of (potentially or provably; section \ref{sec:wellposed}) well-posed continuous-space free-boundary problems.  Considering the spatial discretization of such models shows how to augment the \emph{a posteriori} computations of the last section so as to balance the conservation books at a free boundary represented on a mesh.
+So far we have treated free-boundary mass conservation models in time-semi-discretized form, as a sequence of well-posed continuous-space free-boundary problems.  In this section we make the mild assumption that a further spatial discretization allows an unstructured finite volume \cite{LeVeque2002} interpretation.  This gives a fully-discrete mass conservation statement analogous to the continuous-space version \eqref{eq:newbalance} above.  At the end we consider numerical solution methods for these finite-dimensional, inequality-constrained nonlinear problems.
 
-In this section we make the mild assumption that the spatial discretization allows an unstructured finite volume \cite{LeVeque2002} interpretation.  This is sufficient to give a fully-discrete balance analogous to the continuous-space version \eqref{eq:newbalance} above.  After that we consider numerical solution methods for the constrained nonlinear problem.
-
-\subsection{Unstructured finite volume method} \label{subsec:spacenotation}  To set notation for a generic finite volume scheme, we restrict to polygonal (polyhedral if $d\ge 3$) domains $\Omega\subset \RR^d$; though there is no dimension restriction in fact, terms appropriate to the most-common $\RR^2$ case---``polygon,'' ``edge,'' ``area,'' etc.---are used.  We assume that $\Omega$ is tiled by finitely-many open polygonal cells $\omega_j$, indexed by $j\in J$, with area $|\omega_j|$.  These cells may be non-convex and the number of edges (faces) per cell may vary.  Because this is a tiling, $\omega_j \cap \omega_k = \emptyset$ for $j\ne k$ and
+\subsection{Unstructured finite volumes} \label{subsec:spacenotation}  To set notation for a generic finite volume scheme, we assume $\Omega \subset \RR^d$ is polygonal.  (Though there is no actual restriction on dimension, language suitable for $\RR^2$ case, such as ``polygon,'' ``edge,'' ``area,'' and etc., is used.)  Thus we assume that $\Omega$ is tiled by finitely-many open polygonal cells $\omega_j$, indexed by $j\in J$, with area $|\omega_j|$, so that $\omega_j \cap \omega_k = \emptyset$ for $j\ne k$ and
 \begin{equation}
 \bar\Omega = \bigcup_{j\in J} \bar \omega_j \quad \text{and} \quad |\Omega| = \sum_{j\in J} |\omega_j|.  \label{eq:tiling}
 \end{equation}
-An edge, denoted by the ordered pair $(j,k)$, exists between cell $j$ and cell $k$ if $\bar\omega_j \cap \bar \omega_k$ has positive $d-1$ measure (length) $\ell_{(j,k)}>0$.  The set of edges $(j,k)$ for cell $\omega_j$ is denoted $\mathcal{E}_j$.
-
-Our approach is now to discretize the strong form equation \eqref{eq:semimassconserve} using finite volume ideas.  The representative thickness $u_n^j$ in cell $j$ is given the usual finite volume definition as an average \cite{LeVeque2002}, and similarly $F_n^j$ denotes a representative source term for the cell:
-\begin{equation}
-u_n^j \approx \frac{1}{|\omega_j|} \int_{\omega_j} u_n(x), \qquad F_n^j \approx \frac{1}{|\omega_j|} \int_{\omega_j} F_n(u_n,x).  \label{eq:fvthickness}
-\end{equation}
-The value $F_n^j$ is computed by some quadrature scheme, but the details do not matter here.  The discrete (scalar) normal flux across the edge $(j,k)$, outward from cell $j$, is denoted
-\begin{equation}
-Q_n^{(j,k)} \approx \frac{1}{\ell_{(j,k)}} \int_{(j,k)} \bQ_n \cdot \bn_{(j,k)}. \label{eq:fvflux}
-\end{equation}
-This is shown in Figure \ref{fig:fvmesh-notation}.  Here $\bn_{(j,k)}$ denotes the unit normal vector to edge $(j,k)$ directed outward from $\omega_j$.  We assume that these fluxes are approximated by some scheme, based on values $\{u_n^l\}$.  Again the details are not important here, but these discrete fluxes might be computed by upwinded and/or flux-limited schemes \cite{LeVeque2002} according to the functional form of the flux $\bQ_n$.
+Cells may be non-convex and the number of edges (faces) per cell may vary.  An edge, denoted by the ordered pair $(j,k)$, exists between cell $j$ and cell $k$ if $\bar\omega_j \cap \bar \omega_k$ has positive measure $\ell_{(j,k)}>0$.  The set of edges for cell $\omega_j$ is denoted $\mathcal{E}_j=\{(j,k)\}$.
 
 \begin{figure}[ht]
 \begin{center}
@@ -647,24 +635,31 @@ This is shown in Figure \ref{fig:fvmesh-notation}.  Here $\bn_{(j,k)}$ denotes t
 \label{fig:fvmesh-notation}
 \end{figure}
 
-We make only two assumptions about this finite volume scheme:
-\renewcommand{\labelenumi}{(\roman{enumi})}
-\begin{enumerate}
-\item There is local conservation between any two adjacent cells which are fluid-filled:
+We suppose the strong form \eqref{eq:semimassconserve} is discretized using finite volume ideas as shown in Figure \ref{fig:fvmesh-notation}.  The representative thickness $u_n^j$ in cell $j$ is given the usual finite volume definition as an average \cite{LeVeque2002}, as follows, and similarly $F_n^j$ denotes the average source term for the cell:
+\begin{equation}
+u_n^j \approx \frac{1}{|\omega_j|} \int_{\omega_j} u_n(x), \qquad F_n^j \approx \frac{1}{|\omega_j|} \int_{\omega_j} F_n(u_n,x).  \label{eq:fvthickness}
+\end{equation}
+(One may suppose these are computed by a quadrature scheme, but the details will not matter.)  The discrete (scalar) normal flux across the edge $(j,k)$, outward from cell $j$, is denoted
+\begin{equation}
+Q_n^{(j,k)} \approx \frac{1}{\ell_{(j,k)}} \int_{(j,k)} \bQ_n \cdot \bn_{(j,k)}. \label{eq:fvflux}
+\end{equation}
+Here $\bn_{(j,k)}$ denotes the unit normal vector to edge $(j,k)$ directed outward from $\omega_j$; thus $\bn_{(k,j)} = -\bn_{(j,k)}$.  We assume that these fluxes are approximated by some scheme, based on values $\{u_n^l\}$.  Again the details are not important here, but these discrete fluxes might be computed by upwinded and/or flux-limited schemes \cite{LeVeque2002} according to the functional form of the flux $\bQ_n$.
+
+We assume that between any two adjacent \emph{fluid-filled} cells there is local conservation:
 \begin{equation}
   u_n^j u_n^k > 0 \quad \implies \quad Q_n^{(k,j)}=-Q_n^{(j,k)}.  \label{eq:fvlocalconservation}
 \end{equation}
-\item If $u_n^j>0$ then the strong form single-time-step problem \eqref{eq:semimassconserve} is approximated by
+
+FIXME: EXPLAIN THAT ONLY BACKWARD-EULER IS USED BUT IT IS NO RESTRICTION TO ASSUME \eqref{eq:fvmassconserve} ONLY FOR $u_n^j > 0$.  We also assume that if $u_n^j>0$ then the strong form single-time-step problem \eqref{eq:semimassconserve} is approximated by
 \begin{equation}
 \frac{u_n^j - u_{n-1}^j}{\Delta t_n} + \frac{1}{|\omega_j|} \sum_{k\in \mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = F_n^j. \label{eq:fvmassconserve}
 \end{equation}
-\end{enumerate}
 
-Local discrete conservation statement (i) is completely standard, but the fluid-filled hypothesis is important.  We do not expect discrete conservation in the sense $Q_n^{(k,j)}=-Q_n^{(j,k)}$ at the free boundary because a flux scheme at the edge (face) of a fluid-free cell, facing a fluid-filled cell, cannot be expected to generate flux which is compatible with those monotonicity or coercivity properties (subsection \ref{subsec:mono}) which would lead to well-posedness.
+Local discrete conservation statement \eqref{eq:fvlocalconservation} is completely standard, but the fluid-filled hypothesis is important.  We do \emph{not} expect discrete conservation, in the sense $Q_n^{(k,j)}=-Q_n^{(j,k)}$, at the free boundary.  This is because a flux scheme at the edge (face) of a fluid-free cell, facing a fluid-filled cell, cannot be expected to generate a flux which is compatible with the flow generating stresses (e.g.~body or boundary stresses) which yield nonzero fluxes in the neighboring fluid-filled cell.
 
-Regarding (ii), recall that, at least heuristically, the divergence of a vector field $\bX$ is the limit of line (surface) integrals, $|R|^{-1} \int_{\partial R} \bX\cdot \bn \to \Div \bX$, where $R\subset \RR^d$ denotes a sequence of regions with Lipshitz boundary, enclosing and shrinking down to $x$, with outward unit normal vector $\bn$.  Though \eqref{eq:fvmassconserve} requires the discrete scheme to approximate such an integral, this prescription has great flexibility because of the many possible meanings of approximations \eqref{eq:fvthickness} and \eqref{eq:fvflux}.
+Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including structured-grid (i.e.~uniform rectangular cell) finite difference \cite{Bueler2016,MortonMayers2005} and structured/unstructured finite volume \cite{LeVeque2002} schemes.  Regarding the sum in \eqref{eq:fvmassconserve}, recall that, at least heuristically, the divergence of a vector field $\bX$ is the limit of line (surface) integrals, $|R|^{-1} \int_{\partial R} \bX\cdot \bn \to \Div \bX$, where $R\subset \RR^d$ denotes a sequence of regions with Lipshitz boundary, enclosing and shrinking down to $x$, with outward unit normal vector $\bn$.  Though \eqref{eq:fvmassconserve} requires the discrete scheme to approximate such an integral, this form has great flexibility because of the many allowed meanings of approximations \eqref{eq:fvthickness} and \eqref{eq:fvflux}.
 
-Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including structured-grid (i.e.~uniform rectangular cell) finite difference \cite{Bueler2016,MortonMayers2005} and structured/unstructured finite volume \cite{LeVeque2002} schemes.  In fact, our finite volume description can instead be treated as a non-conforming Petrov-Galerkin finite element method for the variational inequality \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.  In that case the test functions are piecewise-constant and discontinuous along the edges of the cells $\omega_j$, as in a so-called ``finite volume element'' method \cite{Bueler2016,Cai1990,EwingLinLin2002}.  The cells $\omega_j$ would be geometrically ``dual'' to the elements in such a scheme (e.g.~\cite{Ringleretal2013}).
+Pur finite volume description can instead be treated as a non-conforming Petrov-Galerkin finite element method for the variational inequality \eqref{eq:theVI}, with $A_n$ defined by \eqref{eq:defineAn}.  In that case the test functions are piecewise-constant and discontinuous along the edges of the cells $\omega_j$, as in a so-called ``finite volume element'' method \cite{Bueler2016,Cai1990,EwingLinLin2002}.  The cells $\omega_j$ would be geometrically ``dual'' to the elements in such a scheme (e.g.~\cite{Ringleretal2013}).
 
 \subsection{The discrete-space ``shell error''}  \label{subsec:shellerror}  In the fully-discrete model we use a superscript ``$h$'' to denote the spatially-discrete version of integrated quantities.  Analogous to \eqref{eq:totalmassseries}, \eqref{eq:climateseries}, and \eqref{eq:retreatlossseries}, we define the time-series
 \begin{align}
