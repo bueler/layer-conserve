@@ -81,12 +81,6 @@ We consider models of such fluid layers in which the fluid geometry is described
 
 In physically-complete models the mass conservation equation combines with further momentum and energy conservation equations, the flow physics, which are part of how the evolution of layer geometry and state are determined.  Additionally there may be models determining the addition/removal processes, i.e.~the ``climate'' of the fluid layer, which are coupled to the fluid layer geometry.  These models combine to determine changes in the location of the free/moving boundary at which the thickness goes to zero.  This paper contains a basic, and admittedly incomplete, analysis of the mathematical well-posedness of such climate-influenced fluid layer models.  We start by extracting the minimal mathematical form which includes flow, climate, and nonnegative-thickness constraint.  After considering well-posedness we then focus on certain tradeoffs inherent in numerical solutions of such models.
 
-%\begin{figure}[ht]
-%\input{tikz/cartoon.tex}
-%\caption{Free-boundary fluid layer problems for several components of the earth-system models, including \emph{(a)} ice sheet, \emph{(b)} sea ice, and \emph{(c)} ocean components.  And \emph{(d)} drops of water on a car windshield.}
-%\label{fig:climatepictures}
-%\end{figure}
-
 Problems of this free-boundary type appear within models of glaciers and ice sheets \cite{Bueler2016,CalvoDuranyVazquez2000,Calvoetal2002,DiazSchiavi1999,EgholmNielsen2010,JouvetBueler2012},  surface and subsurface hydrology \cite{AlonsoSantillanaDawson2008,Maxwelletal2014}, and sea ice \cite{LipscombHunke2004,Thorndikeetal1975}.  Furthermore, multiphysics models can contain thin-layer and free-boundary sub-models for various species (or phases) of fluids.  For example, in comprehensive models of glaciers and ice sheets there are submodels describing floating ice shelves \cite{Albrechtetal2011}, supra- and suglacial hydrology of liquid water \cite{Aschwandenetal2012,BuelervanPelt2015,Schoofetal2012}, and sediment transport \cite{Brinkerhoffetal2017}.
 
 In such geophysical and climate-modeling contexts, determining the fluid-covered area is a leading-order modeling goal.  For example, snow and ice are much more reflective than the substrate they cover (i.e.~land or ocean), so deciding whether grid cells are ice-covered or ice-free is a significant aspect of climate modeling.  However, conservation of mass, including precise accounting of mass transfers to and from the modeled fluid to other fluid phases, is a goal of equal importance.
@@ -596,23 +590,23 @@ The distinction between \eqref{eq:oldbalance} and \eqref{eq:newbalance} is signi
 \end{quote}
 Note that the retreat loss $R_n$ should vanish in the $\Delta t_n\to 0$ limit; this is a consistency statement about the time-discretized model.
 
-\subsection{\emph{A priori} estimation} \label{subsec:apriori}   The retreat loss $R_n$ can be bounded \emph{a priori} if we have additional information about the solution of variational inequality \eqref{eq:theVI}.  The resulting \emph{a priori} bound allows approximation to mass conservation relation \eqref{eq:oldbalance} to within some desired tolerance.
+\subsection{\emph{A priori} estimation} \label{subsec:apriori}   The retreat loss $R_n$ could be bounded \emph{a priori} if we have additional information about the solution of variational inequality \eqref{eq:theVI}.  Such \emph{a priori} bounds would allow approximate mass conservation, i.e.~statements of the form $|M_n - M_{n-1} - C_n|<\eps$ within some desired tolerance $\eps>0$.
 
-Consider the solution of \eqref{eq:theVI}.  Note $u_n=0$ and $F_n=F_n(0,x)\le 0$ on $\Omega_n^r$.  By theorem \ref{thm:weakimpliesstrong}(ii) we have
+Consider the solution of \eqref{eq:theVI}.  Note $u_n=0$ and $F_n(0,x)\le 0$ on $\Omega_n^r$.  By theorem \ref{thm:weakimpliesstrong}(ii) we have
 \begin{equation}
-R_n \le - \Delta t_n\,\int_{\Omega_n^r} F_n(0,x)\,dx = \Delta t_n\,\int_{\Omega_n^r} |F_n(0,x)|\,dx  \label{eq:earlyretreatbound}
+R_n \le - \Delta t_n\,\int_{\Omega_n^r} F_n(0,x)\,dx = \Delta t_n\,\int_{\Omega_n^r} |F_n(0,x)|\,dx.  \label{eq:earlyretreatbound}
 \end{equation}
-because $u_{n-1} + \Delta t\,F_n(0,x) \le 0$ on $\Omega_n^r$.  The set $\Omega_n^r$ is not, however, known before solving \eqref{eq:theVI}, so we cannot yet compute the right side of \eqref{eq:earlyretreatbound} \emph{a priori}.
+The set $\Omega_n^r$ is not, however, known before solving \eqref{eq:theVI}, so we cannot yet compute the right side of \eqref{eq:earlyretreatbound} \emph{a priori}.
 
 FIXME  An \emph{a priori} estimate of $\Omega_n^r$, if available, would of course improve this bound.
 
 Bound \eqref{eq:earlyretreatbound} becomes computable in the general case with two extra assumptions.  FIXME assume there is an $L^1$ stability bound
 \begin{equation}
-\|u_n-u_{n-1}\|_{L^1(\Omega)} \le \Phi_n(\Delta t)
+\|u_n-u_{n-1}\|_{L^1(\Omega)} \le \Phi(\Delta t_n)
 \end{equation}
-for some bounded function $\Phi_n : [0,\infty) \to [0,\infty)$.  It is then a triviality to convert \eqref{eq:earlyretreatbound} into
+for some bounded function $\Phi : [0,\infty) \to [0,\infty)$.  It is then a triviality to convert \eqref{eq:earlyretreatbound} into
 \begin{equation}
-R_n \le \Delta t\,\left(\Gamma_n + L \Phi_n(\Delta t)\right)   \label{eq:retreatbound}
+R_n \le \Delta t_n\,\left(\Gamma_n + L \Phi(\Delta t_n)\right)   \label{eq:retreatbound}
 \end{equation}
 for a constant $\Gamma_n=\left|\int_{\Omega} F_n(u_{n-1},x)\,dx\right|$ which is potentially computable before solving single time-step problem \eqref{eq:theVI}.  Note that $\Delta t\,\Gamma_n$ is an estimate of the change to the present ($t_{n-1}$) fluid layer by the future ($t_n$) climate.  If $\Phi_n$ is bounded by $M>0$, or if $\Phi_n(z) \le A z^q$ for $A,q>0$, for example, then \eqref{eq:retreatbound} can be solved for the time-step $\Delta t$.
 
@@ -722,7 +716,6 @@ The above conclusions apply in the time-semi-discretized case and thus are indep
 With the conservation-correction time-series $\{R_n\}$ and $\{S_n\}$, a numerical model can ``balance the books'' exactly (i.e.~up to rounding error) in a manner which properly reflects the continuum model of the fluid layer.  Even without \emph{a priori} control, a user can then assess whether these free-boundary-related \emph{a posteriori} conservation errors are acceptably small.
 
 We believe that avoidance of, or at least clearer understanding of, \emph{ad hoc} discrete schemes to maintain conservation at free boundaries will be possible once theoretical limits on discrete conservation are acknowledged, as here.  With the proposed corrections, for example, when a large area of ice sheet or sea-ice is modeled as melting entirely in a climate simulation model, that model can measure the amount of non-conservation of the mass of water in each phase, even if that model simply transfers the ice sheet retreat loss into the ocean.  More powerfully, adaptive time-stepping schemes can be modified to reduce the retreat loss, and adaptive mesh refinement or other paradigms can reduce the shell error below prescribed tolerances.  Climate models will then have better-quantified uncertainty for important mass transfers between component fluids of the climate.
-
 
 
 %         References
