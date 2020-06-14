@@ -1,13 +1,9 @@
-\documentclass[final,leqno,onefignum,onetabnum]{siamltex1213bueler}
-% siamltex1213bueler.cls is a two or three line change of siamltex1213.cls to permit
-% pdflatex to work and not spew warnings
+\documentclass[final,onefignum]{siamart190516}
+%\documentclass[review,onefignum]{siamart190516}
 
-\usepackage{amssymb,amsmath}
-
-\usepackage{times}
-
-\usepackage{tikz}
-\usepackage{pgfplots}
+\usepackage{amssymb}
+\usepackage{pgfplots,tikz}
+\pgfplotsset{compat=1.15}
 
 \newtheorem{example}{Example}
 
@@ -41,7 +37,7 @@
 \newcommand{\ddzz}[1]{\ensuremath{\frac{\partial^2 #1}{\partial z^2}}}
 \newcommand{\Div}{\nabla\cdot}
 \newcommand\eps{\epsilon}
-\renewcommand{\grad}{\nabla}
+\newcommand{\grad}{\nabla}
 \newcommand{\ihat}{\mathbf{i}}
 \newcommand{\ip}[2]{\ensuremath{\left<#1,#2\right>}}
 \newcommand{\jhat}{\mathbf{j}}
@@ -55,13 +51,12 @@
 
 
 
-\title{Conservation problems for fluid layers with free boundaries\thanks{Draft date: \today.  Supported by NASA grant \# NNX13AM16G.}} 
+\title{Conservation laws for fluid layers with free boundaries\thanks{Draft date: \today.  Supported by NASA grant \# NNX13AM16G.}}
 
 \author{Ed Bueler\thanks{Dept.~of Mathematics and Statistics, University of Alaska Fairbanks \,\, (\texttt{elbueler@alaska.edu}).}}
 
 \begin{document}
 \maketitle
-\slugger{siap}{xxxx}{xx}{x}{x--x}
 
 \begin{abstract}
 FIXME
@@ -719,8 +714,8 @@ We believe that avoidance of, or at least clearer understanding of, \emph{ad hoc
 
 
 %         References
+\bibliographystyle{siamplain}
 \bibliography{lc}
-\bibliographystyle{siam}
 
 
 \appendix

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import matplotlib.font_manager as font_manager
 import numpy as np
 import matplotlib.pyplot as plt
 from sys import exit
