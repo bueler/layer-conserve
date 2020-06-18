@@ -96,7 +96,7 @@ u &\ge 0 &&\text{in } \Omega \times [0,T], \label{eq:constraint}
 along with an initial condition $u(x,0)=u_0(x)\ge 0$ defined on $\Omega$.  Conservation equation \eqref{eq:massconserve} applies where the fluid is present ($u>0$), but not otherwise ($u=0$).  The situation is pictured in Figure \ref{fig:cartoon}, where positive source values ($f>0$) are pictured as downward arrows (precipitation).
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=0.8\textwidth]{cartoon}}
+\centerline{\includegraphics[width=0.8\textwidth]{figs/cartoon}}
 \caption{Schematic of a fluid layer with a thickness $u\ge 0$.}
 \label{fig:cartoon}
 \end{figure}
@@ -109,40 +109,38 @@ Evidently, well-posedness of any model including \eqref{eq:massconserve} and \eq
 
 One reason the flux may depend on $\grad u$ is that many of the flows under consideration are gravity-driven and viscous.  The flow is then at least partly diffusive.  In simple cases the flux may be written in the form $\bq=- D \grad u + \bq_a$ where $D > 0$ has various dependence on $t,x,u,|\grad u|$, but the advective flux $\bq_a$ is independent of $\grad u$.  (See Subsections \ref{subsec:plap} and \ref{subsec:powertransform} below, and also reference \cite{Ockendonetal2003}.)
 
-On the other hand, equation \eqref{eq:massconserve} may be purely advective.  In the simplest case mass moves at some vertically-averaged velocity $\bX=\bX(x,t)$ determined by external factors.  In that case, addressed in Subsection \ref{subsec:advect}, we have $\bq = \bX u$.  Our results for such advective fluxes will apply even if $\bX$ comes from a (coupled) solution of a momentum conservation system, as long as it has the regularity needed to apply the theory; see Subsection \ref{subsec:fluxassumptions}.
+On the other hand, equation \eqref{eq:massconserve} may be purely advective.  In the simplest case mass moves at some vertically-averaged velocity $\bX=\bX(x,t)$ determined by external factors.  In that case, addressed in Subsection \ref{subsec:advect}, we have $\bq = \bq_a = \bX u$.  Our results for such advective fluxes will apply even if $\bX$ comes from a (coupled) solution of a momentum conservation system, as long as it has the regularity needed to apply the theory; see Subsection \ref{subsec:fluxassumptions}.
 
-The ideas and results in this paper are of most interest if the \emph{source function} $f(u,x,t)$ in \eqref{eq:massconserve} takes either sign.  If $f\ge 0$ everywhere then active enforcement of constraint \eqref{eq:constraint} may not be necessary because a maximum principle can be expected to imply the nonnegativity of the solution.  By contrast, if $f<0$ in some portion of the domain then \eqref{eq:constraint} typically generates a free boundary, the location of which comes from the combined solution of \eqref{eq:massconserve} and \eqref{eq:constraint}.
+The ideas and results in this paper are nontrivial if the source function $f(u,x,t)$ in \eqref{eq:massconserve} takes either sign.  If $f\ge 0$ holds everywhere then active enforcement of constraint \eqref{eq:constraint} may not be necessary because a maximum principle may imply the nonnegativity of the solution.  The source function $f$ is allowed to be nonlinear in $u$ because feedback between layer thickness $u$ and the source $f$ occurs in certain applications (e.g.~for glaciers \cite{Jouvetetal2011}).  However, when proving well-posedness in Section \ref{sec:wellposed} we simplify to the $u$-independent case $f=f(x,t)$; thus we do not address the impact of ``reaction'' type processes on well-posedness.
 
-The source term $f(u,x,t)$ is allowed to be nonlinear in $u$ because positive or negative feedback between layer thickness $u$ and the source $f$ occurs in certain applications (e.g.~for glaciers \cite{Jouvetetal2011}).  However, our results say nothing new about such cases and when proving well-posedness in section \ref{sec:wellposed} we simplify to the $u$-independent case $f=f(x,t)$.
+Numerical simulations of these fluid layers necessarily discretize time in some manner, and we focus on the discrete-time problem.  That is, we consider time semi-discretizations of the mass conservation equation by generally-implicit one-step methods (Section \ref{sec:strongform}); it is the method-of-lines but in the opposite sense from the usual one.  In Section \ref{sec:weakform} we pose the single-time-step, continuous-space problem in weak variational form.
 
-Numerical approximations of these evolving fluid layers necessarily discretize time in some manner, and we only analyze the discrete-time problem.  We consider time semi-discretizations of the mass conservation equation by generally-implicit one-step methods (Section \ref{sec:strongform}).  We pose the single-time-step, continuous-space problem in weak variational form (Section \ref{sec:weakform}).  In fact Sections \ref{sec:weakform}--\ref{sec:timeseries} address the discretized-time problem independently of spatial discretization.  Section \ref{sec:spacediscretized} extends our results to a fully-discretized, unstructured finite volume/element method framework \cite{Cai1990}.
-
-Each time-step requires the solution of a (continuous) free-boundary problem in space.  An immediate question is:
+Each time-step thus requires the solution of a (continuous) free-boundary problem in space.  An immediate question is:
   \begin{quote}
   \renewcommand{\labelenumi}{(\roman{enumi})}
   \begin{enumerate}
   \item \emph{Is this single time-step free-boundary problem well-posed?}
   \end{enumerate}
   \end{quote}
-The answer to (i) depends on the form of the flux, but by examining a weak form we can show that the answer is often ``yes,'' although sometimes subject to time-step restrictions (Section \ref{sec:wellposed}).
+The answer to (i) depends on the form of the flux, but by examining a weak form and using the theory of monotone variational inequalities \cite{KinderlehrerStampacchia1980} we can show that the answer is often ``yes'' (Section \ref{sec:wellposed}).  However, even if the time-step is implicit this result often needs a time-step restriction.
 
-Our second question is less obvious but it is important in modeling practice:
+A second question is less obvious but it is important in modeling practice:
   \begin{quote}
   \renewcommand{\labelenumi}{(\roman{enumi})}
   \begin{enumerate}
   \setcounter{enumi}{1}
-  \item \emph{Can the discrete-time mass of the fluid layer be conserved exactly in the sense that a computable space-time integral of the source term $f$ is equal to the change in mass during a time step?}
+  \item \emph{Can the mass of the fluid layer be conserved exactly in the sense that a computable space-time integral of the source term $f$ is equal to the change in mass during a time step?}
   \end{enumerate}
   \end{quote}
-By considering this question abstractly in Sections \ref{sec:timeseries} and \ref{sec:spacediscretized} we conclude that the answer is ``no,'' even in cases where the answer to (i) is ``yes.''  In general a numerical model of a fluid layer governed by \eqref{eq:massconserve} and \eqref{eq:constraint} \emph{cannot} exactly conserve mass when the free boundary moves during a time-step.
+By considering this question abstractly in Section \ref{sec:timeseries} we conclude that the answer is ``no,'' even in cases where the answer to (i) is ``yes.''  In general a numerical model of a fluid layer governed by \eqref{eq:massconserve} and \eqref{eq:constraint} \emph{cannot} exactly conserve mass when the free boundary moves during a time-step.
 
-We can, however, bound and report the conservation error in a practical manner.  Such quantification of conservation errors in free-boundary models is a major purpose which guides the structure of this paper.  We first state formalism for the discretized-time problem so that sets describing the free-boundary conservation errors are precisely-defined (Sections \ref{sec:strongform}--\ref{sec:weakform}).  Later we give bounds on conservation errors in both the discretized-time (Section \ref{sec:timeseries}) and fully-discrete (Section \ref{sec:spacediscretized}) cases.
+We may, however, bound and report the mass conservation error in a practical manner.  Such quantification of conservation errors in free-boundary models is a major purpose which guides the structure of this paper.  Of course, exact discrete conservation within the fluid, i.e.~away from any free boundaries, is a common goal and property of numerical schemes \cite[and references therein]{LeVeque2002}.  Note that Sections \ref{sec:weakform}--\ref{sec:timeseries} address the discretized-time problem independently of spatial discretization, but when we consider fully-discretized models (Section \ref{sec:spacediscretized}) we will assume such exact discrete conservation in the interior of the fluid-covered domain.  The discrete conservation barriers we identify in this paper are entirely at the free boundary, and they are only active when that boundary advances into an area where the source term $f$ is negative, or when the fluid-layer retreats from areas where it was present a time-step earlier.
 
-Exact discrete conservation within the fluid, i.e.~away from any free boundaries, is a common goal and property of numerical schemes \cite[and references therein]{LeVeque2002}.  When we consider fully-discretized models (Section \ref{sec:spacediscretized}) we will assume such exact discrete conservation in the interior of the fluid-covered domain.  The discrete conservation barriers we identify in this paper are entirely at the free boundary.  They are only active when the fluid layer advances, or when it retreats from areas where it was present a time-step earlier, when the source term $f$ is negative in a neighborhood of the free boundary.  In fact theoretical guidance as to achievable discrete conservation is generally absent in the literature of free-boundary fluid problems.  Reference \cite{IdelsohnOnate2010} addresses a related conservation challenge at the free surfaces of fluids but the problem is not free-boundary in the same sense.  In the context of glacier \cite{JaroschSchoofAnslow2013} and ice shelf \cite{Albrechtetal2011} modeling, for example, schemes for improved discrete mass conservation at free boundaries are proposed, but this small literature provides only \emph{ad hoc} solutions.
+Theoretical guidance as to achievable discrete conservation is generally absent in the literature of these free-boundary fluid problems.  Reference \cite{IdelsohnOnate2010} addresses a related conservation challenge at the free surfaces of fluids but the problem is not free-boundary in the same sense.  In the context of glacier \cite{JaroschSchoofAnslow2013} and ice shelf \cite{Albrechtetal2011} modeling, schemes for improved discrete mass conservation at free boundaries are proposed, but this small literature provides only \emph{ad hoc} and fully-discretized solutions.
 
-The mass conservation considerations and implicit time-stepping techniques of the current paper apply to sea ice models subject, however, to re-interpretation because of the manner in which mass conservation is described in such models.  They track a non-negative distribution function $g(x,t,h)$ where $h$ is the thickness dimension and $\int_0^\infty g\,dh = 1$ \cite{Thorndikeetal1975}.  Then $h$ is discretized into ``categories'' $H_{n-1} < h \le H_n$ with $H_0$ denoting the ice-free category \cite{LipscombHunke2004}.  Our results are relevant to the continuous-space equations which arise from discretizing $t$ and $h$.  Note that in such models melting is a negative source term in the evolution equation for the $H_0$ category.  Explicit updating of $g_{n,1}(x) \approx \int_{H_0}^{H_1} g(x,t_n,h)\,dh$ requires truncation (projection) to maintain nonnegativity of $g_{n,1}$.  The inequality constraint $g_{n,1} \ge 0$ is part of such a scheme whether the time-stepping is explicit or implicit.
+We will see that there is no conservation error at the free boundary under the additional hypothesis that $f\ge 0$ in \eqref{eq:massconserve}.  Regarding this point, the modeling goals of the debris flow \cite{GeorgeIverson2014} and tsunumi run-up \cite{LeVequeetal2011} literature provide a useful contrast to our concerns.  These fluid-layer problems are of free-boundary type for a hyperbolic system of mass and momentum conservation equations.  The thickness $u$ of the flow must be nonnegative, and the discrete models allow wet ($u>0$) and dry ($u=0$) cells.  However, the time-scales are sufficiently short (seconds to minutes) so that addition/removal sources like precipitation, evaporation, or absorption into the ground are absent from the conservation of mass equation; $f=0$ in \eqref{eq:massconserve} in the models found in \cite{GeorgeIverson2014,LeVequeetal2011}, for example.  Without a source the discrete-time sequence of free-boundary problems, if the model were to be formulated that way, would call for constancy of the total mass, despite the moving boundary between wet and dry areas.  In these models nonnegative fluid-layer thickness is preserved by maximum-principle or strong-stability properties of the discrete scheme, and exact discrete conservation applies automatically.
 
-We will see that there is no conservation error at the free boundary under the additional hypothesis that $f\ge 0$ in \eqref{eq:massconserve}.  In fact, the modeling goals of the debris flow \cite{GeorgeIverson2014} and tsunumi run-up \cite{LeVequeetal2011} literature provide a useful contrast to our concerns.  These fluid-layer problems are of free-boundary type for a hyperbolic system of mass and momentum conservation equations.  The thickness $u$ of the flow must be nonnegative, and the cited discrete models allow wet ($u>0$) and dry ($u=0$) cells.  However, the time-scales are sufficiently short (seconds to minutes) so that addition/removal sources like evaporation into the air or absorption into the ground are absent from the conservation of mass equation; $f=0$ in \eqref{eq:massconserve} in the models found in \cite{GeorgeIverson2014,LeVequeetal2011}.  The discrete-time sequence of free-boundary problems, if the model were to be formulated that way, would call for constancy of the total mass, despite the moving boundary between wet and dry areas.  In these models nonnegative fluid-layer thickness is preserved by maximum-principle properties of the discrete scheme, and exact discrete conservation applies nearly automatically.
+The mass conservation considerations and implicit time-stepping techniques of the current paper could be applied to sea ice models.  However, our ideas require re-interpretation because of the manner in which mass conservation is described in such models.  They track a non-negative distribution function $g(x,t,h)$ where $h$ is the thickness dimension and $\int_0^\infty g\,dh = 1$ \cite{Thorndikeetal1975}.  Then $h$ is discretized into ``categories'' $H_{n-1} < h \le H_n$ with $H_0$ denoting the ice-free category \cite{LipscombHunke2004}.  Our results are relevant to the continuous-space equations which remain after discretization of $t$ and of $h$.  Note that in such models melting is a negative source term in the evolution equation for the $H_0$ category so explicit updating of $g_{n,1}(x) \approx \int_{H_0}^{H_1} g(x,t_n,h)\,dh$ requires truncation (projection) to maintain nonnegativity of $g_{n,1}$.  The inequality constraint $g_{n,1} \ge 0$ is a not-necessarily-stated part of such a scheme whether the time-stepping is explicit or implicit.
 
 
 \section{Time semi-discretization}  \label{sec:strongform}
@@ -150,15 +148,15 @@ We will see that there is no conservation error at the free boundary under the a
 Let $\{t_n\}_{n=0}^N$ be a sequence of increasing times with $t_0=0$ and $t_N=T>0$.  Let $\Delta t_n = t_n-t_{n-1}>0$.  Corresponding to \eqref{eq:massconserve} and \eqref{eq:constraint}, the strong form of the \emph{single time-step problem} is
 \begin{align}
 \frac{u_n - u_{n-1}}{\Delta t_n} + \Div \bQ_n(\grad u_n,u_n,x) &= F_n(u_n,x) &&\text{in } \Omega, \text{ where } u_n > 0 \label{eq:semimassconserve} \\
-u_n &\ge 0 &&\text{in } \overline{\Omega} \label{eq:semiconstraint}
+u_n &\ge 0 &&\text{in } \Omega \label{eq:semiconstraint}
 \end{align}
-This problem determines a new thickness function $u_n(x) \approx u(x,t_n)$ given $u_{n-1}(x) \approx u(x,t_{n-1})$, as shown in Figure \ref{fig:timestepcartoon}.  (The weak form of the problem is given in Section \ref{sec:weakform}, but we state the strong form first because of the developed intuition of many practitioners.)
+This problem determines a new thickness function $u_n(x) \approx u(x,t_n)$ given $u_{n-1}(x) \approx u(x,t_{n-1})$, as shown in Figure \ref{fig:timestepcartoon}.  (The weak form of the problem is given in Section \ref{sec:weakform}, but we state the strong form first because of the developed intuition of most practitioners.)
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[width=3.9in,keepaspectratio=true]{cartoon-dt}
+\includegraphics[width=3.9in,keepaspectratio=true]{figs/cartoon-dt}
 \end{center}
-\caption{The single time-step problem of \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint} is a free boundary problem determining a new thickness $u_n\ge 0$ from an old thickness $u_{n-1}$, using the source term $F_n$ during the time step.}
+\caption{The single time-step problem \eqref{eq:semimassconserve}, \eqref{eq:semiconstraint} is a free boundary problem for the new thickness $u_n\ge 0$.}
 \label{fig:timestepcartoon}
 \end{figure}
 
@@ -166,7 +164,7 @@ A semi-discretization procedure generating equations \eqref{eq:semimassconserve}
 \begin{equation}
 \bQ_n(\bX,v,x), \quad F_n(v,x) \label{eq:functionalforms}
 \end{equation}
-Here $\bX\in\RR^d$, $v\ge 0$, and $x\in \Omega$.  We will assume $\bQ_n$ is defined for all $x\in\Omega$, not just where $v(x)>0$, but that $\bQ_n(\bX,0,x)=0$, i.e.~that flux is zero for a zero-thickness layer.
+Here $\bX\in\RR^d$, $v\ge 0$, and $x\in \Omega$.  We will assume $\bQ_n$ is defined for all $x\in\Omega$, not just where $v(x)>0$, but that $\bQ_n(\bX,0,x)=0$, i.e.~flux is zero for a zero-thickness layer.
 
 \subsection{$\theta$ methods}  \label{subsec:thetamethods}  Consider a $\theta$-method discretization \cite{MortonMayers2005} of \eqref{eq:massconserve} with $0\le \theta \le 1$:
 \begin{align}
@@ -180,11 +178,12 @@ F_n(v,x)       &= \theta f(v,x,t_n) + (1-\theta) f(u_{n-1},x,t_{n-1}) \\
                &\qquad - (1-\theta) \Div \bq(\grad u_{n-1},u_{n-1},x,t_{n-1}).
 \end{align*}
 
-For any $\theta$ observe that the source function $F_n$ ``absorbs'' all the terms which do not involve the flux $\bq$ evaluated at time $t_n$.  If $\theta=0$ then $\bQ_n=0$; this explicit case is considered in Subsection \ref{subsec:explicit}.  On the other hand, implicitness $\theta>0$ is both helpful for the usual stability reasons \cite{MortonMayers2005} and additionally to give the smoothness needed so that the weak form of the single time-step problem can be well-posed; see Section \ref{sec:weakform}.  In the simplest implicit case of a backward Euler scheme note that $\bQ_n = \bq(\bX,v,x,t_n)$ and $F_n = f(v,x,t_n)$.
+For any $\theta$ observe that the source function $F_n$ in \eqref{eq:semimassconserve} ``absorbs'' all the terms which do not involve the flux $\bq$ evaluated at time $t_n$.  If $\theta=0$ then $\bQ_n=0$; this explicit case is considered in Subsection \ref{subsec:explicit}.  Implicitness $\theta>0$ is both helpful for the usual stability reasons \cite{MortonMayers2005} and additionally to give the smoothness needed so that the weak form of the single time-step problem can be well-posed; see Section \ref{sec:weakform}.  In the simplest implicit case, the backward Euler scheme with $\theta=1$, observe that $\bQ_n = \bq(\bX,v,x,t_n)$ and $F_n = f(v,x,t_n)$.
 
-Time-discretization need not be limited to $\theta$-methods.  In particular, Appendix \ref{app:rk2} shows how multi-stage one-step schemes like Runge-Kutta can be put in form \eqref{eq:semimassconserve}.  Multi-step integration methods also fit into our framework (not shown), but the low regularity of the solution in the vicinity of the free boundary suggests that such schemes will provide no accuracy improvement.
+Time-discretization need not be limited to $\theta$-methods.  In particular, Appendix \ref{app:rk2} shows how multi-stage one-step schemes like Runge-Kutta can be put in form \eqref{eq:semimassconserve}.  Multi-step integration methods can also be fit into our framework, but this is not shown.
 
-\subsection{Associated set decomposition}  \label{subsec:setdecompose}  We can decompose $\Omega$ using the solution of problem \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint}, defining three disjoint regions based on $u_n$ and $u_{n-1}$:
+
+\subsection{Associated set decomposition}  \label{subsec:setdecompose}  In preparation for a statement of the weak form, let us suppose \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint} can be solved.  A solution $u_n$ then decomposes $\Omega$ into three disjoint regions:
 \begin{align*}
 \Omega_n &= \left\{x \in \Omega \,\big|\, u_n(x)>0\right\}, \\
 \Omega_n^r &= \left\{x \in \Omega \,\big|\, u_n(x)=0 \text{ and } u_{n-1}(x) > 0\right\}, \\
@@ -199,36 +198,36 @@ Here the superscript ``$r$'' stands for ``retreat,'' and we call $\Omega_n^r$ th
 \begin{figure}[ht]
 \medskip
 \begin{center}
-\includegraphics[width=2.3in,keepaspectratio=true]{domains-fig}
+\includegraphics[width=2.3in,keepaspectratio=true]{figs/domains-fig}
 \end{center}
-\caption{We decompose $\Omega = \Omega_n \cup \Omega_n^r \cup \Omega_n^0$, where $\Omega_n$ is the open support of $u_n$, $\Omega_n^r$ is the retreat set, and $\Omega_n^0$ is the set on which both $u_{n-1}$ and $u_n$ are zero.}
+\caption{A solution to \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint} will decompose $\Omega$ as described in \eqref{eq:omegadecomposition}.}
 \label{fig:domains}
 \end{figure}
 
-Assume $F_n(v,x)$ and $u_n(x)$ are continuous.  Rewriting \eqref{eq:semimassconserve} as
+On the other hand one may rewrite \eqref{eq:semimassconserve} as
 \begin{equation}
-u_n = u_{n-1} + \Delta t_n\, F_n - \Delta t_n\, \Div \bQ_n,  \label{eq:strongflat}
+u_n = u_{n-1} + \Delta t_n\, F_n - \Delta t_n\, \Div \bQ_n.  \label{eq:strongflat}
 \end{equation}
-we see that if $u_n=0$ then the terms on the right side of \eqref{eq:strongflat} must, apparently, sum to a nonnegative number.  Furthermore, as we will assume (see \eqref{eq:Qiszero} below) that the flux of a zero-thickness layer is zero, $\bQ_n=0$ on $\Omega_n^r \cup \Omega_n^0$ where $u_n=0$.  Because also $u_{n-1}\ge 0$ and $\Delta t_n > 0$, we expect that on $\Omega_n^r \cup \Omega_n^0$ this inequality holds:
+The constraint $u_n \ge 0$ implies that the terms on the right side of \eqref{eq:strongflat} sum to a nonnegative number.  Furthermore, because the flux of a zero-thickness layer is zero, $\bQ_n=0$ on $\Omega_n^r \cup \Omega_n^0$ where $u_n=0$.  Because also $u_{n-1}\ge 0$ and $\Delta t_n > 0$, we expect that, at least in the interior of $\Omega_n^r \cup \Omega_n^0$ where $\Div \bQ_n=0$, an inequality holds:
 \begin{equation}
-u_{n-1} + \Delta t_n\, F_n \le 0 \label{eq:strongconditionwherezero}
+u_{n-1} + \Delta t_n\, F_n \le 0. \label{eq:strongconditionwherezero}
 \end{equation}
-and thus also $F_n \le 0$ on the same set.  The intuition behind \eqref{eq:strongconditionwherezero}, used below in deriving the weak form, is that the source term must be negative in a thickness-zero location where the layer was previously present (i.e.~in $\Omega_n^r$), or where it continues to be absent (in $\Omega_n^0$).
+Thus also $F_n \le 0$ on the same set.  The intuition behind \eqref{eq:strongconditionwherezero}, used below in explaining the weak form, is that the source term must be negative in a thickness-zero location where the layer was previously present (i.e.~in $\Omega_n^r$), or where it continues to be absent (in $\Omega_n^0$).
 
 
 \section{Weak formulation of the single time-step problem}  \label{sec:weakform}
 
-The strong form \eqref{eq:semimassconserve}, \eqref{eq:semiconstraint} of the single time-step problem is not adequate for mathematical progress.  PDE \eqref{eq:semimassconserve} applies only on the set $\Omega_n$ where its solution $u_n$ is positive.  Likewise, inequality \eqref{eq:strongconditionwherezero} specifies behavior on the set where $u_n=0$, and so we have posed a problem in terms of its solution.  The strong form is also inadequate because the boundary conditions satisfied by the solution $u_n$ along the free boundary $\partial\Omega_n$ are not clear.  By contrast, the weak form in this section, a variational inequality \cite{Friedman1982,KinderlehrerStampacchia1980} on a convex set of admissible functions, can be well-posed.  This formulation refers only to the set $\Omega$ and its boundary $\partial\Omega$, and not to the sets in \eqref{eq:omegadecomposition}.
+The strong form \eqref{eq:semimassconserve}, \eqref{eq:semiconstraint} of the single time-step problem is in fact not adequate for mathematical progress.  PDE \eqref{eq:semimassconserve} applies only on the set $\Omega_n$ where its solution $u_n$ is positive.  Likewise, inequality \eqref{eq:strongconditionwherezero} applies on the set where $u_n=0$, and thus we have ``posed'' a problem in terms of its solution.  The strong form is also inadequate because the boundary conditions satisfied by $u_n$ along the free boundary $\partial\Omega_n$ are not clear.  By contrast, the weak form in this section, a variational inequality \cite{Friedman1982,KinderlehrerStampacchia1980} on a convex set of admissible functions, refers only to the set $\Omega$ and its boundary $\partial\Omega$, and not to the sets in \eqref{eq:omegadecomposition}, and thus it needs no knowledge of the free boundary.
 
-We will state conditions on the discrete-time flux $\bQ_n$ (Subsection \ref{subsec:fluxassumptions}) allowing construction of a variational inequality (Subsection \ref{subsec:derivevi}) for which a sufficiently-smooth function solves the strong-form problem (subsection \ref{subsec:interior}).  Section \ref{sec:wellposed} then addresses well-posedness, which depends on properties of $\bQ_n$ that are not addressed in the current Section.
+We start this Section by stating conditions on the discrete-time flux $\bQ_n$ (Subsection \ref{subsec:fluxassumptions}) allowing construction of a variational inequality (Subsection \ref{subsec:derivevi}) for which a sufficiently-smooth function solves the strong-form problem (Subsection \ref{subsec:interior}).  Section \ref{sec:wellposed} then addresses well-posedness.
 
 \subsection{Source and flux assumptions} \label{subsec:fluxassumptions}  Let $p\ge 1$ and recall that $L^p (\Omega)$ is the Banach space with norm $\|v\|_{L^p} = \left(\int_\Omega |v|^p\,dx\right)^{1/p}$.  The Sobolev space $W^{1,p}(\Omega)$ \cite{Evans2010} is the set of $v \in L^p(\Omega)$ satisfying $\partial_1 v,\dots,\partial_d v \in L^p(\Omega)$ and with norm
 \begin{equation}
   \|v\|_{1,p} = \left(\|v\|_{L^p}^p + \sum_{i=1}^d \|\partial_i v\|_{L^p}^p\right)^{1/p}.  \label{eq:norm}
 \end{equation}
-If $p>d$ then $v\in W^{1,p}(\Omega)$ has a continuous representative \cite[``Morrey's inequality'']{Evans2010}, but otherwise $v$ may be discontinuous.  Denote by $W_0^{1,p}(\Omega)$ the closure of $C_c^\infty(\Omega)$ in $W^{1,p}(\Omega)$.  For $v \in W^{1,p}(\Omega)$ define $E_v = \{x\in\Omega \,\big|\, v(x) = 0\}$; note that $\grad v = 0$ a.e.~on $E_v$ \cite[lemma A.4 in chapter II]{KinderlehrerStampacchia1980}.  Also let $q=(1-1/p)^{-1}$.
+If $p>d$ then $v\in W^{1,p}(\Omega)$ has a continuous representative \cite[``Morrey's inequality'']{Evans2010}, but otherwise $v$ may be discontinuous.  Denote by $W_0^{1,p}(\Omega)$ the closure of $C_c^\infty(\Omega)$ in $W^{1,p}(\Omega)$.  Also assume $\frac{1}{p}+\frac{1}{q}=1$.
 
-Regarding the source term $F_n$, for now we assume only that if $v\in W^{1,p}(\Omega)$ then
+Regarding the source term $F_n$ we assume only that if $v\in W^{1,p}(\Omega)$ then
 \begin{equation}
 F_n(v,x) \in L^q(\Omega).  \label{eq:FisLq}
 \end{equation}
@@ -246,12 +245,11 @@ F_n(v,x) \in L^q(\Omega).  \label{eq:FisLq}
 \end{equation}
 \item and
 \begin{equation}
-\bQ_n(\grad v,v,x)=0 \quad \text{a.e.~on } E_v. \label{eq:Qiszero}
+\bQ_n(\grad v,v,x)=0 \quad \text{a.e.~on } E_v = \left\{x\in\Omega\,\big|\,v(x)=0\right\}. \label{eq:Qiszero}
 \end{equation}
 \end{enumerate}
 \end{definition}
-
-Assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:QisLq} require $\bQ_n$ to be a well-behaved function.  Requirement \eqref{eq:Qiszero} says that the flux in a zero-thickness fluid layer is zero.
+Assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:QisLq} address the regularity of $\bQ_n$ while \eqref{eq:Qiszero} says that the flux in a zero-thickness fluid layer is zero.  Note that $\grad v = 0$ a.e.~on $E_v$ \cite[lemma A.4 in chapter II]{KinderlehrerStampacchia1980}.
 
 \subsection{Derivation of the variational inequality}  \label{subsec:derivevi}  To use the strong form in deriving a weak form we need an extra assumption that $\bQ_n$ is smooth:  For all open $S \subset \Omega$, if $v\in W^{1,p}(S)$ then
 \begin{equation}
@@ -621,14 +619,6 @@ So far we have treated free-boundary mass conservation models in time-semi-discr
 \bar\Omega = \bigcup_{j\in J} \bar \omega_j \quad \text{and} \quad |\Omega| = \sum_{j\in J} |\omega_j|.  \label{eq:tiling}
 \end{equation}
 Cells may be non-convex and the number of edges (faces) per cell may vary.  An edge, denoted by the ordered pair $(j,k)$, exists between cell $j$ and cell $k$ if $\bar\omega_j \cap \bar \omega_k$ has positive measure $\ell_{(j,k)}>0$.  The set of edges for cell $\omega_j$ is denoted $\mathcal{E}_j=\{(j,k)\}$.
-
-\begin{figure}[ht]
-\begin{center}
-\input{tikz/fvmesh-notation.tex}
-\end{center}
-\caption{Notation for an unstructured finite volume method for \eqref{eq:semimassconserve}.}
-\label{fig:fvmesh-notation}
-\end{figure}
 
 We suppose the strong form \eqref{eq:semimassconserve} is discretized using finite volume ideas as shown in Figure \ref{fig:fvmesh-notation}.  The representative thickness $u_n^j$ in cell $j$ is given the usual finite volume definition as an average \cite{LeVeque2002}, as follows, and similarly $F_n^j$ denotes the average source term for the cell:
 \begin{equation}
