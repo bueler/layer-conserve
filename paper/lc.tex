@@ -251,15 +251,16 @@ F_n(v,x) \in L^q(\Omega).  \label{eq:FisLq}
 \end{definition}
 Assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:QisLq} address the regularity of $\bQ_n$ while \eqref{eq:Qiszero} says that the flux in a zero-thickness fluid layer is zero.  Note that $\grad v = 0$ a.e.~on $E_v$ \cite[lemma A.4 in chapter II]{KinderlehrerStampacchia1980}.
 
-\subsection{Derivation of the variational inequality}  \label{subsec:derivevi}  To use the strong form in deriving a weak form we need an extra assumption that $\bQ_n$ is smooth:  For all open $S \subset \Omega$, if $v\in W^{1,p}(S)$ then
+
+\subsection{Derivation of the variational inequality}  \label{subsec:derivevi}  To derive a weak form we need an extra smoothness assumption on $\bQ_n$:  For all open $S \subset \Omega$, if $v\in W^{1,p}(S)$ then
 \begin{equation}
 \frac{\partial}{\partial x_i} \bQ_n(\grad v,v,x) \in L^q(S). \label{eq:Qissmooth}
 \end{equation}
-This assumption will not affect later considerations of well-posedness (Section \ref{sec:wellposed}) or conservation errors (Sections \ref{sec:timeseries}--\ref{sec:spacediscretized}).
+This assumption will not be needed in later analysis of well-posedness of the resulting weak form (Section \ref{sec:wellposed}) or conservation errors (Sections \ref{sec:timeseries}--\ref{sec:spacediscretized}).
 
-\begin{theorem} \label{thm:strongimpliesweak}  Suppose $u_n \in C(\overline{\Omega}) \cap W^{1,p}(\Omega)$ is a nonnegative function which solves \eqref{eq:semimassconserve} on $\Omega_n$ and \eqref{eq:strongconditionwherezero} on $\Omega_n^r \cup \Omega_n^0$.  Suppose the boundaries of the sets $\Omega_n$ and $\Omega_n^r \cup \Omega_n^0$ in decomposition \eqref{eq:omegadecomposition} are Lipschitz, and that $\overline{\Omega_n} \subset \Omega$.  Suppose $F_n$, $\bQ_n$ satisfy \eqref{eq:FisLq}, the standard flux assumptions, and \eqref{eq:Qissmooth}.  Let $\bQ = \bQ_n(\grad u_n,u_n,x)$ and $F=F_n(u_n,x)$.  Then
+\begin{theorem} \label{thm:strongimpliesweak}  Suppose $u_n \in C(\overline{\Omega}) \cap W^{1,p}(\Omega)$ is a nonnegative function which solves \eqref{eq:semimassconserve} on $\Omega_n$ and \eqref{eq:strongconditionwherezero} on the interior of $\Omega_n^r \cup \Omega_n^0$.  Suppose the boundaries of the sets $\Omega_n$ and $\Omega_n^r \cup \Omega_n^0$ in decomposition \eqref{eq:omegadecomposition} are Lipschitz, and that $\overline{\Omega_n} \subset \Omega$.  Suppose $F_n$, $\bQ_n$ satisfy \eqref{eq:FisLq}, the standard flux assumptions, and \eqref{eq:Qissmooth}.  Suppose $\bQ = \bQ_n(\grad u_n,u_n,x)$ and $F=F_n(u_n,x)$ are continuous.  Then
 \begin{equation}
--\int_{\Omega} \bQ \cdot \grad(v-u_n) \ge \int_{\Omega} \left(F - \frac{u_n - u_{n-1}}{\Delta t}\right) (v-u_n) \label{eq:morallytheVI}
+-\int_{\Omega} \bQ \cdot \grad(v-u_n) \ge \int_{\Omega} \left(F - \frac{u_n - u_{n-1}}{\Delta t_n}\right) (v-u_n) \label{eq:morallytheVI}
 \end{equation}
 for any $v \in C(\overline{\Omega}) \cap W^{1,p}(\Omega)$ such that $v \ge 0$.
 \end{theorem}
@@ -269,30 +270,29 @@ for any $v \in C(\overline{\Omega}) \cap W^{1,p}(\Omega)$ such that $v \ge 0$.
 -\int_{\Omega} \bQ \cdot \grad w &= \int_{\Omega_n} (\Div \bQ) w - \int_{\partial \Omega_n} (\bQ \cdot \bn) w \label{eq:intbypartsfromstrong} \\
   &\qquad\quad + \int_{\Omega_n^r \cup \Omega_n^0} (\Div \bQ) w - \int_{\partial(\Omega_n^r \cup \Omega_n^0)} (\bQ \cdot \bn) w. \notag
 \end{align}
-(This needs regularity of $\partial \Omega_n$ and $\partial(\Omega_n^r \cup \Omega_n^0)$ plus assumption \eqref{eq:Qissmooth} on the sets $S=\Omega_n$ and $S=(\Omega_n^r \cup \Omega_n^0)^\circ$.)  Because $u_n$ is continuous, $u_n=0$ on $\partial \Omega_n$ and on $\partial(\Omega_n^r \cup \Omega_n^0)$.  Thus by \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero} we see that $\bQ=0$ on these boundaries, so the boundary integrals in \eqref{eq:intbypartsfromstrong} are zero.  Now, by \eqref{eq:semimassconserve} on $\Omega_n$, and by \eqref{eq:Qiszero} and \eqref{eq:Qissmooth} we have $\Div \bQ=0$ on $\Omega_n^r \cup \Omega_n^0$.  Thus we get
+(This needs assumption \eqref{eq:Qissmooth} on the sets $S=\Omega_n$ and $S=(\Omega_n^r \cup \Omega_n^0)^\circ$.)  Because $u_n$ is continuous, $u_n=0$ on $\partial \Omega_n$ and on $\partial(\Omega_n^r \cup \Omega_n^0)$.  Thus by continuity, \eqref{eq:Qiscontinuous}, and \eqref{eq:Qiszero} we see that $\bQ=0$ on these boundaries, so the boundary integrals in \eqref{eq:intbypartsfromstrong} are zero.  Now, by \eqref{eq:semimassconserve} on $\Omega_n$, and by \eqref{eq:Qiszero} and \eqref{eq:Qissmooth} we have $\Div \bQ=0$ a.e.~on $\Omega_n^r \cup \Omega_n^0$.  Thus we get
 \begin{equation}
--\int_{\Omega} \bQ \cdot \grad w = \int_{\Omega_n} \left(F - \frac{u_n - u_{n-1}}{\Delta t}\right) w. \label{eq:equalitybeforeVI}
+-\int_{\Omega} \bQ \cdot \grad w = \int_{\Omega_n} \left(F - \frac{u_n - u_{n-1}}{\Delta t_n}\right) w. \label{eq:equalitybeforeVI}
 \end{equation}
 However, by \eqref{eq:strongconditionwherezero}, $F \le 0$ on $\Omega_n^r \cup \Omega_n^0$.  Since also $u_n=0$, $u_{n-1}\ge 0$, and $w = v-u_n = v \ge 0$ on $\Omega_n^r \cup \Omega_n^0$, we have
 \begin{equation}
-    0 \ge \int_{\Omega_n^r \cup \Omega_n^0} \left(F - \frac{u_n - u_{n-1}}{\Delta t}\right) w. \label{eq:inequalitybeforeVI}
+    0 \ge \int_{\Omega_n^r \cup \Omega_n^0} \left(F - \frac{u_n - u_{n-1}}{\Delta t_n}\right) w. \label{eq:inequalitybeforeVI}
 \end{equation}
 Adding \eqref{eq:equalitybeforeVI} and \eqref{eq:inequalitybeforeVI} gives \eqref{eq:morallytheVI}.
 \end{proof}
 
-While this derivation of inequality \eqref{eq:morallytheVI} requires too many hypotheses, it adequatey motivates a weak formulation.  Inequality \eqref{eq:morallytheVI} avoids use of the solution to define subsets of $\Omega$ on which pointwise statements \eqref{eq:semimassconserve}, \eqref{eq:semiconstraint} apply.
-
-For the following definitions, fix $p>1$ and denote $\mathcal{X} = W_0^{1,p}(\Omega)$.  Denote its dual space by $\mathcal{X}'$ and $\ip{\cdot}{\cdot}: \mathcal{X}' \times \mathcal{X} \to \RR$ for the pairing.  Note that the admissible set $\mathcal{K}$ below is a closed and convex subset of $\mathcal{X}$, and that variational inequality \eqref{eq:theVI} is the same as \eqref{eq:morallytheVI}.
+While this derivation of inequality \eqref{eq:morallytheVI} requires too many hypotheses, it adequately motivates a weak formulation, as follows.  Fix $p>1$ and denote $\mathcal{X} = W_0^{1,p}(\Omega)$, with dual space $\mathcal{X}'$ and pairing $\ip{\cdot}{\cdot}: \mathcal{X}' \times \mathcal{X} \to \RR$.
 
 \begin{definition}
 \begin{equation}
 \mathcal{K} = \left\{v \in \mathcal{X} \,\big|\, v(x) \ge 0\, \text{ a.e.~} x \in \Omega\right\}.  \label{eq:defineK}
 \end{equation}
+(This is a closed and convex subset of $\mathcal{X}$.)
 \end{definition}
 
 \begin{definition}  Suppose $u_{n-1}\in\mathcal{K}$ and $\Delta t_n>0$.  Assume that $\bQ_n$ satisfies the standard flux assumptions and that $F_n$ satisfies \eqref{eq:FisLq}.  Define $A_n:\mathcal{K} \to \mathcal{X}'$ by
 \begin{equation}
-  \ip{A_n(v)}{\phi} = \int_\Omega \left(v - \Delta t\, F_n(v,x) - u_{n-1}\right)\phi - \Delta t_n\, \bQ_n(\grad v,v,x) \cdot \grad\phi. \label{eq:defineAn}
+  \ip{A_n(v)}{\phi} = \int_\Omega \left(v - \Delta t_n\, F_n(v,x) - u_{n-1}\right)\phi - \Delta t_n\, \bQ_n(\grad v,v,x) \cdot \grad\phi. \label{eq:defineAn}
 \end{equation}
 \end{definition}
 
@@ -302,24 +302,25 @@ For the following definitions, fix $p>1$ and denote $\mathcal{X} = W_0^{1,p}(\Om
 \end{equation}
 \end{definition}
 
-\subsection{Interior condition}  \label{subsec:interior}  We now show a converse of Theorem \ref{thm:strongimpliesweak} which makes no regularity assumptions on the set decomposition \eqref{eq:omegadecomposition}.
+Variational inequality \eqref{eq:theVI} is the same as \eqref{eq:morallytheVI}.
 
-\begin{theorem} \label{thm:weakimpliesstrong}  Assume $F_n$, $\bQ_n$ satisfy \eqref{eq:FisLq}, the standard flux assumptions, and \eqref{eq:Qissmooth}.  Choose $u_{n-1}\in\mathcal{K}$, and suppose that $u_n\in\mathcal{K}$ solves \eqref{eq:theVI}.  If $S \subset \Omega_n$ is open, $\overline{S}\subset \Omega$, and $u_n\in C(S)$ then \eqref{eq:semimassconserve} applies a.e.~on $S$.  If $S \subset \Omega_n^0$ is open then \eqref{eq:strongconditionwherezero} applies a.e.~on $S$.
+
+\subsection{Interior condition}  \label{subsec:interior}  We now prove a converse of Theorem \ref{thm:strongimpliesweak} which makes no regularity assumptions on the set decomposition \eqref{eq:omegadecomposition}.
+
+\begin{theorem} \label{thm:weakimpliesstrong}  Assume $F_n$ satisfies \eqref{eq:FisLq} and $\bQ_n$ satisfies the standard flux assumptions plus \eqref{eq:Qissmooth}.  Choose $u_{n-1}\in\mathcal{K}$, and suppose that $u_n\in\mathcal{K}$ solves \eqref{eq:theVI}.  If $S \subset \Omega_n$ is open, $\overline{S}\subset \Omega$, and $u_n$ is continuous on $S$ then \eqref{eq:semimassconserve} applies a.e.~on $S$.  If $S \subset \Omega_n^r \cup \Omega_n^0$ is open then \eqref{eq:strongconditionwherezero} applies a.e.~on $S$.
 \end{theorem}
 
-\begin{proof}  Suppose $u_n\in\mathcal{K}$ solves \eqref{eq:theVI} and let $\bQ = \bQ_n(\grad u_n,u_n,x)$ and $F=F_n(u_n,x)$.
-
-Suppose $S \subset \Omega_n$ is open, $\overline{S}\subset \Omega$, and $u_n\in C(S)$.  Choose any $\phi\in C_c^\infty(S)$ and extend it by zero to all of $\Omega$; note that $\phi$ can have either sign, but that $\phi=0$ on $\partial\Omega$.  Let $v = u_n + \eps \phi$ and note that $v \in \mathcal{K}$ as long as $\eps\in\RR$ is sufficiently small in magnitude.  (Specifically, if $|\eps|\le \eps_0 = \min u_n(x) / \max |\phi(x)|$, with the minimum and maximum taken over the closure of the support of $\phi$, then $v \in \mathcal{K}$.)  It follows from \eqref{eq:theVI} that
+\begin{proof}  Let $\bQ = \bQ_n(\grad u_n,u_n,x)$ and $F=F_n(u_n,x)$.  For the case where $S \subset \Omega_n$, choose any $\phi\in C_c^\infty(S)$ and extend it by zero to all of $\Omega$; note that $\phi$ can have either sign, but that $\phi=0$ on $\partial\Omega$.  Let $v = u_n + \eps \phi$ and note that $v \in \mathcal{K}$ as long as $\eps\in\RR$ is sufficiently small in magnitude.  (Specifically, if $|\eps|\le \eps_0 = \min u_n(x) / \max |\phi(x)|$, with the minimum and maximum taken over the closure of the support of $\phi$, then $v \in \mathcal{K}$.)  It follows from \eqref{eq:theVI} that
    $$\eps \int_\Omega \left(u_n - \Delta t_n\,F - u_{n-1}\right)\phi - \Delta t_n\,\bQ \cdot \grad \phi \ge 0.$$
-This is true for all sufficiently-small $\eps$ and thus the integral is zero.  Integration by parts, using assumption \eqref{eq:Qissmooth} and $\phi\big|_{\partial\Omega}=0$, gives
+This is true for all sufficiently-small $\eps$, of either sign, and thus the integral is zero.  Integration by parts, using assumption \eqref{eq:Qissmooth} and $\phi\big|_{\partial\Omega}=0$, gives
    $$\int_\Omega \left[ u_n - \Delta t_n\,F - u_{n-1} + \Delta t_n\,\Div\bQ \right]\phi = 0.$$
 Because $\phi\in C_c^\infty(S)$ is arbitrary, the quantity in square brackets is zero a.e.~on $S$.
 
-Suppose $S \subset \Omega_n^0$ is open.  Choose any \emph{nonnegative} $\phi\in C_c^\infty(S)$, extend it by $\phi$ by zero, and let $v = u_n + \phi$ so $v\in\mathcal{K}$.  Note $u_n=0$ on the support of $\phi$.  By assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}, $\bQ=0$ on the support of $\phi$.  Thus by \eqref{eq:theVI},
+Now suppose $S \subset \Omega_n^r \cup \Omega_n^0$.  Choose any \emph{nonnegative} $\phi\in C_c^\infty(S)$, extend it by zero, and let $v = u_n + \phi$ so $v\in\mathcal{K}$.  Note $u_n=0$ on the support of $\phi$.  By assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}, $\bQ=0$ on the support of $\phi$.  Thus by \eqref{eq:theVI},
     $$0 \ge \int_{\Omega} \left(u_{n-1} + \Delta t_n\, F\right) \phi,$$
 and it follows as before that $u_{n-1} + \Delta t_n\, F \le 0$ a.e.~on $S$. \end{proof}
 
-Thus a solution of \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} where it is positive and continuous, and where it is zero it satisfies inequality \eqref{eq:strongconditionwherezero}.  From now on we will use set decomposition \eqref{eq:omegadecomposition} only when referring to a solution $u_n$ of the weak form \eqref{eq:theVI}.
+Thus a solution of \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} where it is positive and continuous, and where it is zero inequality \eqref{eq:strongconditionwherezero} holds.  From now on we will use set decomposition \eqref{eq:omegadecomposition} only when referring to a solution $u_n$ of the weak form \eqref{eq:theVI}.
 
 
 \section{Well-posedness for the single time-step problem} \label{sec:wellposed}
@@ -366,7 +367,7 @@ Now consider variational inequality \eqref{eq:theVI} with $A_n$ defined by \eqre
 Now we want to relate the properties of the flux $\bQ_n$ to the monotonicity and coercivity of $A_n$.  The following calculation applies when $F_n=F_n(x)$, i.e.~when the source function $F_n(v,x)$ is independent of the thickness $v$:
 \begin{align}
    &\ip{A_n(u) - A_n(v)}{u-v}  \label{eq:AtoQcalculation} \\
-   &\qquad = \int_\Omega (u-v)^2 - \Delta t\, \left[\bQ_n(\grad u,u,x) - \bQ_n(\grad v,v,x)\right] \cdot \grad(u-v).  \notag
+   &\qquad = \int_\Omega (u-v)^2 - \Delta t_n\, \left[\bQ_n(\grad u,u,x) - \bQ_n(\grad v,v,x)\right] \cdot \grad(u-v).  \notag
 \end{align}
 The proof of the following lemma is therefore easy and omitted.  Note that $W^{1,p}(\Omega) \subset L^2(\Omega)$ if either $p>d$ or $d\le 2$ \cite[theorems 5.6.2 and 5.6.5]{Evans2010}.  % FIXME: check for 2nd edition.
 In considering this lemma the reader should observe that in cases where $\bQ_n(\grad u,u,x)$ is proportional to $\grad u$ we expect, for physical reasons, that the flux $\bQ_n$ points generally in the direction of the negative of $\grad u$, as otherwise PDE \eqref{eq:massconserve} would behave like the ill-posed backward heat equation.
@@ -533,7 +534,7 @@ then $A_n$ defined by \eqref{eq:nonlocaldefnAn} is coercive and strictly monoton
 The result follows from condition \eqref{eq:nonlocaldtcond} and definition \eqref{eq:coercivedef}.
 \end{proof}
 
-In a certain sense Theorems \ref{thm:plapadvectwellposed} and \ref{thm:nonlocalwellposed} take different approaches.  In the former the velocity $\bX$ was assumed to be differentiable and an integration-by-parts gave a criterion for well-posedness via a bound on $\Delta t$ using derivatives of $\bX$.  By contrast, in theorem \ref{thm:nonlocalwellposed} we assume only that $\bG$ is integrable, no integration-by-parts is attempted, and $\Delta t$ is bounded using the norm of $\bG$ itself.
+In a certain sense Theorems \ref{thm:plapadvectwellposed} and \ref{thm:nonlocalwellposed} take different approaches.  In the former the velocity $\bX$ was assumed to be differentiable and an integration-by-parts gave a criterion for well-posedness via a bound on $\Delta t_n$ using derivatives of $\bX$.  By contrast, in theorem \ref{thm:nonlocalwellposed} we assume only that $\bG$ is integrable, no integration-by-parts is attempted, and $\Delta t_n$ is bounded using the norm of $\bG$ itself.
 
 \subsection{Explicit time-steps} \label{subsec:explicit}  Recall the explicit case of equation \eqref{eq:thetamethod}, with $\theta=0$.  In weak form the problem is variational inequality \eqref{eq:theVI}, but with $\bQ_n=0$ and
 \begin{equation}
@@ -579,7 +580,7 @@ R_n = \int_{\Omega_n^r} u_{n-1}, \label{eq:retreatlossseries}
 the \emph{retreat (mass) loss} during the $n$th time step.  By \eqref{eq:semimassconserve} on $\Omega_n$, and assuming $\partial \Omega_n$ is (e.g.) Lipshitz,
 \begin{align}
 M_n - M_{n-1} &= \int_{\Omega_n} (u_n - u_{n-1}) + \int_{\Omega_n^r} (0 - u_{n-1}) \label{eq:newbalance} \\
-   &= \Delta t \int_{\Omega_n} (- \Div \bQ_n + F_n) \, - R_n = C_n - R_n \notag
+   &= \Delta t_n \int_{\Omega_n} (- \Div \bQ_n + F_n) \, - R_n = C_n - R_n \notag
 \end{align}
 Note $\bQ_n=0$ along $\partial \Omega_n$ by \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.
 
@@ -607,7 +608,7 @@ for some bounded function $\Phi : [0,\infty) \to [0,\infty)$.  It is then a triv
 \begin{equation}
 R_n \le \Delta t_n\,\left(\Gamma_n + L \Phi(\Delta t_n)\right)   \label{eq:retreatbound}
 \end{equation}
-for a constant $\Gamma_n=\left|\int_{\Omega} F_n(u_{n-1},x)\,dx\right|$ which is potentially computable before solving single time-step problem \eqref{eq:theVI}.  Note that $\Delta t\,\Gamma_n$ is an estimate of the change to the present ($t_{n-1}$) fluid layer by the future ($t_n$) climate.  If $\Phi_n$ is bounded by $M>0$, or if $\Phi_n(z) \le A z^q$ for $A,q>0$, for example, then \eqref{eq:retreatbound} can be solved for the time-step $\Delta t$.
+for a constant $\Gamma_n=\left|\int_{\Omega} F_n(u_{n-1},x)\,dx\right|$ which is potentially computable before solving single time-step problem \eqref{eq:theVI}.  Note that $\Delta t_n\,\Gamma_n$ is an estimate of the change to the present ($t_{n-1}$) fluid layer by the future ($t_n$) climate.  If $\Phi_n$ is bounded by $M>0$, or if $\Phi_n(z) \le A z^q$ for $A,q>0$, for example, then \eqref{eq:retreatbound} can be solved for the time-step $\Delta t_n$.
 
 
 \section{Fully-discrete models}  \label{sec:spacediscretized}
