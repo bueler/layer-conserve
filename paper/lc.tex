@@ -557,7 +557,7 @@ u_n = \max\{0,u_{n-1} + \Delta t_n\,F_n\} \in L^2(\Omega). \label{eq:explicittru
 \end{equation}
 This addresses one time step, but unfortunately $u_n \in L^2(\Omega)$ is not regular enough so that the next timestep has a well-defined weak form.  That is, generally $\Div \bq(\grad u_{n-1},u_{n-1},x)$ need not be in $L^2(\Omega)$.
 
-In summary, for explicit time steps the solution to a single weakly-posed time step is truncation \eqref{eq:explicittruncation}, but that solution is generally not regular enough to yield a well-posed problem at future steps.  Nonetheless many sea ice \cite{Thorndikeetal1975} and even ice sheet \cite{Bueleretal2005} models proceed by explicit time steps for the fully-discretized problem.  We reconsider such cases in Subsection \ref{subsec:spaceexplicit}.
+In summary, for explicit time steps the solution to a single weakly-posed time step is truncation \eqref{eq:explicittruncation}, but that solution is generally not regular enough to yield a well-posed problem at future steps.  Nonetheless many sea ice \cite{Thorndikeetal1975} and even ice sheet \cite{Bueleretal2005} models proceed by explicit time steps for the fully-discretized problem.
 
 
 \section{Mass conservation and the retreat set}  \label{sec:timeseries}
@@ -645,46 +645,40 @@ Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvma
 
 FIXME pure FV description can instead be treated as a non-conforming Petrov-Galerkin finite element method for the variational inequality \eqref{eq:theVI}, with $A_n$ defined by \eqref{eq:defineAn}.  In that case the test functions are piecewise-constant and discontinuous along the edges of the cells $\omega_j$, as in a so-called ``finite volume element'' method \cite{Bueler2016,Cai1990,EwingLinLin2002}.  The cells $\omega_j$ would be geometrically ``dual'' to the elements in such a scheme (e.g.~\cite{Ringleretal2013}).
 
-\subsection{The discrete-space ``shell error''}  \label{subsec:shellerror}  In the fully-discrete model we use a superscript ``$h$'' to denote the spatially-discrete version of integrated quantities.  Analogous to \eqref{eq:totalmassseries}, \eqref{eq:climateseries}, and \eqref{eq:retreatlossseries}, we define the time-series
-\begin{align}
-M_n^h &= \sum_j u_n^j |\omega_j|, \label{eq:fvtimeseriesdefn} \\
-C_n^h &= \Delta t_n\!\!\sum_{\{j:u_n^j>0\}} F_n^j |\omega_j|,  \notag \\
-R_n^h &= \sum_{\{j:u_n^j=0\}} u_{n-1}^j |\omega_j|.  \notag
-\end{align}
-Analogous to \eqref{eq:newbalance}, by \eqref{eq:fvmassconserve} we compute
+\subsection{The discrete-space ``slop''}  \label{subsec:slop}  Analogous to \eqref{eq:totalmassseries}, \eqref{eq:climateseries}, and \eqref{eq:retreatlossseries}, we now define time-series
+\begin{equation}
+M_n^h = \sum_j u_n^j |\omega_j|, \quad C_n^h = \Delta t_n\!\!\sum_{\{j:u_n^j>0\}} F_n^j |\omega_j|, \quad R_n^h = \sum_{\{j:u_n^j=0\}} u_{n-1}^j |\omega_j|.  \label{eq:fvtimeseriesdefn}
+\end{equation}
+(A superscript ``$h$'' denotes spatially-discrete quantities.)  Analogous to \eqref{eq:newbalance}, by \eqref{eq:fvmassconserve} we compute
 \begin{align}
 M_n^h - M_{n-1}^h &= \sum_{u_n^j>0} (u_n^j - u_{n-1}^j) |\omega_j| - \sum_{u_n^j=0} u_{n-1}^j |\omega_j| \notag \\
    &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + \Delta t_n\,\sum_{u_n^j>0} F_n^j |\omega_j| - R_n^h \notag \\
    &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + C_n^h - R_n^h.  \label{eq:fvnewbalance}
 \end{align}
-
-In the continuous-space version \eqref{eq:newbalance} we could eliminate the flux integral, but the discrete flux sum in \eqref{eq:fvnewbalance} is not zero.  However, local conservation \eqref{eq:fvlocalconservation} does reduce it to a sum over edges which have a positive-thickness cell on one side and a zero-thickness cell on the other.  We call this residual sum the \emph{shell error}:
+Now local conservation \eqref{eq:fvlocalconservation} reduces the remaining sum to a sum over those edges which have a positive-thickness cell on one side and a zero-thickness cell on the other.  We call this residual sum the \emph{slop},
 \begin{equation}
-S_n^h = \sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = \sum_{u_j^n > 0 \,\&\, (j,k)\in\mathcal{E}_j \,\&\, u_k^n = 0} Q_n^{(j,k)} \ell_{(j,k)} \label{eq:fvderiveshellerror}
+S_n^h = \Delta t_n \sum_{\begin{smallmatrix} (j,k)\in\mathcal{E}_j \\ u_j^n > 0, u_k^n = 0\end{smallmatrix}} Q_n^{(j,k)} \ell_{(j,k)}. \label{eq:fvderiveslop}
 \end{equation}
-As suggested in Figure \ref{fig:fvmesh-shellerror}, $S_n^h$ is computed along the finite-volume approximation of the free boundary.  The quantity $S_n^h$ is an ``error'' in the sense that the continuous-space flux along the free-boundary would be zero because of flux conditions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.
+This new time-series allows us to write \eqref{eq:fvnewbalance} as a balance:
+\begin{equation}
+  M_n^h = M_{n-1}^h + C_n^h - R_n^h - S_n^h. \label{eq:fvfinalbalance}
+\end{equation}
+Note that $M_n^h$ and $R_n^h$ are nonnegative, but the climate input $C_n^h$ and the slop $S_n^h$ can be of either sign.
+
+As suggested in Figure \ref{fig:fvmesh-slop}, the slop $S_n^h$ is computed along the finite-volume approximation of the free boundary.  The slop is a numerical error in the sense that the continuous-space flux along the free-boundary is zero because of flux conditions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.  If the free boundary were well-behaved, which is beyond our scope to show even under strong assumptions on the data (especially the substrate topography), then we expect $S_n^h\to 0$ as $h\to 0$.  The retreat loss $R_n^h$ is also a numerical error, arising only from the time semi-discretization, and for reasons given in Section \ref{sec:timeseries}, $R_n^h \to 0$ as $\Delta t_n\to 0$. In any case, we may report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,S_n^h\}$, which balance as in \eqref{eq:fvfinalbalance}, up to rounding error, in a fully-discrete free-boundary numerical computation.
 
 \begin{figure}[ht]
 \begin{center}
-\input{tikz/fvmesh-shellerror.tex}
+\input{tikz/fvmesh-slop.tex}
 \end{center}
-\caption{The shell error $S_n^h$ is computed along those edges (strong line) where $u_n$ changes from positive (``$+$'') to zero (``$0$'').}
-\label{fig:fvmesh-shellerror}
+\caption{The slop $S_n^h$ is computed along those edges (strong line) where a wet cell meets a dry cell.}
+\label{fig:fvmesh-slop}
 \end{figure}
 
-At this point we can report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,S_n^h\}$ which exactly balance in a fully-discrete free-boundary numerical computation:
-\begin{equation}
-  M_n^h = M_{n-1}^h + C_n^h - R_n^h - \Delta t_n\,S_n^h. \label{eq:fvfinalbalance}
-\end{equation}
 
-Recall that additional assumptions can show $R_n\to 0$ as $\Delta t_n\to 0$ (section \ref{sec:timeseries}).  FIXME also assert $S_n^h\to 0$ as $h\to 0$ \emph{if} free boundary well-behaved, which is beyond scope to show, but evidently $R_n^h + \Delta t_n\,S_n^h \to 0$ as $\Delta t_n\to 0$
+\subsection{Implicit time-step solvers}  \label{subsec:implicitdiscrete}  
 
-\subsection{Fully-discrete explicit and semi-explicit schemes} \label{subsec:spaceexplicit}
-FIXME  On the other hand, explicit and \emph{fully-discretized} numerical schemes are obviously in widespread use for solving first-order and even second-order PDE problems.  FIXME:  can be well-posed but regularity concerns different
-
-\subsection{Newton-type methods} \label{subsec:newtonvi}  FIXME: mostly generalities \cite{Kelley2003}, but factor Jacobian into deriv of apparent stuff in \eqref{eq:theVI} and $\partial Q_n^j/\partial u_n^k$; equivalence of complementarity problems \cite{BensonMunson2006,BillupsMurty2000}; example in \cite{Bueler2016}
-
-FIXME Condition (ii) could be summarized ``if $u_n^j>0$ then $G_j(u_n^J)=0$,'' using notation $u_n^J$ for a vector formed from all $u_n^j$ with $j\in J$, for some formula $G_j$ which records the residual of equation \eqref{eq:fvmassconserve}.  We also have constraint ``$u_n^j\ge 0$'' on the unknowns.  In these senses we are regarding the system of equations formed from conditions \eqref{eq:fvmassconserve} as combining to give a \emph{complementarity problem} \cite{BillupsMurty2000} of the form $u_j\ge 0$ and $G_j(u^J)\ge 0$ and $u_j G_j(u^J)=0$ for all $j\in J$
+FIXME equation \eqref{eq:fvmassconserve} is not the full story because this backward-Euler represents a nontrivial finite-dimensional solution.  finite-dimensional VI equivalence to \emph{complementarity problems} \cite{BensonMunson2006,BillupsMurty2000}; example in \cite{Bueler2016}.  notation $u_n^J$ for a vector formed from all $u_n^j$ with $j\in J$, and formula $G^j(u_n^J)$ which records the residual of equation \eqref{eq:fvmassconserve}.  equation \eqref{eq:fvmassconserve} actually means ``if $u_n^j>0$ then $G^j(u_n^J)=0$.''  We also have constraint ``$u_n^j\ge 0$'' on the unknowns.  In these senses we are regarding the system of equations formed from conditions \eqref{eq:fvmassconserve} as combining to give a complementarity problem of the form $u_n^J\ge 0$, $G^J(u_n^J) \ge 0$, and $u_n^J G^J(u_n^J)=0$
 
 
 \section{Conclusion} \label{sec:conclusion}
