@@ -7,11 +7,12 @@
 
   % the free boundary is bold
   \draw[line width=2.0pt] (6,3) -- (3,5) -- (4,9) -- (8,8) -- (8,14) --
-                          (12,11) -- (16,9) -- (10,5) -- cycle;
+                          (12,11) -- (16,9) -- (10,5) -- (14,3) -- (10,1) -- cycle;
   % label cells with positive thickness
-  \draw (6,6) node {$+$};
-  \draw (11,8) node {$+$};
-  \draw (9.5,11) node {$+$};
+  \draw (6,6) node {$u>0$};
+  \draw (11,8) node {$u>0$};
+  \draw (9.7,10.8) node {$u>0$};
+  \draw (10,3) node {$u>0$};
   % label cells with zero thickness
   \draw (2,2) node {$0$};
   \draw (1.5,7.5) node {$0$};
@@ -23,5 +24,4 @@
   \draw (13.5,5.5) node {$0$};
   \draw (13,0.5) node {$0$};
   \draw (6.5,0.5) node {$0$};
-  \draw (10,3) node {$0$};
 \end{tikzpicture}
