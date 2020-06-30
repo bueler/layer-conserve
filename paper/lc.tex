@@ -10,7 +10,7 @@
 % math macros
 \newcommand\bb{\mathbf{b}}
 \newcommand\bbf{\mathbf{f}}
-\newcommand\bG{\mathbf{G}}
+\newcommand\bg{\mathbf{g}}
 \newcommand\bn{\mathbf{n}}
 \newcommand\bq{\mathbf{q}}
 \newcommand\br{\mathbf{r}}
@@ -19,6 +19,7 @@
 \newcommand\bx{\mathbf{x}}
 \newcommand\by{\mathbf{y}}
 
+\newcommand\bG{\mathbf{G}}
 \newcommand\bQ{\mathbf{Q}}
 \newcommand\bV{\mathbf{V}}
 \newcommand\bX{\mathbf{X}}
@@ -695,19 +696,20 @@ Conclusions which apply in the semi-discretized, continuous-space case are indep
 
 \appendix
 
-\section{Inequalities for $p$-norms}   \label{app:pinequalities}  Versions of the inequalities in the next two Lemmas appear in the literature, at least as early as \cite{GlowinskiMarroco1975}, but here the results apply in $\RR^d$---contrast \cite{BarrettLiu1993,GlowinskiMarroco1975} for the $\RR^2$ case---and have complete proofs and explicit constants.  The proof follows and corrects \cite[Appendix A]{Peral1997}.
+\section{Inequalities for $p$-norms}   \label{app:pinequalities}  Versions of the inequalities in the next two Lemmas appear in the literature, at least as early as \cite{GlowinskiMarroco1975}, but here the results apply in $\RR^d$---contrast \cite{BarrettLiu1993,GlowinskiMarroco1975} for the $\RR^2$ case---and have complete proofs and explicit constants.  The first two proofs follow \cite[Appendix A]{Peral1997}.
 
 \begin{lemma}  \label{lem:pbiginequality}  If $p\ge 2$ and $x,y\in\RR^d$ then
 \begin{equation}
 \left(|x|^{p-2} x - |y|^{p-2} y\right)\cdot(x-y) \ge 2^{2-p} |x-y|^p. \label{eq:pbiginequality}
 \end{equation}
+The constant is sharp; consider $y=-x$.
 \end{lemma}
 
 \begin{proof}  The case where $x=0$ or $y=0$ is trivial, so assume, by swapping $x$ and $y$ as necessary, that $0 < |y| \le |x|$.  Define $t=|y|/|x|$ and $s = (x\cdot y)/(|x||y|)$ so that $0\le t \le 1$ and $|s|\le 1$.  Expand \eqref{eq:pbiginequality} and divide it by $|x|^p$, to get the equivalent statement
     $$1 - (t^{p-1}+t) s + t^p \ge 2^{2-p} \left(1 - 2 s t + t^2\right)^{p/2}.$$
-Thus we need to prove that $2^{2-p}$ is a lower bound for
+It is easy to check that this holds when $s=1$, so now we need to prove that $2^{2-p}$ is a lower bound for
 	$$f(t,s) = \frac{1 - (t^{p-1}+t) s + t^p}{\left(1 - 2 s t + t^2\right)^{p/2}}.$$
-Note $s=1$ if and only if $x=y$, and in that case \eqref{eq:pbiginequality} is true.  We find a lower bound of $f$ on $(t,s) \in R=[0,1]\times[-1,1)$.  Note $1-2st+t^2 > 0$ on $ R$, so $f(t,s)$ is well-defined and differentiable on $R$.
+on $(t,s) \in R=[0,1]\times[-1,1)$.  Note $1-2st+t^2 > 0$ on $ R$, so $f(t,s)$ is well-defined and differentiable on $R$.
 
 Now, $f(t,-1) = \left(1 + t^{p-1}\right) / \left(1 + t\right)^{p-1}$ on $t\in[0,1]$.  Because $h(t)=t^{p-1}$ is convex for $p \ge 2$,
     $$\frac{1}{2^{p-1}} (1+t)^{p-1} = h(\tfrac{1}{2} 1 + \tfrac{1}{2} t) \le \tfrac{1}{2} h(1) + \tfrac{1}{2} h(t) = \tfrac{1}{2} (1 + t^{p-1}),$$
@@ -719,13 +721,7 @@ is continuous on the closed rectangle $\bar R = [0,1]\times[-1,1]$.  We will sho
 
 Now,
     $$\frac{\partial g}{\partial s} = (2-p) t (t^{p-2} + 1) \le 0$$
-on $\bar R$.  Define $G(t) = g(t,1)$.  We will show $G(t)\ge 0$ on $[0,1]$, thus that $g(t,s)\ge g(t,1)\ge 0$ on $\bar R$.  But
-\begin{align*}
-G(t) &\ge 0 &\iff && (2-p) t (t^{p-2} + 1) + (p-1) (t^p+1) - t^{p-2} - t^2 \ge 0 \\
-          & &\iff && (p-1) (t-1) (t^{p-1}-1) \ge (t^{p-2} - t) (1 - t)  \\
-          & &\iff && (p-1) (1 - t^{p-1}) \ge t^{p-2} - t.
-\end{align*}
-Note $(p-1) (1 - t^{p-1}) \ge 0$.  If $p\ge 3$ then $t^{p-2} - t \le 0$ so $G(t)\ge 0$ in that case.  On the other hand, if $2\le p < 3$ then
+on $\bar R$.  Define $G(t) = g(t,1)$.  We will show $G(t)\ge 0$ on $[0,1]$, thus that $g(t,s)\ge g(t,1)\ge 0$ on $\bar R$.  But $G(t)\ge 0$ is equivalent to $(p-1) (t-1) (t^{p-1}-1) \ge (t^{p-2} - t) (1 - t)$ which is in turn equivalent to $(p-1) (1 - t^{p-1}) \ge t^{p-2} - t$.  Note $(p-1) (1 - t^{p-1}) \ge 0$.  If $p\ge 3$ then $t^{p-2} - t \le 0$ so $G(t)\ge 0$ in that case.  On the other hand, if $2\le p < 3$ then
 	$$\frac{t^{p-2} - t}{1 - t^{p-1}} = t^{p-2} \frac{1 - t^{3-p}}{1 - t^{p-1}} \le t^{p-2} \le 1 \le p-1$$
 on $t\in[0,1)$, because $t^{p-1}\le t^{3-p}$ and thus $1 - t^{p-1} \ge 1 - t^{3-p}$.  But also $G(1)=0$, so $G(t)\ge 0$ on $[0,1]$. \end{proof}
 
@@ -757,7 +753,7 @@ on $t\in[0,1)$, because $t^{p-1}\le t^{3-p}$ and thus $1 - t^{p-1} \ge 1 - t^{3-
 \end{align*}
 This proves \eqref{eq:psmallinequality}. \end{proof}
 
-We will also need the result of combining Lemma \ref{lem:psmallinequality}, a point-wise result, with integration over a set $\Omega$.
+We will also need the result of combining point-wise Lemma \ref{lem:psmallinequality} with integration over a set $\Omega$.
 
 \begin{lemma} \label{lem:smallpbound}  Suppose $1<p\le 2$.  If $\Omega \subset \RR^d$ is measurable and if $\bu,\bv\in L^p(\Omega; \RR^m)$ for $m\ge 1$, then
 \begin{equation}
@@ -773,7 +769,7 @@ We will also need the result of combining Lemma \ref{lem:psmallinequality}, a po
 thus \eqref{eq:smallpbound}.
 \end{proof}
 
-Finally we recall the classical Poincar\'e inequality on the Sobolev space $W_0^{1,p}(\Omega)$.  This form, with an explicit but not optimal constant, is from \cite[section 7.8]{GilbargTrudinger2001}.
+Finally we recall the Poincar\'e inequality on the Sobolev space $W_0^{1,p}(\Omega)$.  This form, with an explicit but not optimal constant, is from \cite[section 7.8]{GilbargTrudinger2001}.
 
 \begin{lemma} \label{lem:poincare}  If $\Omega\subset \RR^d$ is a bounded domain with volume $|\Omega|$, and if $1\le p<\infty$ then for all $u\in W_0^{1,p}(\Omega)$,
 \begin{equation}
@@ -783,43 +779,40 @@ where $C(\Omega,p)=1+(|\Omega|/\omega_d)^{p/d}$ and $\omega_d=(2 \pi^{d/2})/(d\,
 \end{lemma}
 
 
-\section{Second-order Runge-Kutta time-discretization}  \label{app:rk2}  Section \ref{sec:strongform} describes the time semi-discretization of the continuum strong form \eqref{eq:massconserve}--\eqref{eq:constraint} using the $\theta$ method.  Such a one-stage time-discretization generates particular forms for the functions $\bQ_n(\bX,v,z)$ and $F_n(v,z)$ in equations \eqref{eq:semimassconserve}--\eqref{eq:semiconstraint}.  These functions determine the important variational inequality problem \eqref{eq:theVI}.  Here we illustrate how these functions can be generated for two particular Runge-Kutta (RK) schemes.  Generally one must solve multiple variational inequality problems \eqref{eq:theVI} during each time step of a multi-stage RK scheme.
+\section{Second-order Runge-Kutta time-discretization}  \label{app:rk2}  Section \ref{sec:strongform} describes the time semi-discretization of the continuum strong form \eqref{eq:massconserve}--\eqref{eq:constraint} using the $\theta$ method.  Such a one-stage method generates particular forms for the functions $\bQ_n(\bX,v,z)$ and $F_n(v,z)$ in equations \eqref{eq:semimassconserve}--\eqref{eq:semiconstraint}, and these functions then define weak formulation (VI) \eqref{eq:theVI}.  Here we illustrate how the corresponding functions $\bQ_n$ and $F_n$ can be generated for second-order Runge-Kutta (RK) schemes.
 
-For the $m$-dimensional ODE system
-\begin{equation}
-  \by' = \bbf(t,\by),  \label{eq:abstractODE}
-\end{equation}
-a two-stage RK scheme \cite{AscherPetzold1998} with time-step $h=\Delta t$ is given by
+For the $m$-dimensional ODE system $\by' = \bg(t,\by)$ an $s$-stage RK scheme \cite{AscherPetzold1998} with time-step $h=\Delta t$ is given by constants $a_{ij},b_i,\tau_i$ and the equations
 \begin{align}
-  \by_{n,i} &= \by_{n-1} + h \sum_{j=1}^2 a_{ij} \bbf(t_{n-1} + \tau_j h, \by_{n,j}), \quad i=1,2, \label{eq:RK2} \\
-      \by_n &= \by_{n-1} + h \sum_{i=1}^2 b_i \bbf(t_{n-1} + \tau_i h, \by_{n,i}). \notag
+  \by_{n,i} &= \by_{n-1} + h \sum_{j=1}^s a_{ij} \bg(t_{n-1} + \tau_j h, \by_{n,j}), \quad i=1,\dots,s \label{eq:RK2} \\
+      \by_n &= \by_{n-1} + h \sum_{i=1}^s b_i \bg(t_{n-1} + \tau_i h, \by_{n,i}). \notag
 \end{align}
-The constants $a_{ij},b_i,\tau_i$ depend upon the particular scheme.  \emph{Explicit} methods have $a_{ij}=0$ for $j\ge i$, i.e.~zeros on and above the diagonal in the Butcher tableau \cite{AscherPetzold1998}.  By definition, \emph{semi-implicit} methods have $a_{12}=0$.  We consider only explicit and semi-implicit methods.
+\emph{Explicit} methods have $a_{ij}=0$ for $j\ge i$, i.e.~zeros on and above the diagonal in the Butcher tableau \cite{AscherPetzold1998}, while \emph{semi-implicit} methods have zeros above the diagonal.  Whereas general implicit RK schemes generate larger (nonlinear) systems, semi-implicit methods have the computational advantage that each stage generates an $m$-equation system.  Note that one must solve \eqref{eq:theVI} $s$ times to compute a time step using an $s$-stage explicit or semi-implicit RK scheme.
 
-\emph{Diagonally-implicit} RK (``DIRK'') methods are semi-implicit methods for which the diagonal entries $a_{ii}$ are independent of $i$, i.e.~$a_{11}=a_{22}$.  The accuracy of $s$-stage DIRK methods is limited to $p=s+1$ \cite{AscherPetzold1998}.  There exist strongly S-stable and stiffly-accurate \cite{AscherPetzold1998} DIRKs with $s$ stages and order of accuracy $p=s$ for $s=1,2,3$ \cite{Alexander1977}.  ``Strongly S-stable'' is also called ``stiff decay'' \cite{AscherPetzold1998}.  The strong stability properties of these DIRK methods are helpful for many applications addressed in the paper, namely cases where $\bq$ has a leading-order diffusion term.  (In such cases the $m$-dimensional method-of-lines ODE system is arbitrarily stiff under spatial refinement.)  Semi-implicit methods have the computational advantage that each stage generates an $m$-equation linear system, whereas general implicit RK schemes generate larger systems.  DIRK methods have the further advantage that the $m\times m$ matrix can be re-used at each stage of a time-step.  This matrix has stage-independent form $A = I - h a_{ii} J$ if the Jacobian $J$ is evaluated only at the start of the time step: $J = \frac{\partial \bbf}{\partial y}(t_{n-1},\by_{n-1})$.
+\emph{Diagonally-implicit} RK (DIRK) methods are semi-implicit methods for which the diagonal entries $a_{ii}$ are independent of $i$.  The accuracy of $s$-stage DIRK methods is limited to order $p=s+1$, and there exist strongly S-stable and stiffly-accurate \cite{AscherPetzold1998} DIRKs with order $p=s$ for $s=1,2,3$ \cite{Alexander1977}.  (``Strongly S-stable'' is also called ``stiff decay'' \cite{AscherPetzold1998}.)  The stability properties of these DIRK methods are helpful for mass conservation problems considered in the text, especially cases where $\bq$ has a leading-order diffusion term so that the $m$-dimensional method-of-lines ODE system is stiff.  In DIRK methods the linear system matrix can potentially be re-used at each stage.  (This matrix is $A = I - h a_{ii} J$ where the Jacobian $J$ is evaluated at the start of the time step, $J = \frac{\partial \bg}{\partial y}(t_{n-1},\by_{n-1})$.)
 
-Functions $\bQ_n$ and $F_n$ in \eqref{eq:functionalforms} appear in weak form \eqref{eq:theVI}.  Now, as an illustration, we compute these functions for the following two DIRK schemes: \emph{(a)} the $(s,p)=(1,2)$ A-stable scheme (implicit midpoint rule), and \emph{(b)} the unique strongly S-stable $(s,p)=(2,2)$ scheme for which $0\le \tau_i\le 1$ \cite{AscherPetzold1998}.
+Now, as an illustration, we compute functions $\bQ_n$ and $F_n$ for two DIRK schemes.
+
+\medskip
 \renewcommand{\labelenumi}{\emph{(\alph{enumi})}}
 \begin{enumerate}
-\item The implicit midpoint rule has two stages, a backward Euler step of $\frac{1}{2} h$ followed by an explicit stage.  Using the notation $\tilde\by = \by_{n,2}$ the equations are
+\item The implicit midpoint rule is a $(s,p)=(2,2)$ A-stable DIRK scheme.  It uses a half backward Euler step followed by an explicit step:
 \begin{align}
-\tilde\by &= \by_{n-1} + \tfrac{1}{2} h \bbf(t_{n-1}+\tfrac{1}{2}h,\tilde\by), \label{eq:impmida} \\
-\by_n &= \by_{n-1} + h \bbf(t_{n-1}+\tfrac{1}{2}h,\tilde\by). \label{eq:impmidb}
+\tilde\by &= \by_{n-1} + \tfrac{1}{2} h \bg(t_{n-1}+\tfrac{1}{2}h,\tilde\by), \notag \\
+\by_n &= \by_{n-1} + h \bg(t_{n-1}+\tfrac{1}{2}h,\tilde\by). \notag
 \end{align}
-Let $t_{n-1/2} = t_{n-1} + \tfrac{1}{2} \Delta t$.  Functions \eqref{eq:functionalforms} for the first stage \eqref{eq:impmida} are
+Let $t_{n-1/2} = t_{n-1} + \tfrac{1}{2} \Delta t$.  Functions \eqref{eq:functionalforms} for the first stage are
   $$\tilde\bQ(\bX,v,x) = \tfrac{1}{2} \bq(\bX,v,x,t_{n-1/2}) \quad \text{and} \quad \tilde F(v,x) = \tfrac{1}{2} f(v,x,t_{n-1/2}).$$
-Now let $\tilde u$ denote the weak solution to the first stage variational inequality problem.  The functions for the second stage \eqref{eq:impmidb} are $\bQ_n(\bX,v,x) = 0$ and
+Now let $\tilde u$ denote the weak solution to the first stage VI problem.  The functions for the explicit second stage are then $\bQ_n(\bX,v,x) = 0$ and
   $$\quad F_n(v,x) = f(\tilde u,x,t_{n-1/2}) - \Div \bq(\grad\tilde u,\tilde u,x,t_{n-1/2}).$$
-Neither of these second-stage functions depend on the unknown $v$ because stage \eqref{eq:impmidb} is explicit.
 
-\item The strongly S-stable $(2,2)$ scheme has equations
+\item The (unique) strongly S-stable $(s,p)=(2,2)$ scheme for which $0\le \tau_i\le 1$ \cite{AscherPetzold1998} has equations
 \begin{align}
-\tilde\by &= \by_{n-1} + \alpha h \bbf(\tilde t,\tilde\by), \label{eq:sstabledirka} \\
-\by_n &= \by_{n-1} + (1-\alpha) h \bbf(\tilde t,\tilde\by) + \alpha h \bbf(t_n,\by_n). \label{eq:sstabledirkb}
+\tilde\by &= \by_{n-1} + \alpha h \bg(\tilde t,\tilde\by), \notag \\
+\by_n &= \by_{n-1} + (1-\alpha) h \bg(\tilde t,\tilde\by) + \alpha h \bg(t_n,\by_n). \notag
 \end{align}
-where $\alpha = (2-\sqrt{2})/2$, $\tilde\by = \by_{n,1}$, and $\tilde t = t_{n-1} + \alpha h$.  The functions \eqref{eq:functionalforms} for the first stage \eqref{eq:sstabledirka} are
+where $\alpha = 1-\frac{\sqrt{2}}{2}$ and $\tilde t = t_{n-1} + \alpha h$.  Functions for the first stage are
   $$\tilde\bQ(\bX,v,x) = \alpha \bq(\bX,v,x,\tilde t) \quad \text{and} \quad \tilde F(v,x) = \alpha f(v,x,\tilde t).$$
-If $\tilde u$ denotes the weak solution to the first stage variational inequality problem then the functions for the second stage \eqref{eq:sstabledirkb} are $\bQ_n(\bX,v,x) = \alpha \bq(\bX,v,x,t_n)$ and
+If $\tilde u$ denotes the solution to the first stage VI then the functions for the second stage are $\bQ_n(\bX,v,x) = \alpha \bq(\bX,v,x,t_n)$ and
    $$F_n(v,x) = (1-\alpha) f(\tilde u,x,\tilde t) + \alpha f(v,x,t_n) - (1-\alpha) \Div \bq(\grad\tilde u,\tilde u,x,\tilde t).$$
 \end{enumerate}
 
