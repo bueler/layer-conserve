@@ -79,8 +79,8 @@ In physically-based models the mass conservation equation couples with further m
 
 This paper contains a basic, inevitably incomplete, analysis of the mathematical well-posedness of such climate-driven fluid layer models.  We start by extracting the minimal mathematical form; it includes flow, climate, and the nonnegative-thickness constraint.  After considering well-posedness we then address tradeoffs and barriers inherent in the numerical solutions of such models.
 
-Fluid layer problems of this free-boundary type appear within models of glaciers and ice sheets \cite{Bueler2016,CalvoDuranyVazquez2000,Calvoetal2002,DiazSchiavi1999,
-EgholmNielsen2010,JouvetBueler2012,JouvetBuelerGraeserKornhuber2013}, surface and subsurface hydrology \cite{AlonsoSantillanaDawson2008,Maxwelletal2014}, and sea ice \cite{LipscombHunke2004,Thorndikeetal1975}.  Furthermore, multiphysics models of earth systems often contain thin-layer and free-boundary sub-models for various species (or phases) of fluids.  For example, in comprehensive models of glaciers and ice sheets there are submodels describing supra- and suglacial hydrology of liquid water \cite{Aschwandenetal2012,BuelervanPelt2015,Schoofetal2012}, floating ice shelves \cite{Albrechtetal2011}, and sediment transport \cite{Brinkerhoffetal2017}.
+Fluid layer problems of this free-boundary type appear within models of glaciers and ice sheets \cite{Bueler2016,CalvoDuranyVazquez2000,DiazSchiavi1999,
+EgholmNielsen2010,JouvetBueler2012,JouvetBuelerGraeserKornhuber2013}, surface and subsurface hydrology \cite{AlonsoSantillanaDawson2008,Maxwelletal2015}, and sea ice \cite{LipscombHunke2004,Thorndikeetal1975}.  Furthermore, multiphysics models of earth systems often contain thin-layer and free-boundary sub-models for various species (or phases) of fluids.  For example, in comprehensive models of glaciers and ice sheets there are submodels describing supra- and suglacial hydrology of liquid water \cite{Aschwandenetal2012,BuelervanPelt2015,Schoofetal2012}, floating ice shelves \cite{Albrechtetal2011}, and sediment transport \cite{Brinkerhoffetal2017}.
 
 In such geophysical and climate-modeling contexts, determining the fluid-covered area is a leading-order modeling goal.  For example, snow and ice are much more reflective than the substrate they cover (i.e.~land or ocean), so deciding whether grid cells are ice-covered or ice-free is a significant aspect of earth system modeling.  However, conservation of mass, including a precise accounting of mass transfers to and from the modeled fluid to other fluid phases, is a goal of equal importance.
 
@@ -433,7 +433,7 @@ as $\|u\|\to\infty$, because $0<2-p<1$, thus $A_n$ is coercive. \end{proof}
 \begin{equation}
   \bQ_n(\grad u,u) = - k u^r |\grad u|^{p-2} \grad u \label{eq:doubleflux}
 \end{equation}
-where $k>0$, $r\ge 0$, and $1<p<\infty$.  This includes, as the $r=0$ case, the $p$-Laplacian \eqref{eq:plapflux}, but it also includes the porous medium equation \cite{Vazquez2007}, where $p=2$, $r=\gamma-1$, and thus $\bQ_n = - \tilde k \grad(u^\gamma)$.  Flux for the diffusive shallow water equations \cite{AlonsoSantillanaDawson2008}, which has nontrivial powers $1<r<2$ and $1<p\le 2$, is included, as is the flat-bed shallow ice approximation \cite{Calvoetal2002} flux with $r=n+2$ and $p=n+1$ for $n>1$.
+where $k>0$, $r\ge 0$, and $1<p<\infty$.  This includes, as the $r=0$ case, the $p$-Laplacian \eqref{eq:plapflux}, but it also includes the porous medium equation \cite{Vazquez2007}, where $p=2$, $r=\gamma-1$, and thus $\bQ_n = - \tilde k \grad(u^\gamma)$.  Flux for the diffusive shallow water equations \cite{AlonsoSantillanaDawson2008}, which has nontrivial powers $1<r<2$ and $1<p\le 2$, is included, as is the flat-bed shallow ice approximation \cite{CalvoDuranyVazquez2000} flux with $r=n+2$ and $p=n+1$ for $n>1$.
 
 Leaving the function space undetermined for a moment, we apply a power transformation $u = w^m$ where $m = (p-1)/(r+p-1)$ \cite{Raviart1970} so that $0 < m \le 1$.  Straightforward calculation turns \eqref{eq:doubleflux} into
 \begin{equation}
@@ -516,7 +516,7 @@ Let $A_n:\mathcal{K} \to \mathcal{X}'=\mathcal{X}$ be defined by \eqref{eq:defin
                       &\qquad\qquad + \Delta t_n\,\left(\int_\Omega K(x,y) \grad v(y)\,dy\right)\cdot \grad \phi\,\bigg]. \notag
 \end{align}
 
-\begin{theorem}  \label{thm:nonlocalwellposed}  Suppose $C(\Omega,p)$ is the Poincar\'e constant in \eqref{eq:poincare}.  Suppose $F_n=F_n(x) \in L^2(\Omega)$ is independent of $u$.  Assume $G_i \in L^2(\Omega\times\Omega)$ for $i=1,\dots,d$.  Suppose $K \in L^2(\Omega\times\Omega)$ positive and bounded below \cite{PorterStirling1990} in the sense that there is $\delta>0$ so that
+\begin{theorem}  \label{thm:nonlocalwellposed}  Suppose $C(\Omega,p)$ is the Poincar\'e constant in \eqref{eq:poincare}.  Suppose $F_n=F_n(x) \in L^2(\Omega)$ is independent of $u$.  Assume $G_i \in L^2(\Omega\times\Omega)$ for $i=1,\dots,d$.  Suppose $K \in L^2(\Omega\times\Omega)$ is positive and bounded below \cite{PorterStirling1990} in the sense that there is $\delta>0$ so that
 \begin{equation}
    \int_\Omega \int_\Omega K(x,y) \phi(x) \phi(y)\,dx\,dy \ge \delta \|\phi\|_{L^2(\Omega)}^2 \qquad \text{for all } \phi \in L^2(\Omega).  \label{eq:nonlocalKpos}
 \end{equation}
@@ -674,9 +674,26 @@ In summary, we may report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,S_
 \end{figure}
 
 
-\subsection{Implicit time-step solvers}  \label{subsec:ncp}
+\subsection{Complementarity and cell-wise conservation}  \label{subsec:ncp}
 
-FIXME equation \eqref{eq:fvmassconserve} is not the full story because this backward-Euler represents a nontrivial finite-dimensional solution.  finite-dimensional VI equivalence to \emph{complementarity problems} \cite{BensonMunson2006,BillupsMurty2000}; example in \cite{Bueler2016}.  notation $u_n^J$ for a vector formed from all $u_n^j$ with $j\in J$, and formula $G^j(u_n^J)$ which records the residual of equation \eqref{eq:fvmassconserve}.  equation \eqref{eq:fvmassconserve} actually means ``if $u_n^j>0$ then $G^j(u_n^J)=0$.''  We also have constraint ``$u_n^j\ge 0$'' on the unknowns.  In these senses we are regarding the system of equations formed from conditions \eqref{eq:fvmassconserve} as combining to give a complementarity problem of the form $u_n^J\ge 0$, $G^J(u_n^J) \ge 0$, and $u_n^J G^J(u_n^J)=0$
+The continuous-space, discrete-time weak formulation we propose in Sections \ref{sec:weakform} and \ref{sec:wellposed}, namely variational inequalities (VIs) \eqref{eq:theVI}, are traditionally solved using finite element (FE) discretization \cite[for example]{CalvoDuranyVazquez2000,JouvetBueler2012,
+JouvetBuelerGraeserKornhuber2013}.  On the other hand we have used the common FV language of discrete conservation in the current Section.  These views can be harmonized in the process of considering solution algorithms for the weak formulation.  In fact, it is well-known that a finite-dimensional VI is equivalent to a complementarity problem \cite{FacchineiPang2003,KinderlehrerStampacchia1980}.  Both practical solver algorithms and clearer intuition---as we explain in this Subsection---are available for the latter formulations.
+
+Suppose we discretize $\mathcal{X} = W_0^{1,p}(\Omega)$ using an FE subspace $S^h$ of dimension $m$, for a triangulation or other mesh with resolution $h$.  Consider problem \eqref{eq:theVI} on this space, namely
+\begin{equation}
+\ip{A_n(u_n^h)}{v^h-u_n^h} \ge 0 \quad \text{for all } v \in \mathcal{K} \cap S^h,   \label{eq:FEtheVI}
+\end{equation}
+where $A_n$ is given by \eqref{eq:defineAn} and (as usual) $\mathcal{K} = \{u\in \mathcal{X}\,\big|\,u\ge 0\}$.  In this conforming FE context, and supposing the same hypotheses considered for \eqref{eq:theVI} itself (Section \ref{sec:wellposed}), problem \eqref{eq:FEtheVI} is well-posed for the numerical solution $u_n^h \in \mathcal{K} \cap S^h$.
+
+Now suppose there is a nonnegative nodal basis $\{\psi_i\}$ of $S^h$, i.e.~such that $\psi_i(x)\ge 0$ on $\Omega$ and that $v(x) = \sum_i v(x_i) \psi_i(x)$ for some nodes $x_i$.  (For example, the usual hat-function basis for $P_1$ elements for a triangulation would satisfy this hypothesis, but not so for the usual $P_2$ basis \cite{Elmanetal2014}.)  Thereby we can represent $u_n^h$ by a vector $\tilde u_i = u_n^h(x_i) \in \RR^m$.  Up to isomorphism the nonlinear operator in \eqref{eq:FEtheVI} is a map $\tilde A:\RR^m \to (\RR^m)'$ given by entries $\tilde A(\tilde u)^i = \ip{A_n(u_n^h)}{\psi_i} \in \RR$.
+
+The finite-dimensional VI \eqref{eq:FEtheVI} is equivalent to the nonlinear complementarity problem (NCP)
+\begin{equation}
+\tilde u_i \ge 0, \quad \tilde A(\tilde u)^i \ge 0, \quad \tilde u_i \tilde A(\tilde u)^i = 0 \label{eq:FEtheNCP}
+\end{equation}
+\cite[Theorem I.5.5]{KinderlehrerStampacchia1980}; see also \cite{FacchineiPang2003}.  Note that the complementarity condition $\tilde u_i \tilde A(\tilde u)^i = 0$ can be regarded either entrywise or in the inner-product sense because of the nonnegativity of the factors.  Problems \eqref{eq:FEtheVI} and \eqref{eq:FEtheNCP} are nonlinear even in the (uncommon) case where the operator $A_n$ is linear, and thus iteration is expected in any numerical solution.  For example, Newton schemes for NCP problems are described in \cite{BensonMunson2006}, with fluid-layer applications in \cite{Brinkerhoffetal2017,Bueler2016}.
+
+FIXME
 
 
 \section{Conclusion} \label{sec:conclusion}
