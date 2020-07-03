@@ -603,58 +603,55 @@ where $F_n(0,x)_- = \max\{0,-F_n(0,x)\}$.  In words, the retreat loss is bounded
 
 \section{Fully-discrete models}  \label{sec:spacediscretized}
 
-So far we have treated free-boundary mass conservation models in semi-discretized form, as a sequence of continuous-space free-boundary problems.  In this section we assume a further \emph{spatial} discretization by an unstructured finite volume (FV) method \cite{LeVeque2002}, and we reconsider mass conservation statement \eqref{eq:newbalance} in this fully-discrete setting.
+So far we have treated free-boundary mass conservation models in semi-discretized form, as a sequence of continuous-space free-boundary problems.  In this section we assume a further \emph{spatial} discretization by an unstructured finite volume (FV) method \cite{LeVeque2002}, and we reconsider mass conservation in this fully-discrete setting.
 
-\subsection{Unstructured finite volumes} \label{subsec:spacenotation}  To set notation for a FV scheme, assume $\Omega \subset \RR^d$ is polygonal.  (Though there is no actual restriction on dimension, we will use language suitable for the $\RR^2$ case, such as ``polygon,'' ``edge,'' ``area,'' and etc.)  Thus we assume that $\Omega$ is tiled by finitely-many open polygonal cells $\omega_j$, indexed by $j\in J$, with area $|\omega_j|$, so that $\omega_j \cap \omega_k = \emptyset$ for $j\ne k$, $\bar\Omega = \bigcup_{j\in J} \bar \omega_j$, and $|\Omega| = \sum_{j\in J} |\omega_j|$.  Cells may be non-convex and the number of edges per cell may vary.  An edge, denoted by the ordered pair $(j,k)$, exists between cell $j$ and cell $k$ if $\bar\omega_j \cap \bar \omega_k$ has positive $(d-1)$-measure (length) $\ell_{(j,k)}>0$.  The set of edges for cell $\omega_j$ is denoted $\mathcal{E}_j=\{(j,k)\}$.
+\subsection{Unstructured finite volumes} \label{subsec:spacenotation}  To set notation for a FV scheme, assume $\Omega \subset \RR^d$ is polygonal.  (Though there is no actual restriction on dimension, we will use language suitable for the $\RR^2$ case, such as ``polygon,'' ``edge,'' ``area,'' and etc.)  Thus we assume that $\Omega$ is tiled by open polygonal cells $\omega_j$, indexed by $j\in J$ with $|J|<\infty$, with area $|\omega_j|$, so that $\omega_j \cap \omega_k = \emptyset$ for $j\ne k$, $\bar\Omega = \bigcup_{j\in J} \bar \omega_j$, and $|\Omega| = \sum_{j\in J} |\omega_j|$.  Cells may be non-convex and the number of edges per cell may vary.  An edge, denoted by the ordered pair $(j,k)$, exists between cell $j$ and cell $k$ if $\bar\omega_j \cap \bar \omega_k$ has positive $(d-1)$-measure (length) $\ell_{(j,k)}>0$.  The set of edges for cell $\omega_j$ is denoted $\mathcal{E}_j=\{k\,\big|\,(j,k) \text{ is an edge}\}$.
 
-Suppose the strong form \eqref{eq:semimassconserve} is discretized using the following FV scheme.  The discrete thickness $u_n^j$ in cell $j$ is given the usual interpretation as an average \cite{LeVeque2002}, and similarly $F_n^j$ denotes the average source term for the cell:
+Suppose the strong form \eqref{eq:semimassconserve} is discretized using the following scheme.  The discrete thickness $u_n^j$ in cell $j$ is given the usual interpretation as an average \cite{LeVeque2002}, and similarly $F_n^j$ denotes the average source term for the cell:
 \begin{equation}
 u_n^j \approx \frac{1}{|\omega_j|} \int_{\omega_j} u_n(x), \qquad F_n^j \approx \frac{1}{|\omega_j|} \int_{\omega_j} F_n(u_n,x).  \label{eq:fvthickness}
 \end{equation}
-(One may suppose $F_n^j$ is computed by a quadrature scheme, but in the following such details will not matter.)  The discrete (scalar) normal flux across the edge $(j,k)$ is denoted
+(One may suppose $F_n^j$ is computed by a quadrature scheme, but in the following such details will not matter.)  The discrete (scalar) normal flux across the edge $(j,k)$ is
 \begin{equation}
-Q_n^{(j,k)} \approx \frac{1}{\ell_{(j,k)}} \int_{(j,k)} \bQ_n \cdot \bn_{(j,k)}. \label{eq:fvflux}
+Q_n^{(j,k)} \approx \frac{1}{\ell_{(j,k)}} \int_{(j,k)} \bQ_n(\grad u_n,u_n,x) \cdot \bn_{(j,k)}. \label{eq:fvflux}
 \end{equation}
-Here $\bn_{(j,k)}$ denotes the unit normal vector to edge $(j,k)$ directed outward from $\omega_j$; thus $\bn_{(k,j)} = -\bn_{(j,k)}$.  We assume that the fluxes $Q_n^{(j,k)}$ are approximated by some scheme based on values $\{u_n^l\}$.  Again the details are not important, but a variety of Godunov and other schemes could be applied in the hyperbolic \cite{LeVeque2002} and general (diffusive, implicit) \cite{Morton2018} cases.
+Here $\bn_{(j,k)}$ denotes the unit normal vector to edge $(j,k)$ directed outward from $\omega_j$; thus $\bn_{(k,j)} = -\bn_{(j,k)}$.  We assume that the fluxes $Q_n^{(j,k)}$ are approximated by some scheme based on values $\{u_n^l\}$.  Again the details are not important, but of course a variety of schemes can be applied in the hyperbolic \cite{LeVeque2002} and general (diffusive, implicit) \cite{Morton2018} cases.
 
 We now require that between any two adjacent \emph{fluid-filled} cells there is local conservation:
 \begin{equation}
   u_n^j u_n^k > 0 \quad \implies \quad Q_n^{(k,j)}=-Q_n^{(j,k)}.  \label{eq:fvlocalconservation}
 \end{equation}
-The fluid-filled hypothesis in \eqref{eq:fvlocalconservation} is important.  We do \emph{not} expect such discrete conservation at the free boundary, because a scheme applied at the edge of a fluid-free (\emph{dry}) cell, facing a fluid-filled (\emph{wet}) cell, cannot be expected to generate a flux which balances the nonzero flux generated by the geometry of (and stress state of) the neighboring wet cell.  Indeed, advance of the fluid layer into the dry cell requires flux imbalance at such edges.
+The hypothesis in \eqref{eq:fvlocalconservation} is important.  We do \emph{not} expect discrete conservation at the free boundary, because a scheme applied at the edge of a fluid-free (\emph{dry}) cell, facing a fluid-filled (\emph{wet}) cell, cannot be expected to generate a flux which balances the nonzero flux generated by the geometry (and stress state) of the neighboring wet cell.  Indeed, advance of the fluid layer into the dry cell requires flux imbalance at such edges, and likewise for retreat leaving-behind a dry cell.
 
-If $u_n^j>0$ then the strong form single-time-step problem \eqref{eq:semimassconserve} is approximated using the obvious FV formula:
+If $u_n^j>0$ then the strong-form problem \eqref{eq:semimassconserve} is approximated using the obvious FV formula:
 \begin{equation}
 \frac{u_n^j - u_{n-1}^j}{\Delta t_n} + \frac{1}{|\omega_j|} \sum_{k\in \mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = F_n^j. \label{eq:fvmassconserve}
 \end{equation}
-Notationally, equation \eqref{eq:fvmassconserve} would appear to be an application of the backward Euler scheme, but in fact the time-stepping is quite general as described in Section \ref{sec:strongform}.  However, note the essential fact that \eqref{eq:fvmassconserve} only applies when $u_n^j>0$.  For other cells we do not state any equation other than $u_n^j=0$.
+(Notationally, equation \eqref{eq:fvmassconserve} would appear to apply the backward Euler scheme, but in fact the time-stepping is quite general as described in Section \ref{sec:strongform}.)  However, note the essential fact that \eqref{eq:fvmassconserve} only applies when the cell is wet at the end of the time step ($u_n^j>0$).  For dry cells we do not, for now, state any equation other than $u_n^j=0$, but see Subsection \ref{subsec:ncp}.  In any case, many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including structured-grid finite difference \cite{Bueler2016} and structured/unstructured FV \cite{LeVeque2002} schemes.
 
-Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including structured-grid finite difference \cite{Bueler2016} and structured/unstructured FV \cite{LeVeque2002} schemes.  Furthermore, our scheme can be treated as a non-conforming Petrov-Galerkin finite element method for the variational inequality \eqref{eq:theVI}, with $A_n$ defined by \eqref{eq:defineAn}.  In that case the test functions are piecewise-constant and discontinuous along the edges of the cells $\omega_j$, as in a so-called ``finite volume element'' method \cite{Bueler2016,Cai1990,EwingLinLin2002}.
-
-\subsection{The discrete-space ``cell slop''}  \label{subsec:slop}  Analogous to \eqref{eq:totalmassseries}, \eqref{eq:climateseries}, and \eqref{eq:retreatlossseries}, we now define time-series relevant to conservation of mass:
+\subsection{The discrete-space ``cell slop''}  \label{subsec:slop}  Analogous to \eqref{eq:totalmassseries}, \eqref{eq:climateseries}, and \eqref{eq:retreatlossseries}, we now define \emph{a posteriori} computable time-series relevant to conservation of mass:
 \begin{equation}
-M_n^h = \sum_j u_n^j |\omega_j|, \quad C_n^h = \Delta t_n\!\!\sum_{\{j:u_n^j>0\}} F_n^j |\omega_j|, \quad R_n^h = \sum_{\{j:u_n^j=0\}} u_{n-1}^j |\omega_j|.  \label{eq:fvtimeseriesdefn}
+M_n^h = \sum_j u_n^j |\omega_j|, \quad C_n^h = \Delta t_n\!\!\sum_{u_n^j>0} F_n^j |\omega_j|, \quad R_n^h = \sum_{u_n^j=0} u_{n-1}^j |\omega_j|.  \label{eq:fvtimeseriesdefn}
 \end{equation}
 (A superscript ``$h$'' denotes spatially-discrete quantities.)  Analogous to \eqref{eq:newbalance}, by \eqref{eq:fvmassconserve} we compute
 \begin{align}
 M_n^h - M_{n-1}^h &= \sum_{u_n^j>0} (u_n^j - u_{n-1}^j) |\omega_j| - \sum_{u_n^j=0} u_{n-1}^j |\omega_j| \notag \\
-   &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + \Delta t_n\,\sum_{u_n^j>0} F_n^j |\omega_j| - R_n^h \notag \\
-   &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{(j,k)\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + C_n^h - R_n^h.  \label{eq:fvnewbalance}
+   &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{k\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + \Delta t_n\,\sum_{u_n^j>0} F_n^j |\omega_j| - R_n^h \notag \\
+   &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{k\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + C_n^h - R_n^h.  \label{eq:fvnewbalance}
 \end{align}
-Now local conservation \eqref{eq:fvlocalconservation} reduces the remaining sum to a sum over those edges which have a positive-thickness cell on one side and a zero-thickness cell on the other.  We call this residual sum the \emph{cell slop}; it is the net amount of unbalanced flux between wet and dry cells:
+Now local conservation \eqref{eq:fvlocalconservation} reduces the remaining sum to over edges between wet and dry cells.  We call this residual sum the \emph{cell slop}; it is the net amount of unbalanced flux along the discrete free boundary (Figure \ref{fig:fvmesh-slop}):
 \begin{equation}
-S_n^h = \Delta t_n \sum_{\begin{smallmatrix} (j,k)\in\mathcal{E}_j \\ u_j^n > 0, u_k^n = 0\end{smallmatrix}} Q_n^{(j,k)} \ell_{(j,k)}. \label{eq:fvderiveslop}
+S_n^h = \Delta t_n \sum_{u_j^n > 0, u_k^n = 0, k\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)}. \label{eq:fvderiveslop}
 \end{equation}
-
-Our new time-series allow us to write \eqref{eq:fvnewbalance} as a balance comparable to \eqref{eq:newbalance}:
+These time-series allow us to write \eqref{eq:fvnewbalance} as a balance comparable to \eqref{eq:newbalance}:
 \begin{equation}
   M_n^h = M_{n-1}^h + C_n^h - R_n^h - S_n^h. \label{eq:fvfinalbalance}
 \end{equation}
-Note that $M_n^h$ and $R_n^h$ are nonnegative, but the climate input $C_n^h$ and the slop $S_n^h$ can be of either sign.
+Note that the mass $M_n^h$ and the retreat loss $R_n^h$ are nonnegative while the climate input $C_n^h$ and the slop $S_n^h$ can be of either sign.
 
-As shown in Figure \ref{fig:fvmesh-slop}, the cell slop $S_n^h$ is computed along the discretized free boundary.  The slop is a numerical error in the sense that the continuous-space flux along the free-boundary is zero because of flux conditions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.  If the free boundary were well-behaved, which is beyond our scope to show even under strong assumptions on the data (especially the substrate topography), then we expect $S_n^h\to 0$ as $h\to 0$.  The retreat loss $R_n^h$ is also a numerical error, arising only from the time semi-discretization, and for reasons given in Section \ref{sec:timeseries}, $R_n^h \to 0$ as $\Delta t_n\to 0$.
+The cell slop is a numerical error in the sense that the continuous-space flux along the free-boundary is zero because of the regularity of the solution ($u_n \in W_0^{1,p}(\Omega)$) and by flux conditions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.  If the free boundary is well-behaved, which is beyond our scope to show even under strong assumptions on the data (especially the substrate topography), then we expect $S_n^h\to 0$ as $h\to 0$.  The retreat loss $R_n^h$ is also a numerical error, but it arises only from the time semi-discretization.
 
-In summary, we may report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,S_n^h\}$, which balance as in \eqref{eq:fvfinalbalance}, up to rounding error, in a fully-discrete free-boundary numerical computation.
+In summary, we may report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,S_n^h\}$, which balance \eqref{eq:fvfinalbalance} up to rounding error, in a fully-discrete free-boundary numerical computation.
 
 \begin{figure}[ht]
 \begin{center}
