@@ -304,7 +304,7 @@ While this derivation of inequality \eqref{eq:morallytheVI} requires too many hy
 \end{equation}
 \end{definition}
 
-Variational inequality \eqref{eq:theVI} is the same as \eqref{eq:morallytheVI}.
+Variational inequality (VI) \eqref{eq:theVI} is the same as \eqref{eq:morallytheVI}.
 
 
 \subsection{Interior condition}  \label{subsec:interior}  We now prove a converse of Theorem \ref{thm:strongimpliesweak} which makes no regularity assumptions on the set decomposition \eqref{eq:omegadecomposition}.
@@ -327,9 +327,9 @@ Thus a solution of \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} where
 
 \section{Well-posedness for the single time-step problem} \label{sec:wellposed}
 
-We show in this Section that a variety of different fluxes $\bQ_n$ yield well-posed variational inequality problems \eqref{eq:theVI}.  Later, the \emph{a posteriori} analysis of conservation errors in Sections \ref{sec:timeseries} and \ref{sec:spacediscretized} assumes that problem \eqref{eq:theVI} is well-posed.
+We show in this Section that a variety of different fluxes $\bQ_n$ yield well-posed VI problems \eqref{eq:theVI}.  Later, the \emph{a posteriori} analysis of conservation errors in Sections \ref{sec:timeseries} and \ref{sec:spacediscretized} assumes that problem \eqref{eq:theVI} is well-posed.
 
-Techniques for proving well-posedness of variational inequalities in Banach spaces are relatively well-established for linear and some nonlinear elliptic problems, especially for monotone operators \cite{KinderlehrerStampacchia1980}.  We recall these tools in Subsection \ref{subsec:mono}.  Then we prove existence and uniqueness of the solution to problem \eqref{eq:theVI} for different flux cases in these Subsections:
+Techniques for proving well-posedness of VIs in Banach spaces are relatively well-established for linear and some nonlinear elliptic problems, especially for monotone operators \cite{KinderlehrerStampacchia1980}.  We recall these tools in Subsection \ref{subsec:mono}.  Then we prove existence and uniqueness of the solution to problem \eqref{eq:theVI} for different flux cases in these Subsections:
 \begin{itemize}
 \item[\ref{subsec:plap}] $p$-Laplacian-type parabolic (diffusion) for $1<p<\infty$,
 \item[\ref{subsec:powertransform}] doubly-nonlinear parabolic, including porous media,
@@ -351,13 +351,9 @@ for all $u,v\in\mathcal{K}$, and \emph{strictly monotone} if, in addition, equal
 \end{equation}
 where the limit is taken over $u\in\mathcal{K}$.  Mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{continuous on finite-dimensional subspaces} if for each finite-dimensional subspace $\mathcal{M} \subset \mathcal{X}$, the restriction $A : \mathcal{K}\cap \mathcal{M} \to \mathcal{X}'$ is weakly-continuous.
 
-The theory of monotone variational inequalities in Banach spaces \cite[chapter III]{KinderlehrerStampacchia1980} says that a solution to the variational inequality like \eqref{eq:theVI}, namely
-\begin{equation}
-    \ip{A(u)}{v-u} \ge 0 \quad \text{for all $v\in\mathcal{K}$}, \label{eq:VIabstract}
-\end{equation}
-exists and is unique if $A$ is strictly monotone, coercive, and continuous on finite-dimensional subspaces.  (Strict monotonicity alone suffices for uniqueness.)
+The theory of monotone VIs in Banach spaces \cite[chapter III]{KinderlehrerStampacchia1980} says that a solution to a VI like \eqref{eq:theVI}, namely $\ip{A(u)}{v-u} \ge 0$ for all $v\in\mathcal{K}$, exists and is unique if $A$ is strictly monotone, coercive, and continuous on finite-dimensional subspaces.  (Strict monotonicity alone suffices for uniqueness.)
 
-Now consider variational inequality \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.  It is easy to show the following lemma.
+Now consider VI \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.  It is easy to show the following lemma.
 
 \begin{lemma}  \label{lem:continuous}  Assume \eqref{eq:Qiscontinuous} for $\bQ_n$ and that $F_n(v,x)\in L^q$ is continuous in $v$.  The map $A_n$ is continuous on finite-dimensional subspaces.
 \end{lemma}
@@ -465,6 +461,7 @@ Suppose $p\ge 2$.  If $w,v\in\mathcal{X}$ then by \eqref{eq:pbiginequality} and 
 The case $1<p<2$ follows by modification of the argument in Theorem \ref{thm:plapwellposed}.
 \end{proof}
 
+
 \subsection{Advection by a differentiable velocity field} \label{subsec:advect}  The flux in certain applications (ice shelves, sea ice) is understood to be dominantly advective.  In such applications the velocity arises from solving a momentum balance, but here we simply assume the layer is transported by a differentiable velocity field $\bX \in W^{1,\infty}(\Omega;\RR^d)$,
 \begin{equation}
   \bQ_n(u,x) = \bX(x) u. \label{eq:advectflux}
@@ -501,6 +498,7 @@ where $c_0=2^{2-p}/C(\Omega,p)>0$.  If $c_1 = \eps c_0 \Delta t_n$ then
 thus $A_n$ is coercive under the given hypotheses on $\Div \bX$ and $\Delta t_n$. \end{proof}
 
 Bound \eqref{eq:plapadvectdtcond} may be regarded as similar to a CFL-type condition \cite{LeVeque2002}, but it measures the \emph{convergence} of the velocity field and not its magnitude.  (If $\|(\Div \bX)_-\|_{L^\infty(\Omega)}$ is small then large time steps are well-posed.) Observe that condition \eqref{eq:plapadvectdtcond} is independent of $\eps>0$, suggesting that the pure advection problem ($\eps = 0$) may also be well-behaved, but the proof is not clear because of the role of ellipticity in the regularity of the solution.
+
 
 \subsection{Non-local dependence through an integral kernel} \label{subsec:nonlocal}   The examples so far compute the flux $\bQ_n$ at $x\in\Omega$ using only the values $u(x)$ and $\grad u(x)$.  However, the flux in realistic models often comes from solving another differential equation, generally a momentum conservation equation, which is coupled to the mass-conservation equation \eqref{eq:massconserve}.  In that context the flux is non-locally determined from the layer thickness $u$ and its spatial derivatives.
 
@@ -543,6 +541,7 @@ The result follows from condition \eqref{eq:nonlocaldtcond}. \end{proof}
 
 Theorems \ref{thm:plapadvectwellposed} and \ref{thm:nonlocalwellposed} take different approaches to monotonicity.  In the former the velocity $\bX$ was assumed to be differentiable and an integration-by-parts gave a criterion via a bound on $\Delta t_n$ (using derivatives of $\bX$).  By contrast, in Theorem \ref{thm:nonlocalwellposed} we assumed only that $\bG$ was integrable, no integration-by-parts was attempted, and $\Delta t_n$ was bounded using the norm of $\bG$ itself.
 
+
 \subsection{Explicit time-steps} \label{subsec:explicit}   Consider a flux $\bq$ such that problem \eqref{eq:theVI} is well-posed in $W_0^{1,p}(\Omega)$ for all $\theta>0$ in the $\theta$-method \eqref{eq:thetamethod}.  (For example, consider the fluxes in Subsections \ref{subsec:plap} or \ref{subsec:powertransform}.)  Now go to the explicit case, namely a forward Euler step with $\theta=0$.  In weak form the $\theta=0$ problem is variational inequality \eqref{eq:theVI}, but now $\bQ_n=0$ and
 \begin{equation}
 F_n = - \Div \bq(\grad u_{n-1},u_{n-1},x) + f(u_{n-1},x).  \label{eq:Fnformexplicit}
@@ -551,7 +550,7 @@ One seeks $u\in\mathcal{K} \subset \mathcal{X}$ so that
 \begin{equation}
 \ip{A_n(u)}{\phi} = \int_\Omega (u - \Delta t_n\,F_n - u_{n-1})\phi \ge 0 \quad \text{ for all } \phi \in \mathcal{K}.  \label{eq:explicitweakstep}
 \end{equation}
-The previous state $u_{n-1}$ must therefore be regular enough so that $F_n$ in \eqref{eq:Fnformexplicit} is well defined, that is, so that $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}'$ and thus $F_n\in\mathcal{X}'$.  However, even if we are so lucky that $F_n$ is in the dual space, variational inequality \eqref{eq:explicitweakstep} is not coercive on $\mathcal{X}=W_0^{1,p}(\Omega)$.
+The previous state $u_{n-1}$ must therefore be regular enough so that $F_n$ in \eqref{eq:Fnformexplicit} is well defined, that is, so that $\Div \bq(\grad u_{n-1},u_{n-1},x) \in \mathcal{X}'$ and thus $F_n\in\mathcal{X}'$.  However, even if we are so lucky that $F_n$ is in the dual space, VI \eqref{eq:explicitweakstep} is not coercive on $\mathcal{X}=W_0^{1,p}(\Omega)$.
 
 On the other hand, the single time step \eqref{eq:explicitweakstep} is a well-posed problem in $\mathcal{X}=L^2(\Omega)$.  The solution is by truncation \cite[page 27]{KinderlehrerStampacchia1980}:
 \begin{equation}
@@ -564,7 +563,7 @@ In summary, for explicit time steps the solution to a single weakly-posed time s
 
 \section{Mass conservation and the retreat set}  \label{sec:timeseries}
 
-From now on we assume that the weak problem \eqref{eq:theVI} for a single time-step is well-posed, and that the solution is sufficiently-regular so that strong form statements \eqref{eq:semimassconserve} and \eqref{eq:strongconditionwherezero} also hold.  Thus, given an initial state $u_0\in\mathcal{K}$, there is a unique sequence of functions $\{u_n\} \subset \mathcal{K}$ which solves the variational inequalities \eqref{eq:theVI}.
+From now on we assume that the weak problem \eqref{eq:theVI} for a single time-step is well-posed, and that the solution is sufficiently-regular so that strong form statements \eqref{eq:semimassconserve} and \eqref{eq:strongconditionwherezero} also hold.  Given an initial state $u_0\in\mathcal{K}$, there is a unique sequence of functions $\{u_n\} \subset \mathcal{K}$ which solves the VIs \eqref{eq:theVI}.
 
 Define
 \begin{equation}
@@ -574,13 +573,13 @@ the \emph{(total) mass} at time $t_n$.  Recalling set decomposition \eqref{eq:om
 \begin{equation}
 C_n = \Delta t_n\, \int_{\Omega_n} F_n(u_n,x) \label{eq:climateseries}
 \end{equation}
-as the \emph{climate input} at time step $n$.  Note that we sum values of $F_n(u_n,x)$ only over locations where the fluid is present at $t=t_n$.
+as the \emph{climate input} at time step $n$.  Note that we sum values of $F_n(u_n,x)$ only over locations where the fluid is present at $t=t_n$ because in the set $\Omega \setminus \Omega_n = \Omega_n^r \cup \Omega_n^0$ the climate $F_n$, which we know is nonpositive, is not actually removing fluid at time $t_n$.
 
 Practical conservation models will compute approximations to time-series like $M_n$ and $C_n$ as model outputs in order to audit mass transfers to and from the fluid layer.  A numerical model of a \emph{fixed}-boundary fluid layer problem, wherein $\Omega_n=\Omega$, would achieve exact discrete mass conservation in the sense that
 \begin{equation}
 M_n = M_{n-1} + C_n \label{eq:oldbalance}
 \end{equation}
-to within rounding error at each time $t_n$.  One can easily show \eqref{eq:oldbalance} holds under a Neumann condition $\bQ_n=0$ on $\partial \Omega$ in strong problem \eqref{eq:semimassconserve} if $\Omega_n=\Omega$.  However, balance \eqref{eq:oldbalance} does not follow from definitions \eqref{eq:totalmassseries} and \eqref{eq:climateseries} when there is a free boundary ($\Omega_n \subsetneq \Omega$).
+to within rounding error at each time $t_n$.  For example, one can easily show \eqref{eq:oldbalance} holds under a Neumann condition $\bQ_n=0$ on $\partial \Omega$ in strong problem \eqref{eq:semimassconserve} if the constraint $u_n\ge 0$ is removed.  However, balance \eqref{eq:oldbalance} does not follow from definitions \eqref{eq:totalmassseries} and \eqref{eq:climateseries} when there is a nonempty free boundary ($\Omega_n \subsetneq \Omega$).
 
 Recall the retreat set $\Omega_n^r=\{u_n = 0 \,\&\,u_{n-1}>0\}$, and define
 \begin{equation}
@@ -593,21 +592,13 @@ because $\bQ_n=0$ along $\partial \Omega_n$ by \eqref{eq:Qiscontinuous} and \eqr
 M_n = M_{n-1} + C_n - R_n. \label{eq:newbalance}
 \end{equation}
 
-\emph{A posteriori} statement \eqref{eq:newbalance} suggests what is achievable as a numerical mass conservation statement for free-boundary models.  Note that the retreat loss $R_n$ should vanish in the $\Delta t_n\to 0$ limit; this is a consistency statement about the time-discretized model.  Computing $R_n$, or an equivalent quantity, is essential to quantifying the behavior of time-stepping moving-boundary models of thin-layer fluid motion.
+\emph{A posteriori} statement \eqref{eq:newbalance} suggests what degree of conservation is achievable in numerical free-boundary models.  Note that the retreat loss $R_n$ should vanish in the $\Delta t_n\to 0$ limit; this is a consistency statement about the time-discretized model.  Computing $R_n$ quantifies the conservation error from time-stepping in moving-boundary models of thin-layer fluid motion.
 
-The retreat loss $R_n$ could be bounded \emph{a priori} if we had additional information about the solution of variational inequality \eqref{eq:theVI}.  For example, note that $u_n=0$ and $F_n(0,x)\le 0$ on $\Omega_n^r$ so by theorem \ref{thm:weakimpliesstrong} we have
+The retreat loss $R_n$ can also be bounded \emph{a priori} in a simple way.  Assuming the interior $(\Omega_n^r)^\circ$ has full measure ($m(\Omega_n^r \setminus (\Omega_n^r)^\circ)=0$), and recalling that Theorem \ref{thm:weakimpliesstrong} shows that \eqref{eq:strongconditionwherezero} holds on $(\Omega_n^r)^\circ$, we have $u_{n-1} \le -\Delta t_n\,F_n(u_n,x) = \Delta t_n |F_n(0,x)|$ and thus
 \begin{equation}
-R_n \le - \Delta t_n\,\int_{\Omega_n^r} F_n(0,x)\,dx.  \label{eq:earlyretreatbound}
+R_n \le \Delta t_n \int_{\Omega_n^r} |F_n(0,x)| = \Delta t_n \int_\Omega F_n(0,x)_- \label{eq:retreatbound}
 \end{equation}
-Bound \eqref{eq:earlyretreatbound} becomes computable with two extra assumptions.  FIXME assume there is an $L^1$ stability bound
-\begin{equation}
-\|u_n-u_{n-1}\|_{L^1(\Omega)} \le \Phi(\Delta t_n)
-\end{equation}
-for some bounded function $\Phi : [0,\infty) \to [0,\infty)$.  Then convert \eqref{eq:earlyretreatbound} into
-\begin{equation}
-R_n \le \Delta t_n\,\left(\Gamma_n + L \Phi(\Delta t_n)\right)   \label{eq:retreatbound}
-\end{equation}
-for a constant $\Gamma_n=\left|\int_{\Omega} F_n(u_{n-1},x)\,dx\right|$ which is potentially computable before solving single time-step problem \eqref{eq:theVI}.  Note that $\Delta t_n\,\Gamma_n$ is an estimate of the change to the present ($t_{n-1}$) fluid layer by the future ($t_n$) climate.  If $\Phi_n$ is bounded by $M>0$, or if $\Phi_n(z) \le A z^q$ for $A,q>0$, for example, then an upper bound on \eqref{eq:retreatbound} can be solved for the time-step $\Delta t_n$.
+where $F_n(0,x)_- = \max\{0,-F_n(0,x)\}$.  In words, the retreat loss is bounded by the maximum amount of ablation which the climate can apply to a bare substrate.  Clearly \eqref{eq:retreatbound} can be used to put an upper bound on the time step based upon a certain conservation error tolerance.
 
 
 \section{Fully-discrete models}  \label{sec:spacediscretized}
