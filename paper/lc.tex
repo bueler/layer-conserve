@@ -629,7 +629,7 @@ If $u_n^j>0$ then the strong-form problem \eqref{eq:semimassconserve} is approxi
 \end{equation}
 (Notationally, equation \eqref{eq:fvmassconserve} would appear to apply the backward Euler scheme, but in fact the time-stepping is quite general as described in Section \ref{sec:strongform}.)  However, note the essential fact that \eqref{eq:fvmassconserve} only applies when the cell is wet at the end of the time step ($u_n^j>0$).  For dry cells we do not, for now, state any equation other than $u_n^j=0$, but see Subsection \ref{subsec:ncp}.  In any case, many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including structured-grid finite difference \cite{Bueler2016} and structured/unstructured FV \cite{LeVeque2002} schemes.
 
-\subsection{The discrete-space ``cell slop''}  \label{subsec:slop}  Analogous to \eqref{eq:totalmassseries}, \eqref{eq:climateseries}, and \eqref{eq:retreatlossseries}, we now define \emph{a posteriori} computable time-series relevant to conservation of mass:
+\subsection{The discrete-space ``boundary leak''}  \label{subsec:leak}  Analogous to \eqref{eq:totalmassseries}, \eqref{eq:climateseries}, and \eqref{eq:retreatlossseries}, we now define \emph{a posteriori} computable time-series relevant to conservation of mass:
 \begin{equation}
 M_n^h = \sum_j u_n^j |\omega_j|, \quad C_n^h = \Delta t_n\!\!\sum_{u_n^j>0} F_n^j |\omega_j|, \quad R_n^h = \sum_{u_n^j=0} u_{n-1}^j |\omega_j|.  \label{eq:fvtimeseriesdefn}
 \end{equation}
@@ -639,32 +639,32 @@ M_n^h - M_{n-1}^h &= \sum_{u_n^j>0} (u_n^j - u_{n-1}^j) |\omega_j| - \sum_{u_n^j
    &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{k\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + \Delta t_n\,\sum_{u_n^j>0} F_n^j |\omega_j| - R_n^h \notag \\
    &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{k\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + C_n^h - R_n^h.  \label{eq:fvnewbalance}
 \end{align}
-Now local conservation \eqref{eq:fvlocalconservation} reduces the remaining sum to over edges between wet and dry cells.  We call this residual sum the \emph{cell slop}; it is the net amount of unbalanced flux along the discrete free boundary (Figure \ref{fig:fvmesh-slop}):
+Now local conservation \eqref{eq:fvlocalconservation} reduces the remaining sum to over edges between wet and dry cells.  We call this residual sum the \emph{boundary leak}; it is the net amount of unbalanced flux along the discrete free boundary (Figure \ref{fig:fvmesh-leak}):
 \begin{equation}
-S_n^h = \Delta t_n \sum_{u_j^n > 0, u_k^n = 0, k\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)}. \label{eq:fvderiveslop}
+B_n^h = \Delta t_n \sum_{u_j^n > 0, u_k^n = 0, k\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)}. \label{eq:fvdefineleak}
 \end{equation}
 These time-series allow us to write \eqref{eq:fvnewbalance} as a balance comparable to \eqref{eq:newbalance}:
 \begin{equation}
-  M_n^h = M_{n-1}^h + C_n^h - R_n^h - S_n^h. \label{eq:fvfinalbalance}
+  M_n^h = M_{n-1}^h + C_n^h - R_n^h - B_n^h. \label{eq:fvfinalbalance}
 \end{equation}
-Note that the mass $M_n^h$ and the retreat loss $R_n^h$ are nonnegative while the climate input $C_n^h$ and the slop $S_n^h$ can be of either sign.
+Note that the mass $M_n^h$ and the retreat loss $R_n^h$ are nonnegative while the climate input $C_n^h$ and the boundary leak $S_n^h$ can be of either sign.
 
-The cell slop is a numerical error in the sense that the continuous-space flux along the free-boundary is zero because of the regularity of the solution ($u_n \in W_0^{1,p}(\Omega)$) and by flux conditions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.  If the free boundary is well-behaved, which is beyond our scope to show even under strong assumptions on the data (especially the substrate topography), then we expect $S_n^h\to 0$ as $h\to 0$.  The retreat loss $R_n^h$ is also a numerical error, but it arises only from the time semi-discretization.
+The boundary leak is a numerical error in the sense that the continuous-space flux along the free-boundary is zero because of the regularity of the solution ($u_n \in W_0^{1,p}(\Omega)$) and by flux conditions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.  If the free boundary is well-behaved, which is beyond our scope to show even under strong assumptions on the data (especially the substrate topography), then we expect $B_n^h\to 0$ as $h\to 0$.  The retreat loss $R_n^h$ is also a numerical error, but it arises only from the time semi-discretization.
 
-In summary, we may report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,S_n^h\}$, which balance \eqref{eq:fvfinalbalance} up to rounding error, in a fully-discrete free-boundary numerical computation.
+In summary, we may report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,B_n^h\}$, which balance \eqref{eq:fvfinalbalance} up to rounding error, in a fully-discrete free-boundary numerical computation.
 
 \begin{figure}[ht]
 \begin{center}
-\input{tikz/fvmesh-slop.tex}
+\input{tikz/fvmesh-leak.tex}
 \end{center}
-\caption{The ``cell slop'' $S_n^h$ is computed along those edges where wet and dry cells meet.}
-\label{fig:fvmesh-slop}
+\caption{The ``boundary leak'' $B_n^h$ is computed along those edges where wet and dry cells meet.}
+\label{fig:fvmesh-leak}
 \end{figure}
 
 
 \subsection{Complementarity and cell-wise conservation}  \label{subsec:ncp}
 
-The continuous-space, discrete-time weak formulation we propose in Sections \ref{sec:weakform} and \ref{sec:wellposed}, namely using a variational inequality (VI) \eqref{eq:theVI}, is traditionally solved using finite element (FE) discretization \cite[for example]{CalvoDuranyVazquez2000,JouvetBueler2012,
+The continuous-space, discrete-time weak formulation we propose in Sections \ref{sec:weakform} and \ref{sec:wellposed}, using a variational inequality (VI) \eqref{eq:theVI}, is traditionally solved using finite element (FE) discretization \cite[for example]{CalvoDuranyVazquez2000,JouvetBueler2012,
 JouvetBuelerGraeserKornhuber2013}.  On the other hand the current section applies the common FV language of discrete conservation.  These views can be harmonized and clarified by observing that a VI is equivalent to a complementarity problem \cite{FacchineiPang2003,KinderlehrerStampacchia1980} in finite-dimensions.  As we explain in this Subsection, both practical solver algorithms and clearer intuition can result from this observation.
 
 Suppose we discretize $\mathcal{X} = W_0^{1,p}(\Omega)$ using an FE subspace $S^h$ of dimension $m$, based on a triangulation or other mesh with resolution $h$.  Consider problem \eqref{eq:theVI} on this space, namely
