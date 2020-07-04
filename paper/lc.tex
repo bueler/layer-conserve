@@ -665,42 +665,63 @@ In summary, we may report computable time-series, namely $\{M_n^h,C_n^h,R_n^h,B_
 \subsection{Complementarity and cell-wise conservation}  \label{subsec:ncp}
 
 The continuous-space, discrete-time weak formulation we propose in Sections \ref{sec:weakform} and \ref{sec:wellposed}, using a variational inequality (VI) \eqref{eq:theVI}, is traditionally solved using finite element (FE) discretization \cite[for example]{CalvoDuranyVazquez2000,JouvetBueler2012,
-JouvetBuelerGraeserKornhuber2013}.  On the other hand the current section applies the common FV language of discrete conservation.  These views can be harmonized and clarified by observing that a VI is equivalent to a complementarity problem \cite{FacchineiPang2003,KinderlehrerStampacchia1980} in finite-dimensions.  As we explain in this Subsection, both practical solver algorithms and clearer intuition can result from this observation.
+JouvetBuelerGraeserKornhuber2013}.  On the other hand the current section applies the FV language of discrete conservation.  These views can be harmonized and clarified by observing that a VI is equivalent to a complementarity problem \cite{FacchineiPang2003,KinderlehrerStampacchia1980}.  Practical solver algorithms, and clearer intuition, can result from this observation.  The schemes described next are simultaneously $W_0^{1,p}$-conforming, implementable using finite-dimensional complementarity-problem solvers (see below), and have known \emph{a posteriori} conservation (balance) up to rounding error.
 
-Suppose we discretize $\mathcal{X} = W_0^{1,p}(\Omega)$ using an FE subspace $S^h$ of dimension $m$, based on a triangulation or other mesh with resolution $h$.  Consider problem \eqref{eq:theVI} on this space, namely
+Suppose we discretize using an FE subspace $S^h \subset \mathcal{X} = W_0^{1,p}(\Omega)$ of dimension $m$, based on a triangulation (or other mesh) with resolution $h$.  Consider problem \eqref{eq:theVI} on this space, namely
 \begin{equation}
 \ip{A_n(u_n^h)}{v^h-u_n^h} \ge 0 \quad \text{for all } v \in \mathcal{K} \cap S^h,   \label{eq:FEtheVI}
 \end{equation}
-where $A_n$ is given by \eqref{eq:defineAn} and (as usual) $\mathcal{K} = \{u\in \mathcal{X}\,\big|\,u\ge 0\}$.  In this conforming FE context, and supposing the same Section \ref{sec:wellposed} hypotheses considered for \eqref{eq:theVI}, problem \eqref{eq:FEtheVI} is well-posed for the numerical solution $u_n^h \in \mathcal{K} \cap S^h$.
+where $A_n$ is given by \eqref{eq:defineAn} and (as usual) $\mathcal{K} = \{u\in \mathcal{X}\,\big|\,u\ge 0\}$.  Supposing the same Section \ref{sec:wellposed} hypotheses considered for \eqref{eq:theVI}, problem \eqref{eq:FEtheVI} is well-posed for the numerical solution $u_n^h \in \mathcal{K} \cap S^h$.
 
-Now suppose there is a nonnegative nodal basis $\{\psi_i\}$ of $S^h$, i.e.~such that $\psi_i(x)\ge 0$ on $\Omega$ and that $v(x) = \sum_i v(x_i) \psi_i(x)$ for some nodes $x_i$.  (For example, the usual hat-function basis for $P_1$ elements for a triangulation would satisfy this hypothesis, but not so for the usual $P_2$ basis \cite{Elmanetal2014}.)  Then we can represent the FE solution $u_n^h$ by a vector $\tilde u_i = u_n^h(x_i) \in \RR_+^m$.  Up to isomorphism the nonlinear operator in \eqref{eq:FEtheVI} can be regarded as a map $\tilde A:\RR_+^m \to (\RR^m)'$ given by entries $\tilde A(\tilde u)^i = \ip{A_n(u_n^h)}{\psi_i} \in \RR$.
+Now suppose there is an admissible nodal basis $\{\psi_i\}$ of $S^h$, i.e.~such that $\psi_i(x)\ge 0$ on $\Omega$ and that $v(x) = \sum_i v(x_i) \psi_i(x)$ for some nodes $x_i$.  (For example, the usual hat-function bases for $P_1$ and $Q_1$ elements would satisfy this hypothesis, but not the nodal $P_2$ basis \cite{Elmanetal2014}.)  Then we can represent the FE solution $u_n^h$ by a vector $\tilde u \in \RR_+^m$, i.e.~such that $u_i = u_n^h(x_i) \ge 0$.  Up to isomorphism the nonlinear operator in conforming FE formulation \eqref{eq:FEtheVI} is a map $\tilde A:\RR_+^m \to (\RR^m)'$ with entries $\tilde A(\tilde u)^i = \ip{A_n(u_n^h)}{\psi_i} \in \RR$.
 
 The finite-dimensional VI \eqref{eq:FEtheVI} is equivalent to the nonlinear complementarity problem (NCP)
 \begin{equation}
 \tilde u_i \ge 0, \quad \tilde A(\tilde u)^i \ge 0, \quad \tilde u_i \tilde A(\tilde u)^i = 0 \label{eq:FEtheNCP}
 \end{equation}
-\cite[Theorem I.5.5]{KinderlehrerStampacchia1980}; see also \cite{FacchineiPang2003}.  Note that the complementarity condition $\tilde u_i \tilde A(\tilde u)^i = 0$ can be regarded either entrywise or as an inner-product because of the nonnegativity of the factors.
+\cite[Theorem I.5.5]{KinderlehrerStampacchia1980}; see also \cite{FacchineiPang2003}.  The final complementarity condition can be regarded either entrywise or as an inner-product because of the nonnegativity of the factors.  Problem \eqref{eq:FEtheNCP} is nonlinear even in the (uncommon) case where the operator $A_n$ is linear, and thus iteration is expected in any numerical solution.  For example, parallelized Newton schemes for NCP problems are described in \cite{BensonMunson2006}; relevant applications appear in \cite{Brinkerhoffetal2017,Bueler2016}.
 
-Problems \eqref{eq:FEtheVI} and \eqref{eq:FEtheNCP} are nonlinear even in the (uncommon) case where the operator $A_n$ is linear, and thus iteration is expected in any numerical solution.  For example, parallelized Newton schemes for NCP problems are described in \cite{BensonMunson2006}, with relevant applications in \cite{Brinkerhoffetal2017,Bueler2016}.
+In our fluid-layer context the intuition behind NCP \eqref{eq:FEtheNCP} is straightforward.  Namely, at convergence of the numerical solver, the layer thickness at each node is nonnegative ($\tilde u_i \ge 0$), the balance between flow and climate inputs, represented by the (signed) residual \eqref{eq:defineAn} of the operator $A_n$, never removes more mass than was already present ($\tilde A(\tilde u)^i \ge 0$), and either the thickness is zero or the flow and climate are in exact balance ($\tilde u_i \tilde A(\tilde u)^i = 0$).  On the other hand, the value $\tilde A(\tilde u)^i = \ip{A_n(u_n^h)}{\psi_i}$ is zero when mass conservation equation \eqref{eq:semimassconserve} holds at node $x_i$ in an FE sense.  That is, if this value is zero then the integrand in \eqref{eq:defineAn} is zero in a weighted-average sense, i.e.~over the support of $\psi_i(x)$.  On the other hand, FV tradition (and climate-modeling practice) justifiably regards such an averaged sense of discrete conservation (balance) as inferior to exact local conservation \eqref{eq:fvlocalconservation}.
 
-In our fluid-layer context the intuition behind NCP \eqref{eq:FEtheNCP} is straightforward.  Namely, at convergence of the numerical solver, the layer thickness at each node is nonnegative ($\tilde u_i \ge 0$), the balance between flow and climate inputs, represented by the (signed) residual \eqref{eq:defineAn} which defines the operator $A_n$, never removes more mass than was already present ($\tilde A(\tilde u)^i \ge 0$), and either the thickness is zero or the flow and climate are in exact balance ($\tilde u_i \tilde A(\tilde u)^i = 0$).
+However, one may adapt \eqref{eq:FEtheNCP} to an FV view, if desired, assuming that for each FE node $x_i$ there is a unique corresponding FV cell $\omega_i$.  Note that the schemes in \cite{Bueler2016} and \cite{EwingLinLin2002}, for example, has this property.  Generally such a scheme can be interpreted as having ``dual meshes,'' one for conservation and one for representing the solution \cite{Ringleretal2013}.  We make no detailed assumption about the correspondence here.
 
-The value $\tilde A(\tilde u)^i = \ip{A_n(u_n^h)}{\psi_i}$ is zero when the mass conservation equation \eqref{eq:semimassconserve} holds at node $x_i$ in an FE sense.  If this value is zero then the integrand in \eqref{eq:defineAn} is zero in a weighted-average sense over the support of $\psi_i(x)$.  On the other hand, FV tradition (and climate-modeling practice) justifiably regards such an averaged sense of discrete conservation (balance) as inferior to e.g.~local conservation equation \eqref{eq:fvlocalconservation}.
-
-However, one may adapt \eqref{eq:FEtheNCP} to an FV view, if desired, by computing the residual using the characteristic function $\mathbbm{1}_{\omega_i}$ of each FV cell $\omega_i$ (Subsection \ref{subsec:spacenotation}):
-\begin{equation}
-\hat A(\tilde u)^i = \ip{A_n(u_n^h)}{\mathbbm{1}_{\omega_i}}. \label{eq:cellwiseresidual}
-\end{equation}
-This integral must be initially understood in a distributional sense, for instance as a limit of residuals using mollified characteristic functions, but in fact the result is the same as the residual of FV conservation equation \eqref{eq:fvfinalbalance} (after a division by $\Delta t_n$).
+Now we compute the residual using the characteristic function $\mathbbm{1}_{\omega_i}$ of each FV cell $\omega_i$ (Subsection \ref{subsec:spacenotation}):
+\begin{align}
+\hat A(\tilde u)^i &= \ip{A_n(u_n^h)}{\mathbbm{1}_{\omega_i}}  \label{eq:cellwiseresidual} \\
+                   &= \int_{\omega_i} \left(u_n^h - \Delta t_n F_n^h - u_{n-1}^h\right) + \Delta t_n \sum_{k\in\mathcal{E}_i} \int_{(i,k)} \bQ_n^h\cdot \bn_{(i,k)}. \notag
+\end{align}
+where $F_n^h = F_n(u_n^h,x)$ and $\bQ_n^h = \bQ_n(\grad u_n^h, u_n^h,x)$.  The integral $\ip{A_n(u_n^h)}{\mathbbm{1}_{\omega_i}}$ must be understood in a distributional sense, for instance as a limit of residuals using a mollification of $\mathbbm{1}_{\omega_i}$.  Note that $\mathbbm{1}_{\omega_i} \notin \mathcal{X}$ in this Petrov-Galerkin formulation, but it is conforming in the sense that $u_n^h\in \mathcal{K}\cap S^h$ is admissible \cite{Elmanetal2014}, and this ``finite volume element'' viewpoint is not new as it applies to PDE problems; see e.g.~\cite{Cai1990,EwingLinLin2002}.
 
 The NCP corresponding to \eqref{eq:cellwiseresidual}, namely
 \begin{equation}
 \tilde u_i \ge 0, \quad \hat A(\tilde u)^i \ge 0, \quad \tilde u_i \hat A(\tilde u)^i = 0, \label{eq:FVtheNCP}
 \end{equation}
-has a clear FV or cell-wise interpretation.  For each cell $\omega_i$ the thickness $\tilde u_i$ is nonnegative, the flow and climate will not remove more mass than was already present in the cell ($\hat A(\tilde u)^i \ge 0$), and either the thickness is zero or mass is exactly conserved (balanced) in a cell-wise sense.
+again has a clear interpretation even though it mixes FE and FV aspects.  For each cell $\omega_i$ the nodal thickness $\tilde u_i$ is nonnegative, the flow and climate will not remove more mass than was already present in the cell ($\hat A(\tilde u)^i \ge 0$), and either the nodal thickness is zero or conservation (balance) is exact in a cell-wise sense.
 
-This kind ``finite volume element'' viewpoint, which can also be justified by using a discontinuous Galerkin analysis \cite{Arnoldetal2002}, is not new for PDE problems; see e.g.~\cite{Cai1990,EwingLinLin2002}.  However, interpreted as an FV-type discrete conservation statement, NCP \eqref{eq:FVtheNCP} gives a fresh view on fluid-layer free-boundary problems because the usual inequality-constrained weak formulation, namely VI \eqref{eq:theVI}, supposes a function space (Sobolev) framework.
+However, use of \eqref{eq:cellwiseresidual} requires a revised accounting of the time-series in Subsection \ref{subsec:leak}.  We redefine
+\begin{equation}
+M_n^h = \int_\Omega u_n^h, \quad C_n^h = \Delta t_n \sum_{\tilde u_i>0} \int_{\omega_i} F_n^h, \quad R_n^h = \sum_{\tilde u_i=0} \int_{\omega_i} u_{n-1}^h, \label{eq:newfvtimeseriesdefn}
+\end{equation}
+to replace \eqref{eq:fvtimeseriesdefn}, and
+\begin{equation}
+B_n^h = \Delta t_n \sum_{\tilde u_i > 0, \tilde u_k = 0, k\in\mathcal{E}_j} \int_{(i,k)} \bQ_n^h \cdot \bn_{(i,k)} \label{eq:newfvdefineleak}
+\end{equation}
+to replace \eqref{eq:fvdefineleak}.  The following calculation applies if $\tilde u$ solves NCP \eqref{eq:FVtheNCP}:
+\begin{align}
+M_n^h - M_{n-1}^h &= \sum_{\tilde u_i>0} \int_{\omega_i} u_n^h - u_{n-1}^h + \sum_{\tilde u_i=0} \int_{\omega_i} u_n^h - u_{n-1}^h \label{eq:newfvcalculation} \\
+  &= \Delta t_n \sum_{\tilde u_i>0} \int_{\omega_i} F_n^h - \Delta t_n \sum_{\tilde u_i>0} \sum_{k\in \mathcal{E}_i} \int_{(i,k)} \bQ_n^h \cdot \bn_{(i,k)} \notag \\
+  &\qquad + \sum_{\tilde u_i=0} \int_{\omega_i} u_n^h - \sum_{\tilde u_i=0} \int_{\omega_i} u_{n-1}^h \notag
+\end{align}
+We must add a new \emph{cell slop} time series because the support of $u_n^h$ generally extends outside of the union of cells $\omega_i$ for which $\tilde u_i>0$:
+\begin{equation}
+S_n^h = \sum_{\tilde u_i=0} \int_{\omega_i} u_n^h. \label{eq:fvdefineslop}
+\end{equation}
 
+With the revised definitions, by \eqref{eq:newfvcalculation} the following balance holds,
+\begin{equation}
+  M_n^h = M_{n-1}^h + C_n^h - R_n^h - B_n^h + S_n^h, \label{eq:newfvfinalbalance}
+\end{equation}
+replacing \eqref{eq:fvfinalbalance}.  Note that time series \eqref{eq:newfvtimeseriesdefn}, \eqref{eq:newfvdefineleak}, and \eqref{eq:fvdefineslop} are computable \emph{a posteriori} although quadrature may be needed depending on the form of functions $F_n$ and $\bQ_n$.  Comparing the fixed-boundary balance \eqref{eq:oldbalance}, result \eqref{eq:newfvfinalbalance} identifies three conservation errors for free-boundary problems.  The retreat loss $R_n^h\to 0$ only under temporal refinement while the boundary leak $B_n^h\to 0$ under spatial refinement.  The cell slop $S_n^h$ is identically zero in a pure FV formulation (Subsection \ref{subsec:leak}).
 
 \section{Conclusion} \label{sec:conclusion}
 
