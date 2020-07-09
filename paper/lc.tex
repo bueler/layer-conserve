@@ -180,7 +180,6 @@ F_n(v,x)       &= \theta f(v,x,t_n) + (1-\theta) f(u_{n-1},x,t_{n-1}) \\
 
 For any $\theta$ the source function $F_n$ ``absorbs'' all the terms which do not involve the flux $\bq$ evaluated at time $t_n$.  Implicitness ($\theta>0$) is helpful both for the usual stability reasons \cite{MortonMayers2005} and to give the smoothness needed so that the weak form of the single time-step problem can be well-posed (Section \ref{sec:weakform}).  For the backward Euler scheme with $\theta=1$ observe that $\bQ_n = \bq(\bX,v,x,t_n)$ and $F_n = f(v,x,t_n)$, while if $\theta=0$ then $\bQ_n=0$ (Subsection \ref{subsec:explicit}).  Finally, such time-discretization need not be limited to $\theta$-methods; Appendix \ref{app:rk2} considers certain Runge-Kutta schemes.
 
-
 \subsection{Associated set decomposition}  \label{subsec:setdecompose}  In preparation for a statement of the weak form, let us suppose \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint} can be solved.  A solution $u_n$ then decomposes $\Omega$ into three disjoint regions:
 \begin{align*}
 \Omega_n &= \left\{x \in \Omega \,\big|\, u_n(x)>0\right\}, \\
@@ -249,7 +248,6 @@ F_n(v,x) \in L^q(\Omega).  \label{eq:FisLq}
 \end{definition}
 Assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:QisLq} address the regularity of $\bQ_n$ while \eqref{eq:Qiszero} says that the flux in a zero-thickness fluid layer is zero.  Note that $\grad v = 0$ a.e.~on $E_v$ \cite[lemma A.4 in chapter II]{KinderlehrerStampacchia1980}.
 
-
 \subsection{Derivation of the variational inequality}  \label{subsec:derivevi}  To derive a weak form we need an extra smoothness assumption on $\bQ_n$:  For all open $S \subset \Omega$, if $v\in W^{1,p}(S)$ then
 \begin{equation}
 \frac{\partial}{\partial x_i} \bQ_n(\grad v,v,x) \in L^q(S). \label{eq:Qissmooth}
@@ -302,7 +300,6 @@ While this derivation of inequality \eqref{eq:morallytheVI} requires too many hy
 
 Variational inequality (VI) \eqref{eq:theVI} is the same as \eqref{eq:morallytheVI}.
 
-
 \subsection{Interior condition}  \label{subsec:interior}  We now prove a converse of Theorem \ref{thm:strongimpliesweak} which makes no regularity assumptions on the set decomposition \eqref{eq:omegadecomposition}.
 
 \begin{theorem} \label{thm:weakimpliesstrong}  Assume $F_n$ satisfies \eqref{eq:FisLq} and $\bQ_n$ satisfies the standard flux assumptions plus \eqref{eq:Qissmooth}.  Choose $u_{n-1}\in\mathcal{K}$, and suppose that $u_n\in\mathcal{K}$ solves \eqref{eq:theVI}.  If $S \subset \Omega_n$ is open, $\overline{S}\subset \Omega$, and $u_n$ is continuous on $S$ then \eqref{eq:semimassconserve} applies a.e.~on $S$.  If $S \subset \Omega_n^r \cup \Omega_n^{00}$ is open then \eqref{eq:strongconditionwherezero} applies a.e.~on $S$.
@@ -335,7 +332,6 @@ Techniques for proving well-posedness of VIs in Banach spaces are relatively wel
 These Subsections only use the backward Euler time-stepping discretization.
 
 At the end, Subsection \ref{subsec:explicit} shows that if time-stepping is explicit or semi-explicit then regularity issues generally block the continuous-space single time-step problems from being well-posed.
-
 
 \subsection{Monotone variational inequalities} \label{subsec:mono}  Assume that $\mathcal{K}$ is a closed and convex subset of a Banach space $\mathcal{X}$.  The following definitions can be found in \cite{KinderlehrerStampacchia1980}.  A mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{monotone} if
 \begin{equation}
@@ -390,7 +386,6 @@ Inequality \eqref{eq:Qncoercive} implies \eqref{eq:Qnmonotone} with $C=0$, so \e
 \begin{theorem}  \label{thm:monowellposed}  Suppose $W^{1,p}(\Omega) \subset L^2(\Omega)$.  Suppose $\bQ_n$ satisfies the standard flux assumptions and that $F_n=F_n(x)\in L^q(\Omega)$.  If \eqref{eq:Qncoercive} holds then the single time-step problem \eqref{eq:theVI} has a unique solution $u\in\mathcal{K} = \left\{u\ge 0\right\} \subset \mathcal{X}=W_0^{1,p}(\Omega)$.
 \end{theorem}
 
-
 \subsection{$p$-Laplacian fluxes} \label{subsec:plap}  We can apply Theorem \ref{thm:monowellposed} to show well-posedness in certain linear and non-linear parabolic cases, that is, wherein $\bq$ has the direction of $-\grad u$.  First consider the $p$-Laplacian \cite{Evans2010} flux
 \begin{equation}
   \bQ_n(\grad u) = - k |\grad u|^{p-2} \grad u \label{eq:plapflux}
@@ -419,7 +414,6 @@ where $B = \Delta t_n\,k (p-1) C(\Omega,p)^{-2/p} >0$.  This shows $\ip{A_n(u) -
 \frac{\ip{A_n(u) - A_n(v)}{u-v}}{\|u-v\|} \ge B\, \frac{\|u - v\|}{\big\||\grad u|+|\grad v|\big\|_{L^p(\Omega)}^{2-p}} \to \infty
 \end{equation*}
 as $\|u\|\to\infty$, because $0<2-p<1$, thus $A_n$ is coercive. \end{proof}
-
 
 \subsection{Doubly-nonlinear fluxes} \label{subsec:powertransform}  Now consider the flux formula
 \begin{equation}
@@ -457,7 +451,6 @@ Suppose $p\ge 2$.  If $w,v\in\mathcal{X}$ then by \eqref{eq:pbiginequality} and 
 The case $1<p<2$ follows by modification of the argument in Theorem \ref{thm:plapwellposed}.
 \end{proof}
 
-
 \subsection{Advection by a differentiable velocity field} \label{subsec:advect}  The flux in certain applications (ice shelves, sea ice) is understood to be dominantly advective.  In such applications the velocity arises from solving a momentum balance, but here we simply assume the layer is transported by a differentiable velocity field $\bX \in W^{1,\infty}(\Omega;\RR^d)$,
 \begin{equation}
   \bQ_n(u,x) = \bX(x) u. \label{eq:advectflux}
@@ -494,7 +487,6 @@ where $c_0=2^{2-p}/C(\Omega,p)>0$.  If $c_1 = \eps c_0 \Delta t_n$ then
 thus $A_n$ is coercive under the given hypotheses on $\Div \bX$ and $\Delta t_n$. \end{proof}
 
 Bound \eqref{eq:plapadvectdtcond} may be regarded as similar to a CFL-type condition \cite{LeVeque2002}, but it measures the \emph{convergence} of the velocity field and not its magnitude.  (If $\|(\Div \bX)_-\|_{L^\infty(\Omega)}$ is small then large time steps are well-posed.) Observe that condition \eqref{eq:plapadvectdtcond} is independent of $\eps>0$, suggesting that the pure advection problem ($\eps = 0$) may also be well-behaved, but the proof is not clear because of the role of ellipticity in the regularity of the solution.
-
 
 \subsection{Non-local dependence through an integral kernel} \label{subsec:nonlocal}   The examples so far compute the flux $\bQ_n$ at $x\in\Omega$ using only the values $u(x)$ and $\grad u(x)$.  However, the flux in realistic models often comes from solving another differential equation, generally a momentum conservation equation, which is coupled to the mass-conservation equation \eqref{eq:massconserve}.  In that context the flux is non-locally determined from the layer thickness $u$ and its spatial derivatives.
 
@@ -536,7 +528,6 @@ By \eqref{eq:nonlocalGbound}, \eqref{eq:nonlocalKpos}, and \eqref{eq:poincare},
 The result follows from condition \eqref{eq:nonlocaldtcond}. \end{proof}
 
 Theorems \ref{thm:plapadvectwellposed} and \ref{thm:nonlocalwellposed} take different approaches to monotonicity.  In the former the velocity $\bX$ was assumed to be differentiable and an integration-by-parts gave a criterion via a bound on $\Delta t_n$ (using derivatives of $\bX$).  By contrast, in Theorem \ref{thm:nonlocalwellposed} we assumed only that $\bG$ was integrable, no integration-by-parts was attempted, and $\Delta t_n$ was bounded using the norm of $\bG$ itself.
-
 
 \subsection{Explicit time-steps} \label{subsec:explicit}   Consider a flux $\bq$ such that problem \eqref{eq:theVI} is well-posed in $W_0^{1,p}(\Omega)$ for all $\theta>0$ in the $\theta$-method \eqref{eq:thetamethod}.  (For example, consider the fluxes in Subsections \ref{subsec:plap} or \ref{subsec:powertransform}.)  Now go to the explicit case, namely a forward Euler step with $\theta=0$.  In weak form the $\theta=0$ problem is variational inequality \eqref{eq:theVI}, but now $\bQ_n=0$ and
 \begin{equation}
@@ -655,10 +646,7 @@ The boundary leak is a numerical error in the sense that the continuous-space fl
 \label{fig:fvmesh-leak}
 \end{figure}
 
-
-\subsection{Complementarity and cell-wise conservation}  \label{subsec:ncp}
-
-The continuous-space, discrete-time weak formulation we propose in Sections \ref{sec:weakform} and \ref{sec:wellposed}, using a variational inequality (VI) \eqref{eq:theVI}, is traditionally solved using finite element (FE) discretization \cite[for example]{CalvoDuranyVazquez2000,JouvetBueler2012,
+\subsection{Complementarity and cell-wise conservation}  \label{subsec:ncp}  The continuous-space, discrete-time weak formulation we propose in Sections \ref{sec:weakform} and \ref{sec:wellposed}, using a variational inequality (VI) \eqref{eq:theVI}, is traditionally solved using finite element (FE) discretization \cite[for example]{CalvoDuranyVazquez2000,JouvetBueler2012,
 JouvetBuelerGraeserKornhuber2013}.  On the other hand the current section applies the FV language of discrete conservation.  These views can be harmonized and clarified by observing that a VI is equivalent to a complementarity problem \cite{FacchineiPang2003,KinderlehrerStampacchia1980}.  Practical solver algorithms, and clearer intuition, can result from this observation.  The schemes described next are simultaneously $W_0^{1,p}$-conforming, implementable using finite-dimensional complementarity-problem solvers (see below), and have known \emph{a posteriori} conservation (balance) up to rounding error.
 
 Suppose we discretize using an FE subspace $S^h \subset \mathcal{X} = W_0^{1,p}(\Omega)$ of dimension $m$, based on a triangulation (or other mesh) with resolution $h$.  Consider problem \eqref{eq:theVI} on this space, namely
