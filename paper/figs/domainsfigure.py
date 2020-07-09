@@ -25,7 +25,7 @@ plt.plot(xr, yr, '--k', lw=1.5)
 
 myfontsize=18.0
 #plt.text(0.7,0.9,r'$\Omega$',fontsize=20.0)
-plt.text(0.5,-0.6,r'$\Omega_n^0$',fontsize=myfontsize)
+plt.text(0.5,-0.6,r'$\Omega_n^{00}$',fontsize=myfontsize)
 plt.text(0.0,0.6,r'$\Omega_n^r$',fontsize=myfontsize)
 plt.text(-0.2,-0.1,r'$\Omega_n$',fontsize=myfontsize)
 
