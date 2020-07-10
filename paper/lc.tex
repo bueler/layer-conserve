@@ -532,7 +532,7 @@ u_n = \max\{0,u_{n-1} + \Delta t_n\,F_n\} \in L^2(\Omega). \label{eq:explicittru
 \end{equation}
 This addresses one time step, but unfortunately $u_n \in L^2(\Omega)$ is not regular enough so that the next timestep has a well-defined weak form.  That is, generally $\Div \bq(\grad u_{n-1},u_{n-1},x)$ need not be in $L^2(\Omega)$.
 
-In summary, for explicit time steps the solution to a single weakly-posed time step is straightforward truncation \eqref{eq:explicittruncation}, but the result is generally not regular enough to yield a well-posed problem at future steps, at least in our discrete-time, continuous-space formulation.  Nonetheless many practical models \cite[for example]{Winkelmannetal2011} proceed by explicit time steps for the fully-discretized problem followed by truncation if the computed thicknesses are negative.
+In summary, for explicit time steps the solution to a single weakly-posed time step is straightforward truncation \eqref{eq:explicittruncation}, but the result is generally not regular enough to yield a well-posed problem at future steps, at least in our discrete-time, continuous-space formulation.  Nonetheless many practical models \cite[for example]{Winkelmannetal2011} proceed by explicit time steps for the fully-discretized problem, followed by truncation if the computed thicknesses are negative.
 
 
 \section{Mass conservation and the retreat set}  \label{sec:timeseries}
