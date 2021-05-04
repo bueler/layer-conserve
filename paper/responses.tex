@@ -1,0 +1,124 @@
+\documentclass[12pt]{amsart}
+%prepared in AMSLaTeX, under LaTeX2e
+\addtolength{\oddsidemargin}{-.6in} 
+\addtolength{\evensidemargin}{-.6in}
+\addtolength{\topmargin}{-.4in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\textheight}{.6in}
+
+\renewcommand{\baselinestretch}{1.05}
+
+\usepackage{verbatim,fancyvrb}
+\usepackage{palatino}
+\usepackage{csquotes}
+\AtBeginEnvironment{quote}{\itshape}
+
+\newcommand{\mm}{\medskip \noindent}
+\begin{document}
+\hfill 4 May 2021
+
+\bigskip
+
+\large\centerline{\textbf{Responses to Referees \#2 and \#3}}
+\bigskip
+\normalsize
+
+\thispagestyle{empty}
+
+FIXME
+
+\begin{quote}
+Referee \#2 (Remarks to the Author):
+
+\mm Review of "Conservation Laws for Free Boundary Fluid Layers" by Ed Bueler
+
+\mm This article deals with a free boundary value problem (BVP) for thin layer fluid over a solid substrate.  This is a free BVP because as the fluid flows, it may dry up in certain places (thickness dropping to zeros), and may enter new territories.  In my view, this article has two major contributions.  First, it deals with the well-posedness of the one-step semi-discrete model by transforming the free BVP into a variatonal inequality (VI).  This approach appears to have the advantage that one does not have to keep track of the changing interface between the dry and wet regions.  The second contribution of this article is the presentation and discussion of a fully discrete finite volume scheme and a full-discrete finite element scheme, and the discussion of the mass conservation issue within these schemes.
+
+\mm This article is very well written.  The issues discussed are very important, especially in geoscience, where ice sheets are modeled by BVPs like the one discussed here.  
+\end{quote}
+
+FIXME
+
+\begin{quote}
+My only concern is the stability issue of the finite volume scheme presented in Section 6.1. Here, advancing the scheme appears simple, which is likely just an application of a nonlinear solver (e.g. Newton) plus some post-processing to make sure solution never drop below zero. But is this process stable? Note that the well-posedness of the semi-discrete model does not guarantee the stability of the FV scheme, unlike in the case of the FEM scheme.  Given that FV is quite popular for geoscience applications, I would like to see the author address this issue, if it can be reasonably done within a revision. Otherwise, a comment on this issue can also suffice.
+\end{quote}
+
+FIXME
+
+\begin{quote}
+In summary, I think this is a well written paper that address some of the important modeling issues in geosicences.  I recommend its publication in SIAP, after a minor revision.
+\end{quote}
+
+FIXME
+
+\begin{quote}
+Review on SIAP manuscript no M135217 ``CONSERVATION LAWS FOR FREE-BOUNDARY FLUID LAYERS'' by Ed Bueler
+
+\mm The paper considers free-boundary fluid problems with conservation laws. Problems arise for negative source terms at the free boundaries that pose difficulties for any discrete numerical scheme.  The author investigates well-posedness of the (first only in time discretised) problems in these situations and identifies a posteriori quantities to account for the conservation error.  First one is the `retreat loss' where an a priori bound also gives an upper bound for the time step.  In fully discrete FV and FEM schemes additional numerical spacial errors (called `boundary leak' and
+`cell slop`) play a role for the conservation.  The a posteriori quantities are useful to assess if conservation errors are acceptably small, or if time or space refinement is needed.
+
+\mm The paper tackles an important and interesting topic and seems to be a very nice entry-point to study these problems, it is well written and comprises useful results which as far as I have checked are mathematically sound.  I think it is suitable for publication in SIAP, but I suggest to tackle the remarks and suggestions below in a minor revision first.
+\end{quote}
+
+FIXME
+
+\begin{quote}
+\textbf{Remarks, questions, suggestions.}
+
+\mm (1) Definition 3.3. only has a single formula without explanation. Maybe one could add a sentence like ``The set of admissable functions reads \dots''
+\end{quote}
+
+FIXME
+
+\begin{quote}
+\mm (2) p.11: what is $\tilde k$ in $Q_n = - \tilde k\nabla(u^\gamma)$?  (Is it $\tilde k = \gamma k$?)
+\end{quote}
+
+FIXME
+
+\begin{quote}
+\mm (3) What is $m$ in Section 6.3? (Is it the size of the nodal basis/the number of degrees of freedom?)
+\end{quote}
+
+FIXME
+
+\begin{quote}
+\mm (4) Before (6.11) one could make it clearer that now cell refers to the dual FV grid, e.g.~by replacing ``cell'' with ``FV cell $\omega_i$''.  Maybe one should also repeat from which set $i$ is taken (I suppose $i \in \{1,\dots,m\}$?)
+\end{quote}
+
+FIXME
+
+\begin{quote}
+\mm (5) Maybe I missed it, but I guess there is a similar a priori bound for the discrete retreat loss like (5.6), or even the same?
+\end{quote}
+
+FIXME
+
+\begin{quote}
+\mm (6) The discrete climate input depends on the current approximation of the set $\Omega_n$.  How to know if this is approximated reasonably well?
+\end{quote}
+
+FIXME
+
+\begin{quote}
+\mm (7) A small numerical example, that demonstrates the use of the quantities as a posteriori refinement criteria or at least gives a feeling how these quantities might behave in practise, would be really nice.
+\end{quote}
+
+FIXME
+
+\begin{quote}
+\textbf{Typos and Language.}
+
+\begin{itemize}
+\item abstract: finite volume and finite element schemes
+\item p.1 : suglacial $\implies$ subglacial
+\item p.2, p.15 : Lipshitz $\implies$ Lipschitz
+\item p.4 : tsunumi $\implies$ tsunami
+\item p.6 : This Subsection $\implies$ This subsection
+\item p.9 : These/these Subsections $\implies$ These/these subsections
+\end{itemize}
+\end{quote}
+
+FIXME
+
+\end{document}
