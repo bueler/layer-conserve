@@ -15,10 +15,8 @@ doclayer.pdf: doclayer.tex
 	pdflatex doclayer.tex
 	pdflatex doclayer.tex
 
-.PHONY: distclean texclean
+.PHONY: clean
 
-dirclean:
-	@rm -f *~ layer
-
-texclean:
-	@rm -f *~ *.aux *.log *.synctex.gz
+clean::
+	@rm -f *~ layer *.txt
+	@rm -f *~ *.aux *.log *.synctex.g

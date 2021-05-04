@@ -1,18 +1,20 @@
 static const char help[] =
-"Solves conservation-equation-for-layer problem in 1d:\n"
-"    u_t + q_x = f,\n"
-"where the flux\n"
-"    q = lambda q^0 + (1-lambda) q^1,\n"
-"with  0 <= lambda <= 1, combines an SIA-type flux\n"
+"Solves conservation-equation-for-layer problem in 1d.  Option prefix lay_.\n"
+"The equation solved is generic conservation\n"
+"    u_t + q_x = f\n"
+"subject to the constraint\n"
+"    u >= 0.\n"
+"The flux is a combination of nonlinear diffusion and advection:\n"
+"    q = lambda q^0 + (1-lambda) q^1\n"
+"with  0 <= lambda <= 1.  First is a doubly-nonlinear (SIA-type) flux\n"
 "    q^0 = - gamma u^{n+2} |(u+b)_x|^{n-1} (u+b)_x\n"
-"with an advecting layer\n"
+"and second is an advecting layer\n"
 "    q^1 = v0 u.\n"
 "Here n >= 1 and b(x) is a smooth function given in bedelevation() below.\n"
-"Domain is 0 < x < L, with periodic boundary conditions, subject to constraint\n"
-"    u >= 0.\n"
-"Uses SNESVI.  Several O(dx^2) finite difference methods to choose among.\n"
-"Exact solution for lambda=0 case.  Either analytical Jacobian or\n"
-"finite-difference evaluation of Jacobian.\n\n";
+"Domain is 0 < x < L, with periodic boundary conditions.  Uses SNESVI for\n"
+"each time-step solution.  Several O(dx^2) finite difference methods are\n"
+"given for the advection part.  An exact solution is known in the lambda=0\n"
+"case.  Jacobians are either analytical or finite-difference.\n\n";
 
 //   ./layer -help |grep lay_
 
@@ -570,8 +572,9 @@ PetscErrorCode ViewToVTKASCII(Vec u, const char prefix[], const char name[],
     if (strerr < 0) {
         SETERRQ1(PETSC_COMM_WORLD,6,"sprintf() returned %d < 0 ... stopping\n",strerr);
     }
-    ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,filename,&viewer); CHKERRQ(ierr);
-    ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_VTK); CHKERRQ(ierr);
+    ierr = PetscViewerVTKOpen(PETSC_COMM_WORLD,filename,FILE_MODE_WRITE,
+                              &viewer); CHKERRQ(ierr);
+    //ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_VTK); CHKERRQ(ierr);
     ierr = VecView(u,viewer); CHKERRQ(ierr);
     ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
     PetscFunctionReturn(0);
