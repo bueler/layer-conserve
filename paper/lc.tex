@@ -446,7 +446,7 @@ Suppose $p\ge 2$.  If $w,v\in\mathcal{X}$ then by \eqref{eq:pbiginequality} and 
 The case $1<p<2$ follows by modification of the argument in Theorem \ref{thm:plapwellposed}.
 \end{proof}
 
-\subsection{Advection by a differentiable velocity field} \label{subsec:advect}  The flux in certain applications (ice shelves, sea ice) is understood to be dominantly advective.  In such applications the velocity arises from solving a momentum balance, but here we simply assume the layer is transported by a differentiable velocity field $\bX \in W^{1,\infty}(\Omega;\RR^d)$,
+\subsection{Advection by a differentiable velocity field} \label{subsec:advect}  The flux in certain applications (ice shelves, sea ice) is understood to be dominantly advective.  In fact the velocity arises from solving a coupled momentum balance, but here we simply assume the layer is transported by a differentiable velocity field $\bX \in W^{1,\infty}(\Omega;\RR^d)$,
 \begin{equation}
   \bQ_n(u,x) = \bX(x) u. \label{eq:advectflux}
 \end{equation}
@@ -459,14 +459,14 @@ Suppose $u,v\in\mathcal{K}$.  Noting $u=v=0$ on $\partial \Omega$, integration-b
 \end{align}
 Equation \eqref{eq:advectQnmono} can be exploited in a couple of ways.  If the vector field is divergent $\Div\bX\ge 0$ then \eqref{eq:Qnmonotone} applies with $C=0$ and so $A_n$ is strictly monotone.  Otherwise, \eqref{eq:Qnmonotone} applies with $C = \frac{1}{2}\Delta t_n\,\|(\Div\bX)_{-}\|_{L^\infty(\Omega)}$, and then $A_n$ is monotone if $C \le 1$ (strictly if $C < 1$).
 
-Consider the operator $A_n$ defined by \eqref{eq:defineAn} using flux \eqref{eq:advectflux}.  There is no reason to suppose this operator is coercive, so we add a bit of diffusion in the form of a $p$-Laplacian leading-order term with coefficient $\eps>0$, namely
+Consider the operator $A_n$ defined by \eqref{eq:defineAn} using flux \eqref{eq:advectflux}.  Unfortunately, there is no reason to suppose this operator is coercive, so we add a bit of diffusion in the form of a $p$-Laplacian leading-order term with coefficient $\eps>0$, namely
 \begin{equation}
   \bQ_n(\grad u,u,x) = -\eps |\grad u|^{p-2} \grad u + \bX(x) u.   \label{eq:plapadvectflux}
 \end{equation}
 
 \begin{theorem}  \label{thm:plapadvectwellposed}  Suppose $\bQ_n$ is given by \eqref{eq:plapadvectflux} with $\eps>0$ and $p\ge 2$.  If $\bX \in W^{1,\infty}(\Omega;\RR^d)$ and $F_n=F_n(x)$ is independent of $u$ then \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$ if either $\Div \bX \ge 0$ or
 \begin{equation}
-  \Delta t_n \le \frac{2}{\|(\Div \bX)_-\|_{L^\infty(\Omega)}}. \label{eq:plapadvectdtcond}
+  \Delta t_n \le \frac{2}{\|(\Div \bX)_-\|_{L^\infty}}. \label{eq:plapadvectdtcond}
 \end{equation}
 \end{theorem}
 
@@ -476,55 +476,56 @@ Consider the operator $A_n$ defined by \eqref{eq:defineAn} using flux \eqref{eq:
 \end{equation*}
 where $c_0=2^{2-p}/C(\Omega,p)>0$.  If $c_1 = \eps c_0 \Delta t_n$ then
 \begin{align*}
-\ip{A_n(u) - A_n(v)}{u-v} &\ge c_1\, \|u-v\|^p + \frac{\Delta t_n}{2} \int_\Omega (\Div\bX) (u-v)^2 + \|u-v\|_{L^2(\Omega)}^2 \\
-   &\ge c_1\, \|u-v\|^p + \left(1 - \frac{\Delta t_n}{2} \|(\Div \bX)_-\|_{L^\infty(\Omega)}\right) \|u-v\|_{L^2(\Omega)}^2,
+\ip{A_n(u) - A_n(v)}{u-v} &\ge c_1\, \|u-v\|^p + \frac{\Delta t_n}{2} \int_\Omega (\Div\bX) (u-v)^2 + \|u-v\|_{L^2}^2 \\
+   &\ge c_1\, \|u-v\|^p + \left(1 - \frac{\Delta t_n}{2} \|(\Div \bX)_-\|_{L^\infty}\right) \|u-v\|_{L^2}^2,
 \end{align*}
 thus $A_n$ is coercive under either hypothesis. \end{proof}
 
-Bound \eqref{eq:plapadvectdtcond} may be regarded as a CFL-type condition \cite{LeVeque2002}, but it measures the \emph{convergence} of the velocity field and not its magnitude.  (If $\|(\Div \bX)_-\|_{L^\infty(\Omega)}$ is small then large time steps are well-posed.) Observe that condition \eqref{eq:plapadvectdtcond} is independent of $\eps>0$, suggesting that the pure advection problem ($\eps = 0$) may also be well-behaved, but our monotone VI technique does not establish it.
+Condition \eqref{eq:plapadvectdtcond} is independent of $\eps>0$, suggesting that the pure advection problem ($\eps = 0$) may also be well-behaved, but our monotone VI technique in $\mathcal{K} \subset W^{1,p}$ does not establish it.  Note that bound \eqref{eq:plapadvectdtcond} might be regarded as a CFL-type condition \cite{LeVeque2002}, but it measures the \emph{convergence} of the velocity field, not its magnitude.  If $\|(\Div \bX)_-\|_{L^\infty}$ is small then large time steps are well-posed.
+
 
 \subsection{Non-local dependence through an integral kernel} \label{subsec:nonlocal}   The examples so far compute the flux $\bQ_n$ at $x\in\Omega$ using only the values $u(x)$ and $\grad u(x)$.  However, the flux in realistic models often comes from solving coupled differential equations, generally including momentum conservation.  In that context the flux is non-locally determined from the layer thickness $u$ and its spatial derivatives.
 
-Let $\mathcal{X} = W_0^{1,2}(\Omega)$, a Hilbert space, and $\mathcal{K}=\{u\in\mathcal{X}|u\ge 0\}$ as before.  Suppose $G_1(x,y)$, \dots, $G_d(x,y)$ and $K(x,y)$ are scalar, real-valued kernel functions in $L^2(\Omega\times \Omega)$.  Define
+Let $\mathcal{X} = W_0^{1,2}(\Omega)$, a Hilbert space, and $\mathcal{K}=\{u\in\mathcal{X}|u\ge 0\}$.  Suppose $G_1(x,y)$, \dots, $G_d(x,y)$ and $K(x,y)$ are scalar, real-valued kernel functions in $L^2(\Omega\times \Omega)$.  Define
 \begin{equation}
 \bQ_n[\grad u,u](x) = \int_\Omega \bG(x,y) u(y)\,dy - \int_\Omega K(x,y) \grad u(y)\,dy, \label{eq:nonlocaldefQn}
 \end{equation}
-where $\bG(x,y) = (G_1(x,y), \dots, G_d(x,y))$ is $\RR^d$-valued.  With flux \eqref{eq:nonlocaldefQn}, equation \eqref{eq:semimassconserve} is no longer a PDE, but rather a linear integro-differential equation.
+where $\bG(x,y) = (G_1(x,y), \dots, G_d(x,y))$ is $\RR^d$-valued.  With flux \eqref{eq:nonlocaldefQn}, equation \eqref{eq:semimassconserve} is no longer a PDE, but rather a linear integro-differential equation \cite{PorterStirling1990}.
 
-Let $A_n:\mathcal{K} \to \mathcal{X}'=\mathcal{X}$ be defined by \eqref{eq:defineAn}, with $\bQ_n$ from \eqref{eq:nonlocaldefQn},
+Let $A_n:\mathcal{K} \to \mathcal{X}'=\mathcal{X}$ be defined by \eqref{eq:defineAn}, with $\bQ_n$ from \eqref{eq:nonlocaldefQn}, that is
 \begin{align}
-    \ip{A_n(v)}{\phi} &= \int_\Omega \bigg[(v - \Delta t_n\,F_n - u_{n-1})\phi - \Delta t_n\,\left(\int_\Omega \bG(x,y) v(y)\,dy\right)\cdot \grad \phi \label{eq:nonlocaldefnAn} \\
-                      &\qquad\qquad + \Delta t_n\,\left(\int_\Omega K(x,y) \grad v(y)\,dy\right)\cdot \grad \phi\,\bigg]. \notag
+    \ip{A_n(v)}{\phi} &= \int_\Omega \bigg[(v - \Delta t_n\,F_n - u_{n-1})\phi - \Delta t_n\,\left(\int_\Omega \bG(\cdot,y) v(y)\,dy\right)\cdot \grad \phi \label{eq:nonlocaldefnAn} \\
+                      &\qquad\qquad + \Delta t_n\,\left(\int_\Omega K(\cdot,y) \grad v(y)\,dy\right)\cdot \grad \phi\,\bigg]. \notag
 \end{align}
 
-\begin{theorem}  \label{thm:nonlocalwellposed}  Suppose $F_n=F_n(x) \in L^2(\Omega)$ is independent of $u$.  Assume $G_i \in L^2(\Omega\times\Omega)$ for $i=1,\dots,d$.  Suppose $K \in L^2(\Omega\times\Omega)$ is positive and bounded below \cite{PorterStirling1990} in the sense that there is $\delta>0$ so that
+\begin{theorem}  \label{thm:nonlocalwellposed}  Suppose $F_n=F_n(x) \in L^2(\Omega)$ is independent of $u$.  Assume $G_i \in L^2(\Omega\times\Omega)$ for $i=1,\dots,d$.  Suppose $K \in L^2(\Omega\times\Omega)$ is positive and bounded below in the sense that there is $\delta>0$ so that
 \begin{equation}
-   \int_\Omega \int_\Omega K(x,y) \phi(x) \phi(y)\,dx\,dy \ge \delta \|\phi\|_{L^2(\Omega)}^2 \qquad \text{for all } \phi \in L^2(\Omega).  \label{eq:nonlocalKpos}
+   \int_\Omega \int_\Omega K(x,y) \phi(x) \phi(y)\,dx\,dy \ge \delta \|\phi\|_{L^2}^2 \qquad \text{for all } \phi \in L^2(\Omega).  \label{eq:nonlocalKpos}
 \end{equation}
 If either $\bG=0$ or
 \begin{equation}
-  \Delta t_n < \frac{\delta}{C(\Omega,p)\, \|\bG\|_{L^2(\Omega\times\Omega;\RR^d)}},  \label{eq:nonlocaldtcond}
+  \Delta t_n < \frac{\delta}{C(\Omega,p)\, \|\bG\|_{L^2}},  \label{eq:nonlocaldtcond}
 \end{equation}
-where $C(\Omega,p)$ is from \eqref{eq:poincare}.  Then $A_n$ defined by \eqref{eq:nonlocaldefnAn} is coercive and strictly monotone, and thus \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
+where $C(\Omega,p)$ is from the Poincar\'e \eqref{eq:poincare}, then $A_n$ defined by \eqref{eq:nonlocaldefnAn} is coercive and strictly monotone, and thus \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
 
 \begin{proof}  Let $\phi=u-v$ for $u,v\in\mathcal{K}$.  Two applications of Cauchy-Schwarz yield
 \begin{equation}
 \left|\int_\Omega \int_\Omega \bG(x,y) \cdot \grad \phi(x)\,\phi(y) \,dx\,dy\right|
-  \le \|\bG\|_{L^2(\Omega\times\Omega;\RR^d)} \|\phi\|_{\mathcal{X}}^2,   \label{eq:nonlocalGbound}
+  \le \|\bG\|_{L^2} \|\phi\|^2,   \label{eq:nonlocalGbound}
 \end{equation}
 By \eqref{eq:nonlocalGbound}, \eqref{eq:nonlocalKpos}, and \eqref{eq:poincare},
 \begin{align*}
-\ip{A_n(u)-A_n(v)}{\phi} &\ge \|\phi\|_{L^2(\Omega)}^2 - \Delta t_n\,\int_\Omega \int_\Omega \bG(x,y) \cdot \grad \phi(x) \phi(y)\,dx\,dy \\
+\ip{A_n(u)-A_n(v)}{\phi} &\ge \|\phi\|_{L^2}^2 - \Delta t_n\,\int_\Omega \int_\Omega \bG(x,y) \cdot \grad \phi(x) \phi(y)\,dx\,dy \\
     &\qquad + \Delta t_n\,\int_\Omega \int_\Omega K(x,y) \grad \phi(x) \cdot \grad \phi(y)\,dx\,dy \\
-    &\ge \|\phi\|_{L^2(\Omega)}^2 - \Delta t_n\,\|\bG\|_{L^2(\Omega\times\Omega;\RR^d)} \|\phi\|^2 + \delta \|\grad\phi\|_{L^2(\Omega;\RR^d)}^2 \\
-    &\ge \|\phi\|_{L^2(\Omega)}^2 + \left(\frac{\delta}{C(\Omega,p)} - \Delta t_n\,\|\bG\|_{L^2(\Omega\times\Omega;\RR^d)}\right) \|\phi\|^2.
+    &\ge \|\phi\|_{L^2}^2 - \Delta t_n\,\|\bG\|_{L^2} \|\phi\|^2 + \delta \|\grad\phi\|_{L^2}^2 \\
+    &\ge \|\phi\|_{L^2}^2 + \left(\frac{\delta}{C(\Omega,p)} - \Delta t_n\,\|\bG\|_{L^2}\right) \|\phi\|^2.
 \end{align*}
 The result follows from condition \eqref{eq:nonlocaldtcond} and the definition of coercivity. \end{proof}
 
-Theorems \ref{thm:plapadvectwellposed} and \ref{thm:nonlocalwellposed} take different approaches to coercivity.  In the former the velocity $\bX$ was assumed to be differentiable and an integration-by-parts gave a time-step criterion based on derivatives of $\bX$.  By contrast, in Theorem \ref{thm:nonlocalwellposed} we assumed only that $\bG$ was integrable, no integration-by-parts was attempted, and $\Delta t_n$ was bounded using the norm of $\bG$ itself.
+Theorems \ref{thm:plapadvectwellposed} and \ref{thm:nonlocalwellposed} take different approaches to coercivity.  The former assumes the velocity $\bX$ is differentiable so integration-by-parts gives a time-step criterion based on derivatives of $\bX$.  Theorem \ref{thm:nonlocalwellposed} instead assumes only that $\bG$ is integrable, no integration-by-parts is attempted, and $\Delta t_n$ is bounded using the norm of $\bG$ itself.
 
-\subsection{Explicit time-steps} \label{subsec:explicit}   Consider any flux $\bq$ such that, when using the $\theta$-method \eqref{eq:thetamethod} in an implicit case (i.e.~with $\theta>0$), problem \eqref{eq:theVI} is well-posed in $\mathcal{X}=W_0^{1,p}(\Omega)$.  (For example, consider the fluxes in Subsections \ref{subsec:plap} or \ref{subsec:powertransform}.)  Compare the explicit problem, namely a forward Euler step with $\theta=0$, thus $\bQ_n=0$ and
+\subsection{Explicit time-steps} \label{subsec:explicit}   Suppose $\bq$ is any flux such that, when using the $\theta$-method \eqref{eq:thetamethod} in an implicit case (i.e.~with $\theta>0$), problem \eqref{eq:theVI} is well-posed in $\mathcal{X}=W_0^{1,p}(\Omega)$.  (For example, consider the fluxes in Subsections \ref{subsec:plap} or \ref{subsec:powertransform}.)  Compare the explicit problem, namely a forward Euler step with $\theta=0$, thus $\bQ_n=0$ and
 \begin{equation}
 F_n = - \Div \bq(\grad u_{n-1},u_{n-1},x) + f(u_{n-1},x).  \label{eq:Fnformexplicit}
 \end{equation}
@@ -540,7 +541,7 @@ u_n = \max\{0,u_{n-1} + \Delta t_n\,F_n\} \in L^2(\Omega). \label{eq:explicittru
 \end{equation}
 This addresses one time step, but unfortunately $u_n \in L^2(\Omega)$ is not regular enough so that the next timestep has a well-defined weak form.  That is, generally $\Div \bq(\grad u_{n-1},u_{n-1},x)$ need not be in $L^2(\Omega)$.
 
-In summary, for explicit time steps the solution to a single weakly-posed time step is straightforward truncation \eqref{eq:explicittruncation}, but the result is generally not regular enough to yield a well-posed problem at future steps, at least in our discrete-time, continuous-space formulation.  Nonetheless many practical models \cite[for example]{Winkelmannetal2011} proceed by explicit time steps for the fully-discretized problem, followed by truncation if the computed thicknesses are negative.
+In summary, for explicit time steps the solution to a single weakly-posed time step is straightforward truncation \eqref{eq:explicittruncation}, but the result is generally not regular enough to yield a well-posed problem at future steps, at least in our discrete-time, continuous-space formulation.  Nonetheless most existing numerical models \cite[for example]{Winkelmannetal2011} proceed by explicit time steps for the fully-discretized problem, followed by truncation where the computed thicknesses come out negative.
 
 
 \section{Mass conservation and the retreat set}  \label{sec:timeseries}
