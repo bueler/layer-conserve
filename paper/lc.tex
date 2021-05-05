@@ -668,42 +668,44 @@ In our fluid-layer context the intuition behind NCP \eqref{eq:FEtheNCP} is strai
 \smallskip
 When a value $\tilde A(\tilde u)^i$ is zero then mass conservation (balance) equation \eqref{eq:semimassconserve} holds at node $x_i$ in an FE sense.  That is, a weighted-average of the integrand in \eqref{eq:defineAn}, over the support of $\psi_i(x)$, is zero.  Tradition and climate-modeling practice regards such an averaged sense of discrete balance as inferior to exact local balance \eqref{eq:fvlocalconservation}.  However, we may adapt \eqref{eq:FEtheNCP} to an FV view by assuming that for each FE node $x_i$ there is a unique corresponding FV cell $\omega_i$ (Subsection \ref{subsec:spacenotation}).  Schemes satisfying this condition, such as \cite{Bueler2016,EwingLinLin2002,Ringleretal2013}, have a ``dual mesh,'' namely cells for conservation plus a mesh for representing the solution.  Note we will need no detailed assumptions about the mesh correspondence in the following computations.
 
-Suppose we compute the residual using the characteristic function of each cell:
+Suppose we recompute the residual using a cell characteristic function $\mathbbm{1}_{\omega_i}$:
 \begin{align}
 \hat A(\tilde u)^i &= \ip{A_n(u_n^h)}{\mathbbm{1}_{\omega_i}}  \label{eq:cellwiseresidual} \\
                    &= \int_{\omega_i} \left(u_n^h - \Delta t_n F_n^h - u_{n-1}^h\right) + \Delta t_n \sum_{k\in\mathcal{E}_i} \int_{(i,k)} \bQ_n^h\cdot \bn_{(i,k)}. \notag
 \end{align}
-where $F_n^h = F_n(u_n^h,x)$ and $\bQ_n^h = \bQ_n(\grad u_n^h, u_n^h,x)$.  Regarding the flux calculation we will again assume local balance \eqref{eq:fvlocalconservation} between fluid-filled cells.  The integral $\ip{A_n(u_n^h)}{\mathbbm{1}_{\omega_i}}$ must be understood in a distributional sense, for instance as a limit using mollification of $\mathbbm{1}_{\omega_i}$.  Note that $\mathbbm{1}_{\omega_i} \notin \mathcal{X}$, so this is a Petrov-Galerkin formulation, but the scheme is conforming in the sense that $u_n^h\in \mathcal{K}\cap S^h$ is admissible \cite{Elmanetal2014}.  Such a combined ``finite volume element'' viewpoint is not new as it applies to PDE problems \cite[for example]{Cai1990,EwingLinLin2002}, but it seems not to be widely used for VIs.
+where $F_n^h = F_n(u_n^h,x)$, $\bQ_n^h = \bQ_n(\grad u_n^h, u_n^h,x)$, and $i\in\{1,\dots,m\}$.  Regarding the flux integral on the right we again assume interior balance \eqref{eq:fvlocalconservation}.  The integral $\ip{A_n(u_n^h)}{\mathbbm{1}_{\omega_i}}$ must be understood in a distributional sense, for instance as a limit using mollification of $\mathbbm{1}_{\omega_i}$.
 
 The NCP corresponding to the VI for \eqref{eq:cellwiseresidual}, namely
 \begin{equation}
-\tilde u_i \ge 0, \quad \hat A(\tilde u)^i \ge 0, \quad \tilde u_i \hat A(\tilde u)^i = 0, \label{eq:FVtheNCP}
+\tilde u_i \ge 0, \quad \hat A(\tilde u)^i \ge 0, \quad \tilde u_i \hat A(\tilde u)^i = 0 \label{eq:FVtheNCP}
 \end{equation}
-again has a clear interpretation even though it mixes FE and FV aspects.  For each cell $\omega_i$ the nodal thickness $\tilde u_i$ is nonnegative, the flow and climate will not remove more mass than was already present in the cell ($\hat A(\tilde u)^i \ge 0$), and either the nodal thickness is zero or conservation (balance) is exact in a cell-wise sense.
+in $\RR^m$, has an interpretation as before even though it mixes FE and FV aspects.  For each cell $\omega_i$ the nodal thickness $\tilde u_i$ is nonnegative, the flow and climate will not remove more mass than was already present in the cell ($\hat A(\tilde u)^i \ge 0$), and either the nodal thickness is zero or conservation (balance) is exact in a cell-wise sense.  Note that $\mathbbm{1}_{\omega_i} \notin \mathcal{X}$, so this is a Petrov-Galerkin formulation, but the scheme is conforming in the sense that $u_n^h\in \mathcal{K}\cap S^h$ is admissible \cite{Elmanetal2014}.  Such a combined ``finite volume element'' viewpoint is not new as it applies to PDE problems \cite[for example]{Cai1990,EwingLinLin2002}, but it seems not to have been used for VIs.
 
-However, use of \eqref{eq:cellwiseresidual} and \eqref{eq:FVtheNCP} requires a revised global balance accounting relative to Subsection \ref{subsec:leak}.  We redefine
+However, solution of \eqref{eq:cellwiseresidual} and \eqref{eq:FVtheNCP} implies revised mass accounting relative to Subsection \ref{subsec:leak}.  We redefine
 \begin{equation}
-M_n^h = \int_\Omega u_n^h, \quad C_n^h = \Delta t_n \sum_{\tilde u_i>0} \int_{\omega_i} F_n^h, \quad R_n^h = \sum_{\tilde u_i=0} \int_{\omega_i} u_{n-1}^h, \label{eq:newfvtimeseriesdefn}
+\hat M_n^h = \int_\Omega u_n^h, \quad \hat C_n^h = \Delta t_n \sum_{\tilde u_i>0} \int_{\omega_i} F_n^h, \quad \hat R_n^h = \sum_{\tilde u_i=0} \int_{\omega_i} u_{n-1}^h, \label{eq:newfvtimeseriesdefn}
 \end{equation}
 to replace \eqref{eq:fvtimeseriesdefn}, and
 \begin{equation}
-B_n^h = \Delta t_n \sum_{\tilde u_i > 0, \tilde u_k = 0, k\in\mathcal{E}_j} \int_{(i,k)} \bQ_n^h \cdot \bn_{(i,k)} \label{eq:newfvdefineleak}
+\hat B_n^h = \Delta t_n \sum_{\tilde u_i > 0, \tilde u_k = 0, k\in\mathcal{E}_j} \int_{(i,k)} \bQ_n^h \cdot \bn_{(i,k)} \label{eq:newfvdefineleak}
 \end{equation}
 to replace \eqref{eq:fvdefineleak}.  Noting that $u_n^h$ may be nonzero on a cell $\omega_i$ corresponding to a zero nodal thickness $\tilde u_i=0$, the following calculation applies if $\tilde u$ solves NCP \eqref{eq:FVtheNCP}:
 \begin{align}
-M_n^h - M_{n-1}^h &= \sum_{\tilde u_i>0} \int_{\omega_i} u_n^h - u_{n-1}^h + \sum_{\tilde u_i=0} \int_{\omega_i} u_n^h - u_{n-1}^h \label{eq:newfvcalculation} \\
-  &= C_n^h - \Delta t_n \sum_{\tilde u_i>0} \sum_{k\in \mathcal{E}_i} \int_{(i,k)} \bQ_n^h \cdot \bn_{(i,k)} + \sum_{\tilde u_i=0} \int_{\omega_i} u_n^h - R_n^h \notag
+\hat M_n^h - \hat M_{n-1}^h &= \sum_{\tilde u_i>0} \int_{\omega_i} u_n^h - u_{n-1}^h + \sum_{\tilde u_i=0} \int_{\omega_i} u_n^h - u_{n-1}^h \label{eq:newfvcalculation} \\
+  &= \hat C_n^h - \Delta t_n \sum_{\tilde u_i>0} \sum_{k\in \mathcal{E}_i} \int_{(i,k)} \bQ_n^h \cdot \bn_{(i,k)} + \sum_{\tilde u_i=0} \int_{\omega_i} u_n^h - \hat R_n^h \notag
 \end{align}
 The flux sum again simplifies through cancellation by local conservation \eqref{eq:fvlocalconservation}, but now we must add a new time series, which we call the \emph{cell slop}, because the support of $u_n^h$ generally extends outside of the wet cells:
 \begin{equation}
-S_n^h = \sum_{\tilde u_i=0} \int_{\omega_i} u_n^h. \label{eq:fvdefineslop}
+\hat S_n^h = \sum_{\tilde u_i=0} \int_{\omega_i} u_n^h. \label{eq:fvdefineslop}
 \end{equation}
 
 With the revised definitions, by \eqref{eq:newfvcalculation} the following balance holds,
 \begin{equation}
-  M_n^h = M_{n-1}^h + C_n^h - R_n^h - B_n^h + S_n^h, \label{eq:newfvfinalbalance}
+\hat M_n^h = \hat M_{n-1}^h + \hat C_n^h - \hat R_n^h - \hat B_n^h + \hat S_n^h, \label{eq:newfvfinalbalance}
 \end{equation}
-replacing \eqref{eq:fvfinalbalance} and \eqref{eq:newbalance}.  Time series \eqref{eq:newfvtimeseriesdefn}, \eqref{eq:newfvdefineleak}, and \eqref{eq:fvdefineslop} are computable \emph{a posteriori} although quadrature may be needed depending on the form of functions $F_n$ and $\bQ_n$.  In conclusion, compared to the fixed-boundary balance \eqref{eq:oldbalance}, \eqref{eq:newfvfinalbalance} identifies three conservation errors for free-boundary problems.  The retreat loss $R_n^h\to 0$ under temporal refinement, the boundary leak $B_n^h\to 0$ under spatial refinement, and the cell slop $S_n^h$ is identically zero in a pure FV formulation (Subsection \ref{subsec:leak}).
+now replacing both \eqref{eq:newbalance} and \eqref{eq:fvfinalbalance}.  Time series \eqref{eq:newfvtimeseriesdefn}, \eqref{eq:newfvdefineleak}, and \eqref{eq:fvdefineslop} are computable \emph{a posteriori} although quadrature may be needed depending on the form of functions $F_n$ and $\bQ_n$.
+
+To summarize, \eqref{eq:newfvfinalbalance} identifies three conservation errors for free-boundary problems which are not present in the fixed-boundary case.  The retreat loss $R_n^h$ goes to zero under temporal refinement (Section \ref{sec:timeseries}), the boundary leak $B_n^h$ goes to zero under spatial refinement (Subsection \ref{subsec:leak}), and the cell slop $\hat S_n^h$ is identically zero in a pure FV formulation.
 
 
 \section{Conclusion} \label{sec:conclusion}
