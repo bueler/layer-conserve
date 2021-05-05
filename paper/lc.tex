@@ -723,7 +723,7 @@ Conclusions which apply in the semi-discretized, continuous-space case are indep
 
 \appendix
 
-\section{Inequalities for $p$-norms}   \label{app:pinequalities}  Versions of the inequalities in the next two Lemmas appear in the literature, at least as early as \cite{GlowinskiMarroco1975}, but here the results apply in $\RR^d$---contrast \cite{BarrettLiu1993,GlowinskiMarroco1975} for the $\RR^2$ case---and have complete proofs and explicit constants.  The first two proofs follow \cite[Appendix A]{Peral1997}.
+\section{Inequalities for $p$-norms}   \label{app:pinequalities}  Versions of the inequalities in the next two Lemmas appear in the literature, at least as early as \cite{GlowinskiMarroco1975}, but here the results apply in $\RR^d$---contrast \cite{BarrettLiu1993} for the $\RR^2$ case---and have complete proofs and explicit constants.  The first two proofs follow \cite[Appendix A]{Peral1997}.
 
 \begin{lemma}  \label{lem:pbiginequality}  If $p\ge 2$ and $x,y\in\RR^d$ then
 \begin{equation}
@@ -732,9 +732,9 @@ Conclusions which apply in the semi-discretized, continuous-space case are indep
 The constant is sharp; consider $y=-x$.
 \end{lemma}
 
-\begin{proof}  The case where $x=0$ or $y=0$ is trivial, so assume, by swapping $x$ and $y$ as necessary, that $0 < |y| \le |x|$.  Define $t=|y|/|x|$ and $s = (x\cdot y)/(|x||y|)$ so that $0\le t \le 1$ and $|s|\le 1$.  Expand \eqref{eq:pbiginequality} and divide it by $|x|^p$, to get the equivalent statement
+\begin{proof}  The case where $x=0$ or $y=0$ is trivial, so assume, by swapping $x$ and $y$ as necessary, that $0 < |y| \le |x|$.  Define $t=|y|/|x|$ and $s = (x\cdot y)/(|x||y|)$ so that $0 < t \le 1$ and $|s|\le 1$.  Expand \eqref{eq:pbiginequality} and divide it by $|x|^p$, to get the equivalent statement
     $$1 - (t^{p-1}+t) s + t^p \ge 2^{2-p} \left(1 - 2 s t + t^2\right)^{p/2}.$$
-It is easy to check that this holds when $s=1$, so now we need to prove that $2^{2-p}$ is a lower bound for
+It is easy to check that this holds when $s=1$, so now we will prove that $2^{2-p}$ is a lower bound for
 	$$f(t,s) = \frac{1 - (t^{p-1}+t) s + t^p}{\left(1 - 2 s t + t^2\right)^{p/2}}.$$
 on $(t,s) \in R=[0,1]\times[-1,1)$.  Note $1-2st+t^2 > 0$ on $ R$, so $f(t,s)$ is well-defined and differentiable on $R$.
 
@@ -780,11 +780,11 @@ on $t\in[0,1)$, because $t^{p-1}\le t^{3-p}$ and thus $1 - t^{p-1} \ge 1 - t^{3-
 \end{align*}
 This proves \eqref{eq:psmallinequality}. \end{proof}
 
-We will also need the result of combining point-wise Lemma \ref{lem:psmallinequality} with integration over a set $\Omega$.
+We will also need the following result of combining point-wise Lemma \ref{lem:psmallinequality} with integration over a set $\Omega$.
 
-\begin{lemma} \label{lem:smallpbound}  Suppose $1<p\le 2$.  If $\Omega \subset \RR^d$ is measurable and if $\bu,\bv\in L^p(\Omega; \RR^m)$ for $m\ge 1$, then
+\begin{lemma} \label{lem:smallpbound}  Suppose $1<p\le 2$.  If $\Omega \subset \RR^d$ is measurable and if $\bu,\bv\in L^p(\Omega; \RR^k)$ for $k\ge 1$, then
 \begin{equation}
-    \int_\Omega \frac{|\bu-\bv|^p}{\left(|\bu|+|\bv|\right)^{2-p}} \ge \frac{\|\bu-\bv\|_{L^p(\Omega; \RR^m)}^2}{\big\||\bu|+|\bv|\big\|_{L^p(\Omega)}^{2-p}}. \label{eq:smallpbound}
+    \int_\Omega \frac{|\bu-\bv|^p}{\left(|\bu|+|\bv|\right)^{2-p}} \ge \frac{\|\bu-\bv\|_{L^p}^2}{\big\||\bu|+|\bv|\big\|_{L^p}^{2-p}}. \label{eq:smallpbound}
 \end{equation}
 \end{lemma}
 
