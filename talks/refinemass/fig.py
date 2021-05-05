@@ -15,6 +15,8 @@
 #   # mv foo?.txt ../refinemass
 #   $ cd ../refinemass
 #   $ ./fig.py -o bar.pdf foo?.txt
+#
+# See also generate.sh for how mass?.txt were generated.
 
 import argparse
 import sys
@@ -32,10 +34,11 @@ def readtimeseries(filename):
     S = np.loadtxt(filename)
     return S[:,0], S[:,1], S[:,2]
 
-for name in args.files:
-    t, M, R = readtimeseries(name)
-    plt.semilogy(t,M,'k')
-    plt.semilogy(t,R,label='dt=%.3f' % (t[1]-t[0]))
+color = ['r','g','b','y','c']
+for n in range(len(args.files)):
+    t, M, R = readtimeseries(args.files[n])
+    plt.semilogy(t,M,color[n])
+    plt.semilogy(t,R,'.'+color[n],label='dt=%.3f' % (t[1]-t[0]))
 
 plt.axis([0.0,t.max(),1.0e-10,1.0])
 plt.legend(loc='lower right',fontsize=14.0)
