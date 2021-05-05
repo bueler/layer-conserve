@@ -1,7 +1,7 @@
 \documentclass[final,onefignum]{siamart190516}
 %\documentclass[review,onefignum]{siamart190516}
 
-\usepackage{amssymb,bbm}
+\usepackage{amssymb,bbm,enumitem}
 \usepackage{pgfplots,tikz}
 \pgfplotsset{compat=1.14}
 
@@ -554,40 +554,39 @@ the \emph{(total) mass} at time $t_n$.  Recalling set decomposition \eqref{eq:om
 \begin{equation}
 C_n = \Delta t_n\, \int_{\Omega_n} F_n(u_n,x) \label{eq:climateseries}
 \end{equation}
-Note that we sum values of the source term $F_n(u_n,x)$ only over locations where the fluid is present at $t=t_n$; this is the climate input into the fluid layer.  In the set $\Omega \setminus \Omega_n = \Omega_n^r \cup \Omega_n^{00}$ the (nonpositive) climate $F_n$ is not actually removing fluid \emph{at} time $t_n$, though over $\Omega_n^r$ the fluid was removed during the time step $[t_{n-1},t_n]$.
+Note that we sum values of the source term $F_n(u_n,x)$ only over locations where the fluid is present at $t=t_n$; this is the climate input into the fluid layer.  In the complement $\Omega \setminus \Omega_n = \Omega_n^r \cup \Omega_n^{00}$ the (nonpositive) climate $F_n$ is not removing fluid \emph{at} time $t_n$, though the fluid in $\Omega_n^r$ was completely removed during the time step $[t_{n-1},t_n]$.
 
-Practical models will compute approximations to time-series $M_n$ and $C_n$, or similar, as model outputs, in order to audit mass transfers to and from the fluid layer.  For \emph{fixed}-boundary fluid-layer problems, wherein $\Omega_n=\Omega$, exact discrete mass conservation can be achieved in the sense that
+Practical models will compute approximations to time-series $M_n$ and $C_n$, or similar, as model outputs, in order to audit mass transfers to and from the fluid layer.  For \emph{fixed}-boundary fluid-layer problems exact discrete mass conservation can be achieved in the sense that
 \begin{equation}
-M_n = M_{n-1} + C_n \quad (\text{if } \Omega_n = \Omega) \label{eq:oldbalance}
+M_n = M_{n-1} + C_n \qquad \text{if } \Omega_n = \Omega, \label{eq:oldbalance}
 \end{equation}
-to within rounding error at each time $t_n$.  For example, one can easily show \eqref{eq:oldbalance} holds under a Neumann condition $\bQ_n=0$ on $\partial \Omega$.  However, balance \eqref{eq:oldbalance} does \emph{not} follow when there is a nonempty free boundary ($\Omega_n \subsetneq \Omega$).
+to within rounding error at each time $t_n$.  For example, if $\Omega_n=\Omega$ then one can easily show \eqref{eq:oldbalance} holds under a Neumann condition $\bQ_n=0$ on $\partial \Omega$ (see below).  However, a balance like \eqref{eq:oldbalance} does \emph{not} follow when there is a nontrivial free boundary such that $\Omega \setminus \Omega_n$ has positive measure.
 
-Next we define the \emph{retreat loss} during the $n$th time step:
+Let us define the \emph{retreat loss} during the $n$th time step:
 \begin{equation}
 R_n = \int_{\Omega_n^r} u_{n-1}. \label{eq:retreatlossseries}
 \end{equation}
-By \eqref{eq:semimassconserve} on $\Omega_n$, and assuming $\partial \Omega_n$ is (e.g.) Lipshitz,
-    $$M_n - M_{n-1} = \int_{\Omega_n} (u_n - u_{n-1}) - \int_{\Omega_n^r} u_{n-1} = \Delta t_n \int_{\Omega_n} (- \Div \bQ_n + F_n) \, - R_n,$$
-because $\bQ_n=0$ along $\partial \Omega_n$ by \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}, and thus
+By \eqref{eq:semimassconserve} on $\Omega_n$,
+    $$M_n - M_{n-1} = \int_{\Omega_n} (u_n - u_{n-1}) - \int_{\Omega_n^r} u_{n-1} = \Delta t_n \int_{\Omega_n} (- \Div \bQ_n + F_n) \, - R_n.$$
+Because $\bQ_n=0$ along $\partial \Omega_n$ by \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}, and assuming $\partial \Omega_n$ is Lipschitz,
 \begin{equation}
 M_n = M_{n-1} + C_n - R_n. \label{eq:newbalance}
 \end{equation}
-\emph{A posteriori} statement \eqref{eq:newbalance}, replacing \eqref{eq:oldbalance}, suggests what degree of conservation is achievable in numerical free-boundary models.  Computing the retreat loss $R_n$ quantifies the conservation error from the constraint $u_n\ge 0$.  Note that consistency in the time-discretized model implies $R_n$ should vanish in the $\Delta t_n\to 0$ limit.
 
-The retreat loss $R_n$ can easily be bounded \emph{a priori}.  Assuming the interior of $\Omega_n^r$ has full measure ($m(\Omega_n^r \setminus (\Omega_n^r)^\circ)=0$), and recalling inequality \eqref{eq:strongconditionwherezero}, we have $u_{n-1} \le -\Delta t_n\,F_n(u_n,x)$ on $(\Omega_n^r)^\circ$ and thus
+\emph{A posteriori} statement \eqref{eq:newbalance}, replacing \eqref{eq:oldbalance}, suggests what degree of conservation is achievable in time-stepping numerical free-boundary models.  Computing the retreat loss $R_n$ quantifies the conservation error caused by the constraint $u_n\ge 0$.  Consistency suggests $R_n$ should vanish in the $\Delta t_n\to 0$ limit, and in fact the retreat loss $R_n$ can be bounded \emph{a priori} as follows.  Recalling inequality \eqref{eq:strongconditionwherezero}, we have $0 \le u_{n-1} \le -\Delta t_n\,F_n(u_n,x) = -\Delta t_n\,F_n(0,x)$ on $\Omega_n^r$ and thus
 \begin{equation}
 R_n \le \Delta t_n \int_\Omega \max\{0,-F_n(0,x)\}. \label{eq:retreatbound}
 \end{equation}
-In words, the retreat loss is bounded by the maximum amount of ablation which the climate can apply to a bare substrate.  Given a conservation error tolerance, this estimate puts an upper bound on $\Delta t_n$.
+In words, the retreat loss is bounded by the maximum amount of ablation which the climate can apply to a bare substrate during the time step.  Given a conservation error tolerance, estimate \eqref{eq:retreatbound} can be used to put an upper bound on $\Delta t_n$.
 
 
 \section{Fully-discrete models}  \label{sec:spacediscretized}
 
-So far we have treated free-boundary mass conservation models in semi-discretized form, as a sequence of continuous-space free-boundary problems.  We now assume a further spatial discretization, initially an unstructured finite volume (FV) method \cite{LeVeque2002} but later also using a finite element (FE) space of admissible thickness functions, and we reconsider mass conservation in these fully-discrete settings.
+So far we have treated fluid-layer mass conservation models in semi-discretized form, as a sequence of continuous-space free-boundary problems.  We now add spatial discretization, first an unstructured finite volume (FV) method \cite{LeVeque2002}, and later adding a finite element (FE) space of admissible thickness functions, and we reconsider mass conservation in these fully-discretized settings.
 
-\subsection{Unstructured finite volumes} \label{subsec:spacenotation}  To set notation for an FV scheme, assume $\Omega \subset \RR^d$ is polygonal.  (Though there is no actual restriction on dimension, we will use language suitable for the $\RR^2$ case, such as ``polygon,'' ``edge,'' and etc.)  Let us assume that $\Omega$ is tiled by open polygonal cells $\omega_j$, indexed by $j\in J$ with $|J|<\infty$, with area $|\omega_j|$, so that $\omega_j \cap \omega_k = \emptyset$ for $j\ne k$, $\bar\Omega = \bigcup_{j\in J} \bar \omega_j$, and $|\Omega| = \sum_{j\in J} |\omega_j|$.  We say that an edge, denoted by the ordered pair $(j,k)$, exists between cell $j$ and cell $k$ if $\bar\omega_j \cap \bar \omega_k$ has positive $(d-1)$-measure (length) $\ell_{(j,k)}>0$.  The set of edges for cell $\omega_j$ is denoted $\mathcal{E}_j=\{k\,\big|\,(j,k) \text{ is an edge}\}$.  Note that cells may be non-convex, the number of edges per cell may vary, and even hanging nodes are allowed.
+\subsection{Unstructured finite volumes} \label{subsec:spacenotation}  To set notation for spatially-discretized schemes, assume $\Omega \subset \RR^d$ is polygonal.  (We will use language suitable for the $\RR^2$ case, ``polygon,'' ``edge,'' and etc.)  Let us assume that $\Omega$ is tiled by open polygonal cells $\omega_j$, indexed by $j\in J$ with $|J|<\infty$, with area $|\omega_j|$, so that $\omega_j \cap \omega_k = \emptyset$ for $j\ne k$, $\bar\Omega = \bigcup_{j\in J} \bar \omega_j$, and $|\Omega| = \sum_{j\in J} |\omega_j|$.  We say that an edge, denoted by the ordered pair $(j,k)$, exists between cell $j$ and cell $k$ if $\bar\omega_j \cap \bar \omega_k$ has positive $(d-1)$-measure (length) $\ell_{(j,k)}>0$.  The set of edges for cell $\omega_j$ is denoted $\mathcal{E}_j=\{k\,\big|\text{edge } (j,k) \text{ exists}\}$.  Note that cells may be non-convex, the number of edges per cell may vary, and hanging nodes are allowed.
 
-Suppose now that the strong form \eqref{eq:semimassconserve} is discretized using the following scheme.  The discrete thickness $u_n^j$ in cell $j$ is given the usual interpretation as an average \cite{LeVeque2002}, and similarly $F_n^j$ denotes the average source term for the cell:
+Suppose now that the strong form \eqref{eq:semimassconserve} is discretized using the following generic FV scheme.  The discrete thickness $u_n^j$ in cell $j$ is interpreted as an average \cite{LeVeque2002}, and similarly $F_n^j$ denotes the average source term for the cell:
 \begin{equation}
 u_n^j \approx \frac{1}{|\omega_j|} \int_{\omega_j} u_n(x), \qquad F_n^j \approx \frac{1}{|\omega_j|} \int_{\omega_j} F_n(u_n,x).  \label{eq:fvthickness}
 \end{equation}
@@ -595,43 +594,44 @@ u_n^j \approx \frac{1}{|\omega_j|} \int_{\omega_j} u_n(x), \qquad F_n^j \approx 
 \begin{equation}
 Q_n^{(j,k)} \approx \frac{1}{\ell_{(j,k)}} \int_{(j,k)} \bQ_n(\grad u_n,u_n,x) \cdot \bn_{(j,k)}. \label{eq:fvflux}
 \end{equation}
-Here $\bn_{(j,k)}$ denotes the unit normal vector to edge $(j,k)$ directed outward from $\omega_j$; thus $\bn_{(k,j)} = -\bn_{(j,k)}$.  Presumably the fluxes $Q_n^{(j,k)}$ are approximated using values $\{u_n^l\}$, though again the details are not important, and a variety of schemes apply to the hyperbolic \cite{LeVeque2002} and general (diffusive, implicit) \cite{Morton2018} cases.
+Here $\bn_{(j,k)}$ denotes the unit normal vector to edge $(j,k)$ directed outward from $\omega_j$; thus $\bn_{(k,j)} = -\bn_{(j,k)}$.  Presumably the fluxes $Q_n^{(j,k)}$ are approximated using values $\{u_n^l\}$, though again the details are not important.
 
-We now require that between any two adjacent \emph{fluid-filled} cells there is local conservation:
+We now require the scheme satisfies interior conservation.  That is, we require that between any two adjacent \emph{fluid-filled} cells we have flux balance across the edge:
 \begin{equation}
   u_n^j u_n^k > 0 \quad \implies \quad Q_n^{(k,j)}=-Q_n^{(j,k)}.  \label{eq:fvlocalconservation}
 \end{equation}
-The hypothesis in \eqref{eq:fvlocalconservation} is important.  We do \emph{not} expect discrete conservation at the free boundary, because a scheme applied at the edge of a fluid-free (\emph{dry}) cell, facing a fluid-filled (\emph{wet}) cell, cannot be expected to generate a flux which balances the nonzero flux generated by the geometry (and stress state) of the neighboring wet cell.  Indeed, advance of the fluid layer into a dry cell requires flux imbalance at such edges, and likewise for a retreat which leaves behind a dry cell.
+The hypothesis in \eqref{eq:fvlocalconservation} is important.  We do \emph{not} expect discrete conservation at the free boundary, because a flux scheme applied at the edge of a fluid-free (\emph{dry}) cell, facing a fluid-filled (\emph{wet}) cell, cannot be expected to compute a flux which balances the nonzero flux generated by the geometry (and stress state, etc.) of the wet cell.  Indeed, advance of the fluid layer into a dry cell requires flux imbalance at such edges, and likewise for a retreat which leaves behind a dry cell.
 
-Finally we require that if $u_n^j>0$ then the scheme approximates \eqref{eq:semimassconserve} using the obvious FV formula:
+Finally we require that if $u_n^j>0$ then the scheme approximates \eqref{eq:semimassconserve} using the obvious FV formula based on the fluxes:
 \begin{equation}
 \frac{u_n^j - u_{n-1}^j}{\Delta t_n} + \frac{1}{|\omega_j|} \sum_{k\in \mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} = F_n^j. \label{eq:fvmassconserve}
 \end{equation}
-(Notationally, equation \eqref{eq:fvmassconserve} would appear to apply the backward Euler scheme, but in fact the time-stepping is quite general; see Section \ref{sec:strongform}.)  However, note the essential fact that \eqref{eq:fvmassconserve} only applies when the cell is wet at the end of the time step ($u_n^j>0$).  For dry cells we do not, for now, state any equation other than $u_n^j=0$, but see Subsection \ref{subsec:ncp}.
+(Notationally, equation \eqref{eq:fvmassconserve} appears to be the backward Euler scheme, but in fact the time-stepping is quite general; see Section \ref{sec:strongform} and Appendix \ref{app:rk2}.)  However, \eqref{eq:fvmassconserve} only applies when the cell is wet at the end of the time step ($u_n^j>0$).  For dry cells we do not, for now, state any equation other than $u_n^j=0$, but see Subsection \ref{subsec:ncp}.
 
-Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including structured-grid finite difference \cite{Bueler2016} and structured/unstructured FV \cite{LeVeque2002} schemes.
-
-\subsection{The discrete-space ``boundary leak''}  \label{subsec:leak}  For schemes satisfying \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve} we now define \emph{a posteriori} computable time-series relevant to conservation of mass and analogous to Section \ref{sec:timeseries} formulas:
+Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including FV methods for hyperbolic problems \cite{LeVeque2002} and more-general schemes for diffusive problems \cite{Bueler2016,Morton2018}.
+  
+\subsection{The discrete-space ``boundary leak''}  \label{subsec:leak}  For schemes satisfying \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve} we now define \emph{a posteriori} computable time series for conservation of mass.  The following discrete formulas, with superscript ``$h$'', have analogs in Section \ref{sec:timeseries}:
 \begin{equation}
 M_n^h = \sum_j u_n^j |\omega_j|, \quad C_n^h = \Delta t_n\!\!\sum_{u_n^j>0} F_n^j |\omega_j|, \quad R_n^h = \sum_{u_n^j=0} u_{n-1}^j |\omega_j|.  \label{eq:fvtimeseriesdefn}
 \end{equation}
-(A superscript ``$h$'' denotes spatially-discrete quantities.)  Now \eqref{eq:fvmassconserve} implies
+Now \eqref{eq:fvmassconserve} implies
 \begin{align}
 M_n^h - M_{n-1}^h &= \sum_{u_n^j>0} (u_n^j - u_{n-1}^j) |\omega_j| - \sum_{u_n^j=0} u_{n-1}^j |\omega_j| \notag \\
-   &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{k\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + \Delta t_n\,\sum_{u_n^j>0} F_n^j |\omega_j| - R_n^h \notag \\
    &= - \Delta t_n\,\sum_{u_n^j>0}\, \sum_{k\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)} + C_n^h - R_n^h.  \label{eq:fvnewbalance}
 \end{align}
-Now local conservation \eqref{eq:fvlocalconservation} reduces the remaining sum to over edges between wet and dry cells.  We call this residual sum the \emph{boundary leak}; it is the net amount of unbalanced flux along the discrete free boundary (Figure \ref{fig:fvmesh-leak}):
+Interior conservation \eqref{eq:fvlocalconservation} reduces the remaining sum to one over edges between wet and dry cells.  We call this residual sum the \emph{boundary leak} (Figure \ref{fig:fvmesh-leak}):
 \begin{equation}
-B_n^h = \Delta t_n \sum_{u_j^n > 0, u_k^n = 0, k\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)}. \label{eq:fvdefineleak}
+B_n^h = \Delta t_n \sum_{u_n^j > 0, u_n^k = 0, k\in\mathcal{E}_j} Q_n^{(j,k)} \ell_{(j,k)}. \label{eq:fvdefineleak}
 \end{equation}
-These time-series allow us to write \eqref{eq:fvnewbalance} as a fully-discrete balance replacing \eqref{eq:newbalance}:
+This is the net amount of unbalanced flux along the discrete free boundary.
+
+These time series allow us to replace \eqref{eq:newbalance} with a fully-discrete balance:
 \begin{equation}
   M_n^h = M_{n-1}^h + C_n^h - R_n^h - B_n^h. \label{eq:fvfinalbalance}
 \end{equation}
-Note that the mass $M_n^h$ and the retreat loss $R_n^h$ are nonnegative while the climate input $C_n^h$ and the boundary leak $B_n^h$ can be of either sign.
+Note that the masses $M_n^h$ and the retreat losses $R_n^h$ are nonnegative while the climate inputs $C_n^h$ and the boundary leaks $B_n^h$ can be of either sign.
 
-The boundary leak is a numerical error in the sense that the continuous-space flux along the free-boundary is zero because of the regularity of the solution ($u_n \in W_0^{1,p}(\Omega)$) and by flux conditions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.  If the free boundary is well-behaved, which is beyond our scope to show even under strong assumptions on the data, and which is nontrivially related to the substrate topography, then we expect $B_n^h\to 0$ as $h\to 0$.  Contrast the retreat loss $R_n^h$; it is also a numerical error but it appears in time semi-discretization.  In summary, we may report computable time-series $\{M_n^h,C_n^h,R_n^h,B_n^h\}$, which balance as in \eqref{eq:fvfinalbalance}, up to rounding error, in a free-boundary FV computation.
+The boundary leak is a numerical error caused by the spatial discretization.  That is, the continuous-space flux along the free-boundary is zero because of the regularity of the solution ($u_n \in W_0^{1,p}(\Omega)$) and by flux conditions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}.  Note that if the free boundary is well-behaved, which is beyond our scope to show even under strong assumptions on the data, and which is nontrivially related to the substrate topography \cite{Bueler2016}, then we expect $B_n^h\to 0$ as $h\to 0$.  Contrast the retreat loss $R_n^h$; it is also a numerical error but it appears in time semi-discretization and it should stabilize at nonzero values under spatial refinement.
 
 \begin{figure}[ht]
 \begin{center}
@@ -641,31 +641,32 @@ The boundary leak is a numerical error in the sense that the continuous-space fl
 \label{fig:fvmesh-leak}
 \end{figure}
 
-\subsection{Complementarity and cell-wise conservation}  \label{subsec:ncp}  The continuous-space, discrete-time weak formulation we propose in Sections \ref{sec:weakform} and \ref{sec:wellposed}, using variational inequalities (VIs) \eqref{eq:theVI}, would typically be solved using finite element (FE) discretization \cite[for example]{CalvoDuranyVazquez2000,JouvetBueler2012,
-JouvetBuelerGraeserKornhuber2013}.  On the other hand we have just applied the FV language of discrete conservation.  These views can be harmonized by observing that a VI is equivalent to a complementarity problem \cite{FacchineiPang2003,KinderlehrerStampacchia1980}.  Practical solver algorithms, and clearer intuition, can result from this observation.  The schemes described next are (simultaneously) $W_0^{1,p}$-conforming and implementable using finite-dimensional complementarity-problem solvers (see below).
+In summary, in a free-boundary FV computation we may report computable time series $\{M_n^h,C_n^h,R_n^h,B_n^h\}$ which balance as in \eqref{eq:fvfinalbalance} (up to rounding error).  Time series $R_n^h$ and $B_n^h$ are conservation errors intrinsic to free-boundary fluid layer models.
 
-Suppose we discretize using an FE subspace $S^h \subset \mathcal{X} = W_0^{1,p}(\Omega)$ of dimension $m$, based on a triangulation (or other mesh) of $\Omega$ with resolution $h$.  Consider problem \eqref{eq:theVI} on this space, namely
+\subsection{Complementarity and cell-wise conservation}  \label{subsec:ncp}  The continuous-space, discrete-time weak formulation in Sections \ref{sec:weakform} and \ref{sec:wellposed}, using variational inequalities (VIs) \eqref{eq:theVI}, would often be solved using finite element (FE) discretization \cite[for example]{CalvoDuranyVazquez2000,JouvetBueler2012,
+JouvetBuelerGraeserKornhuber2013}, but we have just applied the FV language of discrete conservation.  These views can be harmonized by observing that a VI is equivalent to a complementarity problem \cite{FacchineiPang2003,KinderlehrerStampacchia1980}, and practical solver algorithms and clearer intuition can result from this observation.  The schemes described next are both conforming and implementable using finite-dimensional complementarity-problem solvers.
+
+Suppose we discretize using an FE subspace $S^h \subset \mathcal{X} = W_0^{1,p}(\Omega)$, with a nodal basis of $m$ hat functions, based on a triangulation (or other mesh) of $\Omega$ with resolution $h$.  Consider problem \eqref{eq:theVI} on this space, namely
 \begin{equation}
 \ip{A_n(u_n^h)}{v^h-u_n^h} \ge 0 \quad \text{for all } v \in \mathcal{K} \cap S^h,   \label{eq:FEtheVI}
 \end{equation}
-where $A_n$ is given by \eqref{eq:defineAn} and (as usual) $\mathcal{K} = \{u\in \mathcal{X}\,\big|\,u\ge 0\}$.  Under the same Section \ref{sec:wellposed} hypotheses considered for \eqref{eq:theVI}, we assume problem \eqref{eq:FEtheVI} is well-posed for the numerical solution $u_n^h \in \mathcal{K} \cap S^h$.  Next suppose there is an admissible nodal basis $\{\psi_i\}$ of $S^h$, i.e.~such that $\psi_i(x)\ge 0$ on $\Omega$ and $v(x) = \sum_i v(x_i) \psi_i(x)$ for some nodes $x_i$.  (For example, the usual hat-function bases for $P_1$ and $Q_1$ elements would satisfy this hypothesis, but not the nodal $P_2$ basis \cite{Elmanetal2014}.)  Then we can represent the FE solution $u_n^h$ by a vector $\tilde u \in \RR_+^m$, i.e.~such that $u_i = u_n^h(x_i) \ge 0$.
+where $A_n$ is given by \eqref{eq:defineAn} and (as usual) $\mathcal{K} = \{u\in \mathcal{X}\,\big|\,u\ge 0\}$.  Under the same Section \ref{sec:wellposed} hypotheses considered for \eqref{eq:theVI}, we assume problem \eqref{eq:FEtheVI} is well-posed for $u_n^h \in \mathcal{K} \cap S^h$.  Next we suppose the nodal basis $\{\psi_i\}$ of $S^h$ is admissible so that $\psi_i(x)\ge 0$ on $\Omega$ and $v(x) = \sum_{i=1}^m v(x_i) \psi_i(x)$ for the nodes $x_i$.  (For example, the usual hat-function bases for $P_1$ and $Q_1$ elements would satisfy this hypothesis, but not the nodal $P_2$ basis \cite{Elmanetal2014}.)  Then we can represent the FE solution $u_n^h$ by a vector $\tilde u \in \RR_+^m$, i.e.~$\tilde u_i = u_n^h(x_i) \ge 0$.
 
-Up to isomorphism the nonlinear operator in FE formulation \eqref{eq:FEtheVI} is a map $\tilde A:\RR_+^m \to (\RR^m)'$ with entries $\tilde A(\tilde u)^i = \ip{A_n(u_n^h)}{\psi_i} \in \RR$.  The finite-dimensional VI \eqref{eq:FEtheVI} is equivalent to the nonlinear complementarity problem (NCP)
+Up to isomorphism the nonlinear operator in FE formulation \eqref{eq:FEtheVI} is a map $\tilde A:\RR_+^m \to \RR^m$ with entries $\tilde A(\tilde u)^i = \ip{A_n(u_n^h)}{\psi_i} \in \RR$.  The finite-dimensional VI \eqref{eq:FEtheVI} is equivalent to the nonlinear complementarity problem (NCP)
 \begin{equation}
 \tilde u_i \ge 0, \quad \tilde A(\tilde u)^i \ge 0, \quad \tilde u_i \tilde A(\tilde u)^i = 0 \label{eq:FEtheNCP}
 \end{equation}
-\cite[Theorem I.5.5]{KinderlehrerStampacchia1980}; see also \cite{FacchineiPang2003}.  The final complementarity condition in \eqref{eq:FEtheNCP} can be regarded either entrywise or as an inner-product because of the nonnegativity of the factors.  Problem \eqref{eq:FEtheNCP} is nonlinear even if the operator $A_n$ is linear, and thus iteration is expected in any numerical solution.  Scalable Newton schemes for NCP problems are described in \cite{BensonMunson2006}; relevant applications appear in \cite{Brinkerhoffetal2017,Bueler2016}.
+\cite[Theorem I.5.5]{KinderlehrerStampacchia1980}; see also \cite{FacchineiPang2003}.  (By nonnegativity of the factors the final complementarity condition in \eqref{eq:FEtheNCP} can be regarded either entrywise or as an inner-product.)  NCP \eqref{eq:FEtheNCP} is nonlinear even if the operator $A_n$ is linear, and thus iteration is expected in any numerical solution.  Scalable Newton schemes for NCP problems are described in \cite{BensonMunson2006}; relevant applications appear in \cite{Brinkerhoffetal2017,Bueler2016}.
 
 In our fluid-layer context the intuition behind NCP \eqref{eq:FEtheNCP} is straightforward.  Namely, at convergence of the numerical solver:
-\renewcommand{\labelenumi}{(\roman{enumi})}
-\begin{enumerate}
-\item the layer thickness at each node is nonnegative,
-\item the balance between flow and climate inputs, represented by the residual of the operator $A_n$ in the direction of test function $\psi_i$, never removes more mass than was already present, and
-\item either the thickness is zero or the flow and climate are in exact balance.
-\end{enumerate}
+\begin{itemize}[leftmargin=25mm]
+\item[$\tilde u_i\ge 0$\,:] the layer thickness at each node $x_i$ is nonnegative,
+\item[$\tilde A(\tilde u)^i \ge 0$\,:] the balance between flow and climate inputs, represented by the residual of the operator $A_n$ in the direction of test function $\psi_i$, never removes more mass than was already present, and
+\item[$\tilde u_i \tilde A(\tilde u)^i = 0$\,:] at each location $x_i$ either the thickness is zero or the flow and climate are in exact balance.
+\end{itemize}
 
 \smallskip
-When the value $\tilde A(\tilde u)^i = \ip{A_n(u_n^h)}{\psi_i}$ is zero then mass conservation (balance) equation \eqref{eq:semimassconserve} holds at node $x_i$ in an FE sense.  That is, a weighted-average of the integrand in \eqref{eq:defineAn}, over the support of $\psi_i(x)$, is zero.  Tradition and climate-modeling practice regards such an averaged sense of discrete balance as inferior to exact local balance \eqref{eq:fvlocalconservation}, but one may adapt \eqref{eq:FEtheNCP} to an FV view by assuming that for each FE node $x_i$ there is a unique corresponding FV cell $\omega_i$ (Subsection \ref{subsec:spacenotation}).  The schemes in \cite{Bueler2016,EwingLinLin2002,Ringleretal2013}, for example, satisfy this condition.  Generally such a scheme can be interpreted as having ``dual meshes,'' namely cells for conservation plus a mesh for representing the solution \cite{Ringleretal2013}, but in fact we will need no detailed assumptions about the correspondence in the following computations.
+When a value $\tilde A(\tilde u)^i$ is zero then mass conservation (balance) equation \eqref{eq:semimassconserve} holds at node $x_i$ in an FE sense.  That is, a weighted-average of the integrand in \eqref{eq:defineAn}, over the support of $\psi_i(x)$, is zero.  Tradition and climate-modeling practice regards such an averaged sense of discrete balance as inferior to exact local balance \eqref{eq:fvlocalconservation}.  However, we may adapt \eqref{eq:FEtheNCP} to an FV view by assuming that for each FE node $x_i$ there is a unique corresponding FV cell $\omega_i$ (Subsection \ref{subsec:spacenotation}).  Schemes satisfying this condition, such as \cite{Bueler2016,EwingLinLin2002,Ringleretal2013}, have a ``dual mesh,'' namely cells for conservation plus a mesh for representing the solution.  Note we will need no detailed assumptions about the mesh correspondence in the following computations.
 
 Suppose we compute the residual using the characteristic function of each cell:
 \begin{align}
