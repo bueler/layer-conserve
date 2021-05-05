@@ -193,37 +193,37 @@ so that
 \begin{equation}
 \Omega = \Omega_n \cup \Omega_n^r \cup \Omega_n^{00}.  \label{eq:omegadecomposition}
 \end{equation}
-Here the superscript ``$r$'' stands for ``retreat,'' and we call $\Omega_n^r$ the \emph{retreat set}.  Figure \ref{fig:domains} illustrates this decomposition.  If $u_n$ and $u_{n-1}$ are continuous then $\Omega_n$ is open while $\Omega_n^{00}$ is closed in $\Omega$.
+Here the superscript ``$r$'' stands for ``retreat,'' and we call $\Omega_n^r$ the \emph{retreat set}.  Figure \ref{fig:domains} illustrates this decomposition.  Note that if $u_n$ and $u_{n-1}$ are continuous then $\Omega_n$ is open while $\Omega_n^{00}$ is closed (in $\Omega$).
 
 \begin{figure}[ht]
 \medskip
 \begin{center}
 \includegraphics[width=2.3in,keepaspectratio=true]{figs/domains-fig}
 \end{center}
-\caption{A solution to \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint} will decompose $\Omega$ as described in \eqref{eq:omegadecomposition}.}
+\caption{A solution to \eqref{eq:semimassconserve} and \eqref{eq:semiconstraint} decomposes $\Omega$ as described in \eqref{eq:omegadecomposition}.}
 \label{fig:domains}
 \end{figure}
 
-One may rewrite \eqref{eq:semimassconserve} as
+One may of course rewrite \eqref{eq:semimassconserve} as
 \begin{equation}
 u_n = u_{n-1} + \Delta t_n\, F_n - \Delta t_n\, \Div \bQ_n.  \label{eq:strongflat}
 \end{equation}
-The constraint $u_n \ge 0$ implies that the terms on the right side of \eqref{eq:strongflat} sum to a nonnegative number.  Because also $u_{n-1}\ge 0$ and $\Delta t_n > 0$, we expect that in the interior of $\Omega_n^r \cup \Omega_n^{00}$ where $\Div \bQ_n=0$ (see \eqref{eq:Qiszero} below), an inequality holds:
+The constraint $u_n \ge 0$ implies that the terms on the right side of \eqref{eq:strongflat} must sum to a nonnegative number.  While equation \eqref{eq:strongflat} applies where $u_n>0$, because $u_{n-1}\ge 0$ and $\Delta t_n > 0$ we expect that in the interior of $\Omega_n^r \cup \Omega_n^{00}$, where $\Div \bQ_n=0$ (see \eqref{eq:Qiszero} below), an inequality instead holds:
 \begin{equation}
 u_{n-1} + \Delta t_n\, F_n \le 0. \label{eq:strongconditionwherezero}
 \end{equation}
-Thus also $F_n \le 0$ on the same set.  The intuition behind \eqref{eq:strongconditionwherezero}, used below in deriving the weak form, is that the source term will be nonpositive in a zero-thickness location.
+Thus also $F_n \le 0$ on the same set.  Inequality \eqref{eq:strongconditionwherezero}, used below in deriving the weak form, says that the source term must be nonpositive in a zero-thickness location.
 
 
 \section{Weak formulation of the single time-step problem}  \label{sec:weakform}
 
-The strong form \eqref{eq:semimassconserve}, \eqref{eq:semiconstraint} of the single time-step problem is in fact not adequate for mathematical progress.  PDE \eqref{eq:semimassconserve} applies only on the set $\Omega_n$ where its solution $u_n$ is positive.  Likewise, inequality \eqref{eq:strongconditionwherezero} applies on the set where $u_n=0$.  Thus we have ``posed'' a problem in terms of its solution.  The strong form is also inadequate because the boundary conditions satisfied by $u_n$ along the free boundary $\partial\Omega_n$ are not clear.  By contrast, the weak form in this section, a variational inequality \cite{Friedman1982,KinderlehrerStampacchia1980} on a convex set of admissible functions, refers only to the set $\Omega$ and its boundary $\partial\Omega$, and not to the sets in \eqref{eq:omegadecomposition}.  The problem is posed without knowledge about the free boundary.
+The form of the single time-step problem in \eqref{eq:semimassconserve}, \eqref{eq:semiconstraint} is in fact not adequate for mathematical progress.  PDE \eqref{eq:semimassconserve} applies only where its solution $u_n$ is positive, and inequality \eqref{eq:strongconditionwherezero} applies on the set where $u_n=0$, so we have ``posed'' a problem in terms of its solution.  This form is also inadequate because the boundary conditions satisfied by $u_n$ along the free boundary $\partial\Omega_n$ are not clear.  By contrast, the weak form in this section, a variational inequality \cite{Friedman1982,KinderlehrerStampacchia1980} on a convex set of admissible functions, refers only to the set $\Omega$ and its boundary $\partial\Omega$, and not to the sets in \eqref{eq:omegadecomposition}.
 
-\subsection{Flux assumptions} \label{subsec:fluxassumptions}  This Subsection considers certain conditions on the discrete-time flux $\bQ_n$ which are sufficient to allow construction of a variational inequality (Subsection \ref{subsec:derivevi}), a smooth solution of which will also solve the strong-form problem (Subsection \ref{subsec:interior}).  Let $p\ge 1$.  Recall that the Sobolev space $W^{1,p}(\Omega)$ \cite{Evans2010} is the set of $v \in L^p(\Omega)$ satisfying $\partial_1 v,\dots,\partial_d v \in L^p(\Omega)$ and with norm
+\subsection{Flux assumptions} \label{subsec:fluxassumptions}  We now state certain conditions on the discrete-time flux $\bQ_n$ which are sufficient to allow construction of a variational inequality (Subsection \ref{subsec:derivevi}), a smooth solution of which will also solve the strong-form problem in Subsection \ref{subsec:interior}.  Let $p\ge 1$.  Recall that the Sobolev space $W^{1,p}(\Omega)$ \cite{Evans2010} is the set of $v \in L^p(\Omega)$ satisfying $\partial_1 v,\dots,\partial_d v \in L^p(\Omega)$ and with norm
 \begin{equation}
   \|v\|_{1,p} = \left(\|v\|_{L^p}^p + \sum_{i=1}^d \|\partial_i v\|_{L^p}^p\right)^{1/p}.  \label{eq:norm}
 \end{equation}
-If $p>d$ then $v\in W^{1,p}(\Omega)$ has a continuous representative \cite[``Morrey's inequality'']{Evans2010}, but otherwise $v$ may be discontinuous.  Denote by $W_0^{1,p}(\Omega)$ the closure of $C_c^\infty(\Omega)$ in $W^{1,p}(\Omega)$.  Also assume $\frac{1}{p}+\frac{1}{q}=1$.
+If $p>d$ then $v\in W^{1,p}(\Omega)$ has a continuous representative \cite[``Morrey's inequality'']{Evans2010}, but otherwise $v$ may be discontinuous.  Denote by $W_0^{1,p}(\Omega)$ the closure of $C_c^\infty(\Omega)$ in $W^{1,p}(\Omega)$ and assume $p^{-1} + q^{-1} = 1$.
 
 \begin{definition}  \label{ass:std}  We say $\bQ_n$ satisfies the \emph{standard flux assumptions} if
 \renewcommand{\labelenumi}{\emph{\roman{enumi}})}
@@ -242,32 +242,32 @@ If $p>d$ then $v\in W^{1,p}(\Omega)$ has a continuous representative \cite[``Mor
 \end{equation}
 \end{enumerate}
 \end{definition}
-Condition \eqref{eq:Qiszero} says that the mass flux in a zero-thickness fluid layer is zero.  Note that $\grad v = 0$ a.e.~on $E_v$ \cite[lemma A.4 in chapter II]{KinderlehrerStampacchia1980}.
+The third assumption says that the mass flux in a zero-thickness fluid layer is zero.  Note that $\grad v = 0$ a.e.~on $E_v$ \cite[lemma A.4 in chapter II]{KinderlehrerStampacchia1980}.
 
 Regarding the source term $F_n$ we assume only that if $v\in W^{1,p}(\Omega)$ then
 \begin{equation}
 F_n(v,x) \in L^q(\Omega).  \label{eq:FisLq}
 \end{equation}
 
-\subsection{A variational inequality weak formulation}  \label{subsec:derivevi}  To derive a weak form we need an extra smoothness assumption on $\bQ_n$:  For all open $S \subset \Omega$, if $v\in W^{1,p}(S)$ then
+\subsection{A variational inequality weak formulation}  \label{subsec:derivevi}  To derive the weak form we need an extra smoothness assumption on $\bQ_n$:  For all open $S \subset \Omega$, if $v\in W^{1,p}(S)$ then
 \begin{equation}
 \frac{\partial}{\partial x_i} \bQ_n(\grad v,v,x) \in L^q(S). \label{eq:Qissmooth}
 \end{equation}
 This assumption will not be needed in later analysis of well-posedness of the resulting weak form (Section \ref{sec:wellposed}) or conservation errors (Sections \ref{sec:timeseries}--\ref{sec:spacediscretized}).
 
-\begin{theorem} \label{thm:strongimpliesweak}  Suppose $u_n \in C(\overline{\Omega}) \cap W^{1,p}(\Omega)$ is a nonnegative function which solves \eqref{eq:semimassconserve} on $\Omega_n$ and \eqref{eq:strongconditionwherezero} on the interior of $\Omega_n^r \cup \Omega_n^{00}$.  Suppose the boundaries of the sets $\Omega_n$ and $\Omega_n^r \cup \Omega_n^{00}$ in decomposition \eqref{eq:omegadecomposition} are Lipschitz, and that $\overline{\Omega_n} \subset \Omega$.  Suppose $\bQ_n$ and $F_n$ satisfy the standard flux assumptions, \eqref{eq:Qissmooth}, and \eqref{eq:FisLq}, respectively.  Suppose $\bQ = \bQ_n(\grad u_n,u_n,x)$ and $F=F_n(u_n,x)$ are continuous.  Then
+\begin{theorem} \label{thm:strongimpliesweak}  Suppose $u_n \in C(\overline{\Omega}) \cap W^{1,p}(\Omega)$ is a nonnegative function which solves \eqref{eq:semimassconserve} on $\Omega_n$ and \eqref{eq:strongconditionwherezero} on the interior of $\Omega_n^r \cup \Omega_n^{00}$.  Assume the boundaries of the sets $\Omega_n$ and $\Omega_n^r \cup \Omega_n^{00}$ in decomposition \eqref{eq:omegadecomposition} are Lipschitz, and that $\overline{\Omega_n} \subset \Omega$.  Suppose $\bQ_n$ satisfies the standard flux assumptions and \eqref{eq:Qissmooth}, $F_n$ satisfies \eqref{eq:FisLq}, and $\bQ = \bQ_n(\grad u_n,u_n,x)$ and $F=F_n(u_n,x)$ are continuous.  Then
 \begin{equation}
 -\int_{\Omega} \bQ \cdot \grad(v-u_n) \ge \int_{\Omega} \left(F - \frac{u_n - u_{n-1}}{\Delta t_n}\right) (v-u_n) \label{eq:morallytheVI}
 \end{equation}
 for any $v \in C(\overline{\Omega}) \cap W^{1,p}(\Omega)$ such that $v \ge 0$.
 \end{theorem}
 
-\begin{proof}  Let $w=v-u_n$.  Using decomposition \eqref{eq:omegadecomposition} and integration by parts we get
+\begin{proof}  Let $w=v-u_n$.  Using decomposition \eqref{eq:omegadecomposition} and integration by parts,
 \begin{align}
 -\int_{\Omega} \bQ \cdot \grad w &= \int_{\Omega_n} (\Div \bQ) w - \int_{\partial \Omega_n} (\bQ \cdot \bn) w \label{eq:intbypartsfromstrong} \\
   &\qquad\quad + \int_{\Omega_n^r \cup \Omega_n^{00}} (\Div \bQ) w - \int_{\partial(\Omega_n^r \cup \Omega_n^{00})} (\bQ \cdot \bn) w. \notag
 \end{align}
-(This needs assumption \eqref{eq:Qissmooth} on the sets $S=\Omega_n$ and $S=(\Omega_n^r \cup \Omega_n^{00})^\circ$.)  Because $u_n$ is continuous, $u_n=0$ on $\partial \Omega_n$ and on $\partial(\Omega_n^r \cup \Omega_n^{00})$.  Thus by continuity, \eqref{eq:Qiscontinuous}, and \eqref{eq:Qiszero} we see that $\bQ=0$ on these boundaries, so the boundary integrals in \eqref{eq:intbypartsfromstrong} are zero.  Now, by \eqref{eq:semimassconserve} on $\Omega_n$, and by \eqref{eq:Qiszero} and \eqref{eq:Qissmooth} we have $\Div \bQ=0$ a.e.~on $\Omega_n^r \cup \Omega_n^{00}$.  Thus we get
+(This needs assumption \eqref{eq:Qissmooth} on the sets $S=\Omega_n$ and $S=(\Omega_n^r \cup \Omega_n^{00})^\circ$.)  Because $u_n$ is continuous it follows that $u_n=0$ on $\partial \Omega_n$ and on $\partial(\Omega_n^r \cup \Omega_n^{00})$.  Thus by continuity, \eqref{eq:Qiscontinuous}, and \eqref{eq:Qiszero} we see that $\bQ=0$ on these boundaries, so the boundary integrals in \eqref{eq:intbypartsfromstrong} are zero.  Now, by \eqref{eq:semimassconserve} on $\Omega_n$, and by \eqref{eq:Qiszero} and \eqref{eq:Qissmooth} we have $\Div \bQ=0$ a.e.~on $\Omega_n^r \cup \Omega_n^{00}$.  Thus we get
 \begin{equation}
 -\int_{\Omega} \bQ \cdot \grad w = \int_{\Omega_n} \left(F - \frac{u_n - u_{n-1}}{\Delta t_n}\right) w. \label{eq:equalitybeforeVI}
 \end{equation}
@@ -280,11 +280,10 @@ Adding \eqref{eq:equalitybeforeVI} and \eqref{eq:inequalitybeforeVI} gives \eqre
 
 While this derivation of inequality \eqref{eq:morallytheVI} requires many hypotheses, it adequately motivates a weak formulation, as follows.  Fix $p>1$ and denote $\mathcal{X} = W_0^{1,p}(\Omega)$, with dual space $\mathcal{X}'$ and pairing $\ip{\cdot}{\cdot}: \mathcal{X}' \times \mathcal{X} \to \RR$.
 
-\begin{definition}
+\begin{definition}  The set of admissible layer thicknesses is the following closed and convex subset of $\mathcal{X}$:
 \begin{equation}
 \mathcal{K} = \left\{v \in \mathcal{X} \,\big|\, v(x) \ge 0\, \text{ a.e.~} x \in \Omega\right\}.  \label{eq:defineK}
 \end{equation}
-(This is a closed and convex subset of $\mathcal{X}$.)
 \end{definition}
 
 \begin{definition}  Suppose $u_{n-1}\in\mathcal{K}$ and $\Delta t_n>0$.  Assume that $\bQ_n$ satisfies the standard flux assumptions and that $F_n$ satisfies \eqref{eq:FisLq}.  Define $A_n:\mathcal{K} \to \mathcal{X}'$ by
@@ -303,44 +302,49 @@ Variational inequality (VI) \eqref{eq:theVI} is the same as \eqref{eq:morallythe
 
 \subsection{Interior condition}  \label{subsec:interior}  We now prove a converse of Theorem \ref{thm:strongimpliesweak} which makes no regularity assumptions on the set decomposition \eqref{eq:omegadecomposition}.
 
-\begin{theorem} \label{thm:weakimpliesstrong}  Assume $F_n$ satisfies \eqref{eq:FisLq} and $\bQ_n$ satisfies the standard flux assumptions plus \eqref{eq:Qissmooth}.  Choose $u_{n-1}\in\mathcal{K}$, and suppose that $u_n\in\mathcal{K}$ solves \eqref{eq:theVI}.  If $S \subset \Omega_n$ is open, $\overline{S}\subset \Omega$, and $u_n$ is continuous on $S$ then \eqref{eq:semimassconserve} applies a.e.~on $S$.  If $S \subset \Omega_n^r \cup \Omega_n^{00}$ is open then \eqref{eq:strongconditionwherezero} applies a.e.~on $S$.
+\begin{theorem} \label{thm:weakimpliesstrong}  Assume $F_n$ satisfies \eqref{eq:FisLq} and $\bQ_n$ satisfies the standard flux assumptions plus \eqref{eq:Qissmooth}.  Choose $u_{n-1}\in\mathcal{K}$, and suppose that $u_n\in\mathcal{K}$ solves \eqref{eq:theVI}.
+\renewcommand{\labelenumi}{(\roman{enumi})}
+\begin{enumerate}
+\item If $S \subset \Omega_n$ is open, $\overline{S}\subset \Omega$, and $u_n$ is continuous on $S$ then \eqref{eq:semimassconserve} applies a.e.~on $S$.
+\item If $S \subset \Omega_n^r \cup \Omega_n^{00}$ is open then \eqref{eq:strongconditionwherezero} applies a.e.~on $S$.
+\end{enumerate}
 \end{theorem}
 
-\begin{proof}  Let $\bQ = \bQ_n(\grad u_n,u_n,x)$ and $F=F_n(u_n,x)$.  For the case where $S \subset \Omega_n$, choose any $\phi\in C_c^\infty(S)$ and extend it by zero to all of $\Omega$; note that $\phi$ can have either sign, but that $\phi=0$ on $\partial\Omega$.  Let $v = u_n + \eps \phi$ and note that $v \in \mathcal{K}$ as long as $\eps\in\RR$ is sufficiently small in magnitude.  (Specifically, if $|\eps|\le \eps_0 = \min u_n(x) / \max |\phi(x)|$, with the minimum and maximum taken over the closure of the support of $\phi$, then $v \in \mathcal{K}$.)  It follows from \eqref{eq:theVI} that
+\begin{proof}  Let $\bQ = \bQ_n(\grad u_n,u_n,x)$ and $F=F_n(u_n,x)$.  Supposing $S \subset \Omega_n$ is open, choose any $\phi\in C_c^\infty(S)$ and extend it by zero to all of $\Omega$; note that $\phi$ can have either sign, but that $\phi=0$ on $\partial\Omega$.  Let $v = u_n + \eps \phi$ and note that $v \in \mathcal{K}$ as long as $\eps\in\RR$ is sufficiently small in magnitude.  (Specifically, if $|\eps|\le \eps_0 = \min u_n(x) / \max |\phi(x)|$, with the minimum and maximum taken over the closure of the support of $\phi$, then $v \in \mathcal{K}$.)  It follows from \eqref{eq:theVI} that
    $$\eps \int_\Omega \left(u_n - \Delta t_n\,F - u_{n-1}\right)\phi - \Delta t_n\,\bQ \cdot \grad \phi \ge 0.$$
 This is true for all sufficiently-small $\eps$, of either sign, and thus the integral is zero.  Integration by parts, using assumption \eqref{eq:Qissmooth} and $\phi\big|_{\partial\Omega}=0$, gives
    $$\int_\Omega \left[ u_n - \Delta t_n\,F - u_{n-1} + \Delta t_n\,\Div\bQ \right]\phi = 0.$$
-Because $\phi\in C_c^\infty(S)$ is arbitrary, the quantity in square brackets is zero a.e.~on $S$, i.e.~\eqref{eq:semimassconserve}.
+Because $\phi\in C_c^\infty(S)$ is arbitrary, the quantity in square brackets is zero a.e.~on $S$, i.e.~\eqref{eq:semimassconserve}, which proves \emph{(i)}.
 
 Now suppose $S \subset \Omega_n^r \cup \Omega_n^{00}$.  Choose any \emph{nonnegative} $\phi\in C_c^\infty(S)$, extend it by zero, and let $v = u_n + \phi$ so $v\in\mathcal{K}$.  Note $u_n=0$ on the support of $\phi$.  By assumptions \eqref{eq:Qiscontinuous} and \eqref{eq:Qiszero}, $\bQ=0$ on the support of $\phi$.  Thus by \eqref{eq:theVI},
     $$0 \ge \int_{\Omega} \left(u_{n-1} + \Delta t_n\, F\right) \phi,$$
 and it follows that \eqref{eq:strongconditionwherezero} a.e.~on $S$. \end{proof}
 
-Thus a solution of \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} where it is positive, but where it is zero inequality \eqref{eq:strongconditionwherezero} holds.  From now on we will use set decomposition \eqref{eq:omegadecomposition} only when referring to a solution $u_n$ of the weak form \eqref{eq:theVI}.
+Thus, under a regularity assumption \eqref{eq:Qissmooth} on $\bQ_n$, a solution of \eqref{eq:theVI} solves PDE \eqref{eq:semimassconserve} where it is positive, but where it is zero inequality \eqref{eq:strongconditionwherezero} holds.  From now on we will use set decomposition \eqref{eq:omegadecomposition} only when referring to a solution $u_n$ of the weak form \eqref{eq:theVI}, and we will not need assumption \eqref{eq:Qissmooth}.
 
 
 \section{Well-posedness of the time-step problem} \label{sec:wellposed}
 
 We show in this Section that a variety of different fluxes $\bQ_n$ yield well-posed VI problems \eqref{eq:theVI}.  Later, the \emph{a posteriori} analysis of conservation errors in Sections \ref{sec:timeseries} and \ref{sec:spacediscretized} will assume that \eqref{eq:theVI} is well-posed.
 
-Techniques for proving well-posedness of VIs in Banach spaces are relatively well-established for linear and some nonlinear elliptic problems, especially for the monotone operators \cite{KinderlehrerStampacchia1980} which we recall in Subsection \ref{subsec:mono}.  Thereby we prove existence and uniqueness of the solution to \eqref{eq:theVI} for certain flux cases in these Subsections:
+Techniques for proving well-posedness of VIs in Banach spaces are relatively well-established for linear and some nonlinear elliptic problems, especially for monotone operators \cite{KinderlehrerStampacchia1980}, which we recall next.  Thereby we prove existence and uniqueness of the solution to \eqref{eq:theVI} for certain flux cases in these Subsections:
 \begin{itemize}
 \item[\ref{subsec:plap}] $p$-Laplacian-type parabolic (diffusion) for $1<p<\infty$,
 \item[\ref{subsec:powertransform}] doubly-nonlinear parabolic, including porous media,
-\item[\ref{subsec:advect}] linear advective, with additional small diffusion term, and
+\item[\ref{subsec:advect}] linear advective, with small added diffusion term, and
 \item[\ref{subsec:nonlocal}] linear and non-local, computed by integrals over $\Omega$.
 \end{itemize}
-These Subsections only use the backward Euler time-stepping discretization, but the results can be extended to implicit $\theta$-methods, for example.  At the end, Subsection \ref{subsec:explicit} shows that if time-stepping is explicit then regularity issues generally block the time-step problems, as we have formulated them, from being well-posed.
+These subsections only use the backward Euler time-stepping discretization, but the results can be extended to implicit $\theta$-methods, for example.  At the end, Subsection \ref{subsec:explicit} shows that if time-stepping is explicit then regularity issues generally block these time-step problems from being well-posed.
 
-\subsection{Monotone variational inequalities} \label{subsec:mono}  Assume that $\mathcal{K}$ is a closed and convex subset of a Banach space $\mathcal{X}$.  The following definitions can be found in \cite{KinderlehrerStampacchia1980}.  A mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{monotone} if, for all $u,v\in\mathcal{K}$,
+\subsection{Monotone variational inequalities} \label{subsec:mono}  Assume that $\mathcal{K}$ is any closed and convex subset of a Banach space $\mathcal{X}$.  The following definitions can be found in \cite{KinderlehrerStampacchia1980}.  A mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{monotone} if, for all $u,v\in\mathcal{K}$,
 \begin{equation}
    \ip{A(u) - A(v)}{u-v} \ge 0.  \label{eq:monodef}
 \end{equation}
-It is \emph{strictly monotone} if, in addition, equality in \eqref{eq:monodef} implies $u=v$.  Mapping $A$ is \emph{coercive} if there is $\phi\in \mathcal{K}$ so that
+(This holds if $A$ is linear and positive semi-definite.)  It is \emph{strictly monotone} if equality in \eqref{eq:monodef} implies $u=v$.  Mapping $A$ is \emph{coercive} if there is $\phi\in \mathcal{K}$ so that
 \begin{equation}
-   \lim_{\|u\|\to\infty} \frac{\ip{A(u) - A(\phi)}{u-\phi}}{\|u-\phi\|} = +\infty, \label{eq:coercivedef}
+   \lim_{\|u\|_{\mathcal{X}}\to\infty} \frac{\ip{A(u) - A(\phi)}{u-\phi}}{\|u-\phi\|_{\mathcal{X}}} = +\infty, \label{eq:coercivedef}
 \end{equation}
-where the limit is taken over $u\in\mathcal{K}$.  Finally, a mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{continuous on finite-dimensional subspaces} if for each finite-dimensional subspace $\mathcal{M} \subset \mathcal{X}$ the restriction $A : \mathcal{K}\cap \mathcal{M} \to \mathcal{X}'$ is weakly-continuous.  The theory of monotone VIs in Banach spaces \cite[chapter III]{KinderlehrerStampacchia1980} shows that a solution to a VI like \eqref{eq:theVI}, namely $\ip{A(u)}{v-u} \ge 0$ for all $v\in\mathcal{K}$, exists and is unique if $A$ is strictly monotone, coercive, and continuous on finite-dimensional subspaces, and that strict monotonicity alone suffices for uniqueness.
+where the limit is taken over $u\in\mathcal{K}$.  Finally, a mapping $A : \mathcal{K} \to \mathcal{X}'$ is \emph{continuous on finite-dimensional subspaces} if for each finite-dimensional subspace $\mathcal{M} \subset \mathcal{X}$ the restriction $A : \mathcal{K}\cap \mathcal{M} \to \mathcal{X}'$ is weakly-continuous.  The theory of monotone VIs in Banach spaces \cite[chapter III]{KinderlehrerStampacchia1980} shows that a solution to a VI like \eqref{eq:theVI}, namely $\ip{A(u)}{v-u} \ge 0$ for all $v\in\mathcal{K}$, exists and is unique if $A$ is strictly monotone, coercive, and continuous on finite-dimensional subspaces.
 
 Consider \eqref{eq:theVI} with $A_n$ defined by \eqref{eq:defineAn}.  It is easy to show the following lemma.
 
@@ -359,7 +363,9 @@ Now we want to relate the properties of the flux $\bQ_n$ to the monotonicity and
    &\ip{A_n(u) - A_n(v)}{u-v}  \label{eq:AtoQcalculation} \\
    &\qquad = \int_\Omega (u-v)^2 - \Delta t_n\, \left[\bQ_n(\grad u,u,x) - \bQ_n(\grad v,v,x)\right] \cdot \grad(u-v).  \notag
 \end{align}
-Observe that in cases where $\bQ_n(\grad u,u,x)$ is proportional to $\grad u$ we expect that, for usable models, the flux $\bQ_n$ points generally in the direction of the negative of $\grad u$, as otherwise PDE \eqref{eq:massconserve} would behave like the ill-posed backward heat equation.  The proof of the following lemma is an easy consequence of \eqref{eq:AtoQcalculation} (and is omitted).  Note that $W^{1,p}(\Omega) \subset L^2(\Omega)$ if either $p>d$ or $d\le 2$ \cite[theorems 5.6.2 and 5.6.5]{Evans2010}.
+Observe that in cases where $\bQ_n(\grad u,u,x)$ is proportional to $\grad u$ we expect that, for usable models, the flux $\bQ_n$ points generally in the direction of the negative of $\grad u$.  (Otherwise PDE \eqref{eq:massconserve} would behave as the ill-posed backward heat equation.)
+
+The proof of the following lemma is an easy consequence of \eqref{eq:AtoQcalculation} (and is omitted).  Note that $W^{1,p}(\Omega) \subset L^2(\Omega)$ if either $p>d$ or $d\le 2$ \cite[theorems 5.6.2 and 5.6.5]{Evans2010}.
 
 \begin{lemma}  \label{lem:monotonecoercive}  Suppose $W^{1,p}(\Omega) \subset L^2(\Omega)$.  Suppose \eqref{eq:QisLq} and that $F_n=F_n(x) \in L^q(\Omega)$.  Then
 \renewcommand{\labelenumi}{(\roman{enumi})}
@@ -371,9 +377,8 @@ Observe that in cases where $\bQ_n(\grad u,u,x)$ is proportional to $\grad u$ we
 \item  $A_n$ is strictly-monotone if \eqref{eq:Qnmonotone} holds with $C<1$,
 \item  $A_n$ is coercive if there is $c>0$ and $r>1$ so that, for all $u,v \in \mathcal{K}$,
 \begin{equation}
-\int_\Omega \left[\bQ_n(\grad u,u,x) - \bQ_n(\grad v,v,x)\right] \cdot \grad(u-v) \le - c \|u-v\|^r. \label{eq:Qncoercive}
+\int_\Omega \left[\bQ_n(\grad u,u,x) - \bQ_n(\grad v,v,x)\right] \cdot \grad(u-v) \le - c \|u-v\|_{1,p}^r. \label{eq:Qncoercive}
 \end{equation}
-(The right side of \eqref{eq:Qncoercive} uses the norm in $W^{1,p}(\Omega)$.)
 \end{enumerate}
 \end{lemma}
 
@@ -386,7 +391,7 @@ Inequality \eqref{eq:Qncoercive} implies \eqref{eq:Qnmonotone} with $C=0$, so \e
 \begin{equation}
   \bQ_n(\grad u) = - k |\grad u|^{p-2} \grad u \label{eq:plapflux}
 \end{equation}
-with $k>0$ and $1<p<\infty$, so that $\bQ_n$ satisfies the standard flux assumptions.  Formula \eqref{eq:plapflux} includes the linear (Fourier/Fick's law) flux as the $p=2$ case.  For the proofs in this subsection we assume $F_n=F_n(x)$ is independent of $u$, and we use inequalities from Appendix \ref{app:pinequalities}.
+with $k>0$ and $1<p<\infty$, so that $\bQ_n$ satisfies the standard flux assumptions.  Formula \eqref{eq:plapflux} includes the linear (Fourier/Fick's law) flux as the $p=2$ case.  For the proofs in this subsection we assume $F_n=F_n(x)$ is independent of $u$, and we use inequalities from Appendix \ref{app:pinequalities}.  In the next four subsections we denote $\|\cdot\|$ for $\|\cdot\|_{1,p}$.
 
 \begin{theorem}  \label{thm:plapwellposed}  If $\Omega\subset \RR^d$ is bounded, $1<p<\infty$, $F_n=F_n(x)$ is independent of $u$, and $\bQ_n$ is given by \eqref{eq:plapflux} with $k>0$, then for any $\Delta t_n>0$, \eqref{eq:theVI} has a unique solution $u\in\mathcal{K}$.
 \end{theorem}
@@ -395,31 +400,31 @@ with $k>0$ and $1<p<\infty$, so that $\bQ_n$ satisfies the standard flux assumpt
     $$\int_\Omega \left(\bQ_n(\grad u) - \bQ_n(\grad v)\right)\cdot (\grad u - \grad v) \le - \frac{k}{2^{p-2}} \int_\Omega |\grad u - \grad v|^p \le - \frac{k}{C 2^{p-2}} \|u-v\|^p$$
 and thus \eqref{eq:Qncoercive} holds with $r=p$.  However, if  $1<p<2$ then we have to work harder.  Coercivity can be shown, but not via \eqref{eq:Qncoercive}.  Using \eqref{eq:psmallinequality}, \eqref{eq:smallpbound}, and \eqref{eq:poincare} gives
 \begin{align*}
-\ip{A_n(u) - A_n(v)}{u-v} &\ge \|u-v\|_{L^2(\Omega)}^2 + \Delta t_n\,k (p-1) \int_\Omega \frac{|\grad u - \grad v|^2}{\left(|\grad u|+|\grad v|\right)^{2-p}} \\
-  &\ge \|u-v\|_{L^2(\Omega)}^2 + \Delta t_n\,k (p-1) \frac{\|\grad u - \grad v\|_{L^p(\Omega; \RR^d)}^2}{\big\||\grad u|+|\grad v|\big\|_{L^p(\Omega)}^{2-p}} \\
-  &\ge \|u-v\|_{L^2(\Omega)}^2 + B\, \frac{\|u - v\|^2}{\big\||\grad u|+|\grad v|\big\|_{L^p(\Omega)}^{2-p}}
+\ip{A_n(u) - A_n(v)}{u-v} &\ge \|u-v\|_{L^2}^2 + \Delta t_n\,k (p-1) \int_\Omega \frac{|\grad u - \grad v|^2}{\left(|\grad u|+|\grad v|\right)^{2-p}} \\
+  &\ge \|u-v\|_{L^2}^2 + \Delta t_n\,k (p-1) \frac{\|\grad u - \grad v\|_{L^p}^2}{\big\||\grad u|+|\grad v|\big\|_{L^p}^{2-p}} \\
+  &\ge \|u-v\|_{L^2}^2 + B\, \frac{\|u - v\|^2}{\big\||\grad u|+|\grad v|\big\|_{L^p}^{2-p}}
 \end{align*}
-where $B = \Delta t_n\,k (p-1) C(\Omega,p)^{-2/p} >0$.  This shows $\ip{A_n(u) - A_n(v)}{u-v} \ge \|u-v\|_{L^2(\Omega)}^2$, thus $A_n$ is strictly-monotone.  Fixing $v$ such that $\|\grad v\|_{L^p(\Omega;\RR^d)} >0$, we have
+where $B = \Delta t_n\,k (p-1) C(\Omega,p)^{-2/p} >0$.  This shows $\ip{A_n(u) - A_n(v)}{u-v} \ge \|u-v\|_{L^2(\Omega)}^2$, thus $A_n$ is strictly-monotone.  Fixing $v$ such that $\|\grad v\|_{L^p} >0$, we have
 \begin{equation*}
-\frac{\ip{A_n(u) - A_n(v)}{u-v}}{\|u-v\|} \ge B\, \frac{\|u - v\|}{\big\||\grad u|+|\grad v|\big\|_{L^p(\Omega)}^{2-p}} \to \infty
+\frac{\ip{A_n(u) - A_n(v)}{u-v}}{\|u-v\|} \ge B\, \frac{\|u - v\|}{\big\||\grad u|+|\grad v|\big\|_{L^p}^{2-p}} \to \infty
 \end{equation*}
-as $\|u\|\to\infty$, because $0<2-p<1$, thus $A_n$ is coercive. \end{proof}
+as $\|u\|\to\infty$, because $0<2-p<1$, and thus $A_n$ is coercive. \end{proof}
 
 \subsection{Doubly-nonlinear fluxes} \label{subsec:powertransform}  Now consider the flux formula
 \begin{equation}
   \bQ_n(\grad u,u) = - k u^r |\grad u|^{p-2} \grad u \label{eq:doubleflux}
 \end{equation}
-where $k>0$, $r\ge 0$, and $1<p<\infty$.  This includes, as the $r=0$ case, the $p$-Laplacian \eqref{eq:plapflux}, but it also includes the porous medium equation \cite{Vazquez2007}, where $p=2$, $r=\gamma-1$, and thus $\bQ_n = - \tilde k \grad(u^\gamma)$.  Flux for the diffusive shallow water equations \cite{AlonsoSantillanaDawson2008}, which has nontrivial powers $1<r<2$ and $1<p\le 2$, is included, as is the flat-bed shallow ice approximation \cite{CalvoDuranyVazquez2000} flux with $r=n+2$ and $p=n+1$ for $n>1$.
+where $k>0$, $r\ge 0$, and $1<p<\infty$.  This includes, as the $r=0$ case, the $p$-Laplacian \eqref{eq:plapflux}, but it also includes the porous medium equation \cite{Vazquez2007}, where $p=2$, $r=\gamma-1$, and thus $\bQ_n = - k \gamma \grad(u^\gamma)$.  The flux for the diffusive shallow water equations \cite{AlonsoSantillanaDawson2008}, which has nontrivial powers $1<r<2$ and $1<p\le 2$, is also included, and the flat-bed shallow ice approximation \cite{CalvoDuranyVazquez2000} flux with $r=n+2$ and $p=n+1$ for $n>1$.
 
 Leaving the function space undetermined for a moment, we apply a power transformation $u = w^m$ where $m = (p-1)/(r+p-1)$ \cite{Raviart1970} so that $0 < m \le 1$.  Straightforward calculation turns \eqref{eq:doubleflux} into
 \begin{equation}
 	\bQ_n = - K |\grad w|^{p-2} \grad w, \label{eq:doublenewflux}
 \end{equation}
-with $K=k m^{p-1}>0$, giving the $p$-Laplacian flux \eqref{eq:plapflux}.  This transformation converts PDE \eqref{eq:semimassconserve} into a $p$-Laplacian equation with zeroth-order terms,
+with $K=k m^{p-1}>0$, giving the $p$-Laplacian flux \eqref{eq:plapflux}.  This transformation converts PDE \eqref{eq:semimassconserve} into a $p$-Laplacian equation, but with additional zeroth-order terms,
 \begin{equation}
     - \Div\left(K|\grad w|^{p-2} \grad w\right) + G(w,x) = 0  \label{eq:doubleplap}
 \end{equation}
-where $G(w,x) = w^m - \Delta t_n\, F_n(w^m,x) - u_{n-1}$.  In the porous media case $p=2$ and equation \eqref{eq:doubleplap} is semilinear \cite{Evans2010}.
+where $G(w,x) = w^m - \Delta t_n\, F_n(w^m,x) - u_{n-1}$.  In the porous media $p=2$ case equation \eqref{eq:doubleplap} is semilinear.
 
 Define $\mathcal{X} = W_0^{1,p}(\Omega)$ and $\mathcal{K} =\left\{u\ge 0\right\} \subset \mathcal{X}$ as before.  Define $A_n: \mathcal{K} \to \mathcal{X}'$ by
 \begin{equation}
