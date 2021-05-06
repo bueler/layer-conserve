@@ -668,7 +668,7 @@ In our fluid-layer context the intuition behind NCP \eqref{eq:FEtheNCP} is strai
 \smallskip
 When a value $\tilde A(\tilde u)^i$ is zero then mass conservation (balance) equation \eqref{eq:semimassconserve} holds at node $x_i$, but only in an FE sense.  That is, a weighted-average of the integrand in \eqref{eq:defineAn}, over the support of $\psi_i(x)$, is zero.  Tradition and climate-modeling practice regards such an averaged sense of discrete balance as inferior to exact local balance \eqref{eq:fvlocalconservation}.  However, we may adapt \eqref{eq:FEtheNCP} to an FV view by assuming that for each FE node $x_i$ there is a unique corresponding FV cell $\omega_i$ (Subsection \ref{subsec:spacenotation}).  Schemes satisfying this condition, such as \cite{Bueler2016,EwingLinLin2002,Ringleretal2013}, have a ``dual mesh,'' namely cells for conservation plus a mesh for representing the solution.  Note we will need no detailed assumptions about the mesh correspondence in the following computations.
 
-Suppose we recompute the residual using a cell characteristic function $\mathbbm{1}_{\omega_i}$:
+Now we compute the residual for the characteristic function $\mathbbm{1}_{\omega_i}$ of an FV cell:
 \begin{align}
 \hat A(\tilde u)^i &= \ip{A_n(u_n^h)}{\mathbbm{1}_{\omega_i}}  \label{eq:cellwiseresidual} \\
                    &= \int_{\omega_i} \left(u_n^h - \Delta t_n F_n^h - u_{n-1}^h\right) + \Delta t_n \sum_{k\in\mathcal{E}_i} \int_{(i,k)} \bQ_n^h\cdot \bn_{(i,k)}. \notag
