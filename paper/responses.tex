@@ -26,7 +26,7 @@
 
 \thispagestyle{empty}
 
-I want to thank both referees for their well-informed and positive comments.
+I want to thank both referees for their well-informed and positive comments.  In this note and/or in the revised text I have addressed all of their corrections and suggestions.  In some cases I have explained why no action was taken (see below), but otherwise the suggestions have been adopted.  I have also gone through and made improvements to wording and notation, making sure that this did not change the meaning.
 
 \begin{quote}
 [Referee \#2] This article deals with a free boundary value problem (BVP) for thin layer fluid over a solid substrate.  This is a free BVP because as the fluid flows, it may dry up in certain places (thickness dropping to zeros), and may enter new territories.  In my view, this article has two major contributions.  First, it deals with the well-posedness of the one-step semi-discrete model by transforming the free BVP into a variatonal inequality (VI).  This approach appears to have the advantage that one does not have to keep track of the changing interface between the dry and wet regions.  The second contribution of this article is the presentation and discussion of a fully discrete finite volume scheme and a full-discrete finite element scheme, and the discussion of the mass conservation issue within these schemes.
@@ -34,19 +34,29 @@ I want to thank both referees for their well-informed and positive comments.
 \mm This article is very well written.  The issues discussed are very important, especially in geoscience, where ice sheets are modeled by BVPs like the one discussed here.  
 \end{quote}
 
-FIXME
+This correct summary is appreciated.
 
 \begin{quote}
-My only concern is the stability issue of the finite volume scheme presented in Section 6.1. Here, advancing the scheme appears simple, which is likely just an application of a nonlinear solver (e.g. Newton) plus some post-processing to make sure solution never drop below zero. But is this process stable? Note that the well-posedness of the semi-discrete model does not guarantee the stability of the FV scheme, unlike in the case of the FEM scheme.  Given that FV is quite popular for geoscience applications, I would like to see the author address this issue, if it can be reasonably done within a revision. Otherwise, a comment on this issue can also suffice.
+My only concern is the stability issue of the finite volume scheme presented in Section 6.1. Here, advancing the scheme appears simple, which is likely just an application of a nonlinear solver (e.g. Newton) plus some post-processing to make sure solution never drop below zero.
 \end{quote}
 
-FIXME
+The finite volume (FV) scheme defined in Subsection 6.1 is not complete, and this point has been clarified in the text (at the end of Subsection 6.1).  This subsection provides the minimum axioms necessary to define the discrete conservation error quantity (the ``boundary leak'') in Subsection 6.2.  It is not asserted that the FV scheme in 6.1 is sufficiently-defined so as to generate a unique numerical solution (and again this has been clarified in the text).  Many complete FV schemes, which will vary in their details, including how wet/dry cells at the boundary would be updated, would satisfy the axioms in 6.1.  My preferred schemes, for instance as implemented in Bueler (2016), are implicit and use an NCP solver, often Newton-based, but no ``post-processing'' occurs.  At convergence of the NCP solver the wet/dry cells have a consistent state; this is already pointed out in Subsection 6.3.
+
+\begin{quote}
+\dots  But is this process stable? Note that the well-posedness of the semi-discrete model does not guarantee the stability of the FV scheme, unlike in the case of the FEM scheme.  Given that FV is quite popular for geoscience applications, I would like to see the author address this issue, if it can be reasonably done within a revision. Otherwise, a comment on this issue can also suffice.
+\end{quote}
+
+Since the axiomatized FV scheme in Subsection 6.1 is not complete enough to determine unique evolution for the discrete quantities, I literally cannot address stability.  Scheme stability would depend on the flux form, with various different results as suggested by the cases studied in Section 4.
+
+Furthermore, for implicit schemes, which I regard as the preferred schemes for many of these problems, because of the presence of significant diffusion, the deeper stability concern is with the convergence of the NCP (often Newton) method, a topic which is well beyond the scope of this paper.  On the other hand, the shallow ice sheet implementation in Bueler (2016) shows excellent stability properties, with unconditional stability in flat bed cases.  (For general bed elevation maps, the allowed step sizes are $10^3$ or more longer than the diffusion-limited explicit step size, but again stability limitations are expressed in the failure of convergence of the NCP solver.)
+
+Instead of speculating on these matters in the revised text, I have at least clarified at the end of Subsection 6.1 that the FV scheme description is incomplete and axiomatic, and that many schemes (with different stability properties) satisfy the axioms.  Also, the beginning of Subsection 6.3 now includes a specific claim that Bueler (2016) is an example of the Section 6 techniques, with attention to stability.
 
 \begin{quote}
 In summary, I think this is a well written paper that address some of the important modeling issues in geosicences.  I recommend its publication in SIAP, after a minor revision.
 \end{quote}
 
-FIXME
+This positive recommentation is appreciated.
 
 \begin{quote}
 [Referee \#3] The paper considers free-boundary fluid problems with conservation laws. Problems arise for negative source terms at the free boundaries that pose difficulties for any discrete numerical scheme.  The author investigates well-posedness of the (first only in time discretised) problems in these situations and identifies a posteriori quantities to account for the conservation error.  First one is the `retreat loss' where an a priori bound also gives an upper bound for the time step.  In fully discrete FV and FEM schemes additional numerical spacial errors (called `boundary leak' and
@@ -55,7 +65,7 @@ FIXME
 \mm The paper tackles an important and interesting topic and seems to be a very nice entry-point to study these problems, it is well written and comprises useful results which as far as I have checked are mathematically sound.  I think it is suitable for publication in SIAP, but I suggest to tackle the remarks and suggestions below in a minor revision first.
 \end{quote}
 
-FIXME
+This correct summary, and positive recommentation, is appreciated.
 
 \begin{quote}
 \textbf{Remarks, questions, suggestions.}
@@ -87,13 +97,19 @@ These suggestions have been adopted.
 \mm (5) Maybe I missed it, but I guess there is a similar a priori bound for the discrete retreat loss like (5.6), or even the same?
 \end{quote}
 
-This is an interesting question for which the answer is complicated.  First, the hypotheses for the FV scheme in Subsection 6.2 are insufficient to give such an \emph{a priori} bound.  In Subsection 6.3, however, where we assume the numerical method solves an NCP for the FE approximation, a new version of the \emph{a priori} bound could be proven.  However, that bound would have to hypothesize a smallness criterion on the cell slop, making it more convoluted.  In summary, an appealing \emph{a priori} bound is not available, and it is simpler to not pursue this issue.
+This is an interesting question I had not considered.  First, the FV scheme axioms in Subsection 6.1 are insufficient to give such an \emph{a priori} bound.  In Subsection 6.3, however, where we assume the numerical method solves an NCP for the FE approximation, a new version of the \emph{a priori} bound could be proven.  However, that bound would have to hypothesize a smallness criterion on the cell slop, making it more convoluted.  In summary, an appealing \emph{a priori} bound is not available (and it is simpler to not pursue this issue).  On the other hand, \emph{a posteriori} usage of the discrete retreat mass and cell slop make adaptive time-stepping relatively straightforward.  No action has been taken in the text on this point, but inequality (5.6) of course remains.
 
 \begin{quote}
 \mm (6) The discrete climate input depends on the current approximation of the set $\Omega_n$.  How to know if this is approximated reasonably well?
 \end{quote}
 
-Answering this question as asked is again complicated, and I have chosen (mostly) to avoid commentary while being clear on the mathematics which I can prove.  The original climate (source term) $f$ is defined on the entire domain $\Omega$, and all kinds of modeling errors could be made in computing it, but I assume the question is not about that.  In Section 6 we assume $\Omega$ is polygonal and exactly-approximated by the FV cells.  The cell-wise (discrete) climate input, namely $F_n^j$ for FV cell $\omega_j$, is computed by integral (6.1), with possible quadrature errors.  The total discrete climate input $C_n^h$ in Subsection 6.2, the sum of $F_n^j$, is only as accurate as the approximation of the fluid-covered area $\Omega_n$, but estimating the error in the latter is well-beyond the scope of the paper.  That is, estimating the numerical error in $\Omega_n$ is equivalent to getting control on the free boundary, and that is dependent on which is the particular continuum VI (and flux formula) under consideration.
+Answering this question as asked is complicated.  The original climate source term $f$ is defined on the entire domain $\Omega$, and all kinds of modeling errors could be made in computing it, but I assume the question is not about that.  In Section 6 we assume $\Omega$ is polygonal and exactly-approximated by the FV cells; there may be an error in polygonalizing.  The cell-wise (discrete) climate input, namely $F_n^j$ for FV cell $\omega_j$, is computed by integral (6.1), with presumably-small quadrature errors.  The total discrete climate input $C_n^h$ in Subsection 6.2, the sum of $F_n^j$, depends on the approximation of the fluid-covered area $\Omega_n$, which brings us to the referee's question.
+
+Estimating the numerical error in the area of $\Omega_n$ is well beyond the scope of the paper.  It is equivalent to getting control on the free boundary, on which there is a literature, but it depends entirely on which is the particular continuum VI (i.e.~flux formula) under consideration.
+
+As pointed out in the conclusion, for smooth data the area of $\Omega_n$ can undergo arbitrarily large changes in arbitrarily short times, even (in particular) when the retreat mass time-step bound (5.6) is applied so that the \emph{mass} of the fluid loss is small.  (A perfectly flat lake on perfectly-flat bathymetry could go from fluid-covered to dry in an instant.)
+
+I do not know how to take effective action here, and none has been taken.  I have chosen to avoid commentary while being clear on the mathematics which I can prove.
 
 \begin{quote}
 \mm (7) A small numerical example, that demonstrates the use of the quantities as a posteriori refinement criteria or at least gives a feeling how these quantities might behave in practise, would be really nice.
@@ -114,6 +130,6 @@ FIXME
 \end{itemize}
 \end{quote}
 
-All of these sharp-eyed corrections have been adopted.
+All of these sharp-eyed corrections have been implemented.
 
 \end{document}
