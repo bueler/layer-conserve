@@ -596,7 +596,7 @@ Q_n^{(j,k)} \approx \frac{1}{\ell_{(j,k)}} \int_{(j,k)} \bQ_n(\grad u_n,u_n,x) \
 \end{equation}
 Here $\bn_{(j,k)}$ denotes the unit normal vector to edge $(j,k)$ directed outward from $\omega_j$; thus $\bn_{(k,j)} = -\bn_{(j,k)}$.  Presumably the fluxes $Q_n^{(j,k)}$ are approximated using values $\{u_n^l\}$, though again the details are not important.
 
-We now require the scheme satisfies interior conservation.  That is, we require that between any two adjacent \emph{fluid-filled} cells we have flux balance across the edge:
+We now require the scheme to satisfy interior conservation.  That is, we require that between any two adjacent \emph{fluid-filled} cells we have flux balance across the edge:
 \begin{equation}
   u_n^j u_n^k > 0 \quad \implies \quad Q_n^{(k,j)}=-Q_n^{(j,k)}.  \label{eq:fvlocalconservation}
 \end{equation}
@@ -608,8 +608,8 @@ Finally we require that if $u_n^j>0$ then the scheme approximates \eqref{eq:semi
 \end{equation}
 (Notationally, equation \eqref{eq:fvmassconserve} appears to be the backward Euler scheme, but in fact the time-stepping is quite general; see Section \ref{sec:strongform} and Appendix \ref{app:rk2}.)  However, \eqref{eq:fvmassconserve} only applies when the cell is wet at the end of the time step ($u_n^j>0$).  For dry cells we do not, for now, state any equation other than $u_n^j=0$, but see Subsection \ref{subsec:ncp}.
 
-Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including FV methods for hyperbolic problems \cite{LeVeque2002} and more-general schemes for diffusive problems \cite{Bueler2016,Morton2018}.
-  
+Many schemes can be given interpretations \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve}, including FV methods for hyperbolic problems \cite{LeVeque2002}, and more-general schemes for diffusive problems \cite{Bueler2016,Morton2018}.  They will differ in how the equations are solved, how the free-boundary conditions are applied, and what are the consequent stability and convergence properties.  Indeed \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve} may not suffice to give a unique scheme even when formulas for the edge fluxes $Q_n^{(j,k)}$ are added, but these axioms suffice to allow the conservation error quantification given next.
+
 \subsection{The discrete-space ``boundary leak''}  \label{subsec:leak}  For schemes satisfying \eqref{eq:fvthickness}--\eqref{eq:fvmassconserve} we now define \emph{a posteriori} computable time series for conservation of mass.  The following discrete formulas, with superscript ``$h$'', have analogs in Section \ref{sec:timeseries}:
 \begin{equation}
 M_n^h = \sum_j u_n^j |\omega_j|, \quad C_n^h = \Delta t_n\!\!\sum_{u_n^j>0} F_n^j |\omega_j|, \quad R_n^h = \sum_{u_n^j=0} u_{n-1}^j |\omega_j|.  \label{eq:fvtimeseriesdefn}
@@ -644,7 +644,7 @@ The boundary leak is a numerical error caused by the spatial discretization.  Th
 In summary, in a free-boundary FV computation we may report computable time series $\{M_n^h,C_n^h,R_n^h,B_n^h\}$ which balance as in \eqref{eq:fvfinalbalance} (up to rounding error).  Time series $R_n^h$ and $B_n^h$ are conservation errors intrinsic to free-boundary fluid layer models.
 
 \subsection{Complementarity and cell-wise conservation}  \label{subsec:ncp}  The continuous-space, discrete-time weak formulation in Sections \ref{sec:weakform} and \ref{sec:wellposed}, using variational inequalities (VIs) \eqref{eq:theVI}, would often be solved using finite element (FE) discretization \cite[for example]{CalvoDuranyVazquez2000,JouvetBueler2012,
-JouvetBuelerGraeserKornhuber2013}, but we have just applied the FV language of discrete conservation.  These views can be harmonized by observing that a VI is equivalent to a complementarity problem \cite{FacchineiPang2003,KinderlehrerStampacchia1980}, and practical solver algorithms and clearer intuition can result from this observation.  The schemes described next are both conforming and implementable using finite-dimensional complementarity-problem solvers.
+JouvetBuelerGraeserKornhuber2013}, but we have just applied the FV language of discrete conservation.  These views can be harmonized by observing that a VI is equivalent to a nonlinear complementarity problem (NCP) \cite{FacchineiPang2003,KinderlehrerStampacchia1980}, and both practical solver algorithms and clearer intuition result from this observation.  The dual-mesh schemes described next are both conforming and implementable using finite-dimensional NCP solvers.  The shallow ice sheet solver described in \cite{Bueler2016} serves as an example of the combined FV, FE, and VI/NCP techniques described here.
 
 Suppose we discretize using an FE subspace $S^h \subset \mathcal{X} = W_0^{1,p}(\Omega)$, with a nodal basis of $m$ hat functions $\{\psi_i\}$, based on a triangulation (or other mesh) of $\Omega$ with resolution $h$.  Consider problem \eqref{eq:theVI} on this space, namely
 \begin{equation}
