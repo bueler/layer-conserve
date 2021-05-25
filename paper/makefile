@@ -7,7 +7,7 @@ lcpublish.zip: lc.pdf lc.bbl
 	cp -f figs/*.pdf lcpublish/figs/
 	mkdir lcpublish/tikz/
 	cp -f tikz/*.tex lcpublish/tikz/
-	cp -f siamart190516.cls siamplain.bst lc.bib lc.bbl lc.tex lcpublish/
+	cp -f siamart190516.cls siamplain.bst lc.bib lc.bbl lc.tex lc.pdf lcpublish/
 	zip -r lcpublish lcpublish
 
 figs/cartoon.pdf figs/cartoon-dt.pdf figs/domains-fig.pdf:
